@@ -21,7 +21,7 @@ export const Header = () => {
     <header className={styles.header}>
       <nav className={styles.nav}>
         <div className={styles.brand}>
-          <NavLink to="/">Pro Organiser</NavLink>
+          <NavLink to="/">Task Force</NavLink>
         </div>
         <ul className={styles.menu}>
           {currentUser && currentUser.displayName ? (
@@ -41,19 +41,19 @@ export const Header = () => {
               </li>
             </>
           ) : (
-            <>
-              <li>
-                <NavLink activeClassName={styles.activeLink} to="/login">
-                  Login
+              <>
+                <li>
+                  <NavLink activeClassName={styles.activeLink} to="/login">
+                    Login
                 </NavLink>
-              </li>
-              <li>
-                <NavLink activeClassName={styles.activeLink} to="/signup">
-                  Sign Up
+                </li>
+                <li>
+                  <NavLink activeClassName={styles.activeLink} to="/signup">
+                    Sign Up
                 </NavLink>
-              </li>
-            </>
-          )}
+                </li>
+              </>
+            )}
         </ul>
         {isDropdown && (
           <div className={styles.dropdownMenu}>

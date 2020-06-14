@@ -4,9 +4,9 @@ import firestore from 'firebase/firestore';
 import auth from 'firebase/auth';
 
 const config = {
-  apiKey: process.env.REACT_APP_APIKEY,
+  apiKey: process.env.REACT_APP_apiKey,
   authDomain: process.env.REACT_APP_authDomain,
-  databaseURL: process.env.REACT_APP_DBURL,
+  databaseURL: process.env.REACT_APP_databaseURL,
   projectId: process.env.REACT_APP_projectId,
   storageBucket: process.env.REACT_APP_storageBucket,
   messagingSenderId: process.env.REACT_APP_messagingSenderId,

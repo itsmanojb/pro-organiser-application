@@ -4,7 +4,7 @@ import { Loader } from '../common/loader/Loader';
 
 export const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [pending, setPending] = useState(true);
 
@@ -15,19 +15,10 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-
-  if(pending){
-    return <Loader />
-  }
-
-
-  return (
-    <AuthContext.Provider
-      value={{
-        currentUser
-      }}
-    >
+  return pending ? <Loader /> : (
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );
+
 };

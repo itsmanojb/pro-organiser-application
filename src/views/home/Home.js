@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { getBoards } from '../../utils/data';
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
+import { Header } from '../../components/header/Header';
 import { AuthContext } from '../../context/Auth';
 
 export const Home = () => {
@@ -28,29 +29,32 @@ export const Home = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className={styles.container}>
-          <h2 className={commonStyles.title}>Boards</h2>
-          {boards.length === 0 && (
-            <Alert type="info" isClosable={false}>
-              You haven't created any boards. Kindly click on the 'Create a
-              Board' button in the navigation bar to create a board.
-            </Alert>
-          )}
-          <div className={styles.boards}>
-            {boards.map((board) => {
-              return (
-                <Link
-                  to={'/board/' + board.id}
-                  className={styles.board}
-                  key={board.id}
-                >
-                  <div className={styles.boardName}>{board.name}</div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      )}
+          <>
+            <Header />
+            <div className={styles.container}>
+              <h2 className={commonStyles.title}>Boards</h2>
+              {boards.length === 0 && (
+                <Alert type="info" isClosable={false}>
+                  You haven't created any boards. Kindly click on the 'Create a
+                  Board' button in the navigation bar to create a board.
+                </Alert>
+              )}
+              <div className={styles.boards}>
+                {boards.map((board) => {
+                  return (
+                    <Link
+                      to={'/board/' + board.id}
+                      className={styles.board}
+                      key={board.id}
+                    >
+                      <div className={styles.boardName}>{board.name}</div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
     </>
   );
 };

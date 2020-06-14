@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+
 import styles from '../../common/styles/formStyles.module.css';
 import commonStyle from '../../common/styles/styles.module.css';
-import { withRouter, Link } from 'react-router-dom';
+
 import { firebaseApp } from '../../firebase/init';
-import { Alert } from '../../common/alert/Alert';
+import { ToastsContext } from '../../context/Toasts';
 
 const SignUp = ({ history }) => {
+
+  useEffect(() => {
+    document.title = 'TaskForce - Sign Up'
+  }, []);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
 
-  function handleSignUp() {
+  const [toasts, setToasts] = useContext(ToastsContext);
+
+  const handleSignUp = (e) => {
+
+    e.preventDefault();
     if (!email || !password || !name) {
-      return alert('All fields are required');
+      setToasts([
+        ...toasts,
+        {
+          id: toasts.length,
+          title: 'Hey Man',
+          message: 'All fields are required',
+          backgroundColor: '#d9534f',
+          icon: 'warning'
+        }
+      ]);
+      return;
     }
 
     firebaseApp
@@ -24,6 +44,16 @@ const SignUp = ({ history }) => {
         user
           .updateProfile({ displayName: name })
           .then(() => {
+            setToasts([
+              ...toasts,
+              {
+                id: toasts.length,
+                title: 'Oh Yes',
+                message: 'Signed up successfully.',
+                backgroundColor: '#5cb85c',
+                icon: 'checkmark-circle'
+              }
+            ]);
             history.push('/');
           })
           .catch((err) => {
@@ -31,14 +61,28 @@ const SignUp = ({ history }) => {
           });
       })
       .catch((err) => {
-        setError(err.message);
+        // console.log(err);
+        handleError(err);
       });
   }
 
+  const handleError = error => {
+    setToasts([
+      ...toasts,
+      {
+        id: toasts.length,
+        title: 'Oh No',
+        message: error.message,
+        backgroundColor: '#d9534f',
+        icon: 'warning'
+      }
+    ]
+    );
+  }
+
   return (
-    <div className={styles.formContainer}>
+    <form className={styles.formContainer}>
       <div className={styles.formHeader}>Getting started</div>
-      {error && <Alert> {error} </Alert>}
       <div className={styles.formGroup}>
         <label htmlFor="name">Name</label>
         <input
@@ -73,14 +117,14 @@ const SignUp = ({ history }) => {
         />
       </div>
       <div className={styles.formGroup}>
-        <button className={commonStyle.info} onClick={handleSignUp}>
+        <button type="submit" className={commonStyle.info} onClick={(e) => handleSignUp(e)}>
           Sign Up
         </button>
       </div>
       <div className={styles.meta}>
         Have an account? <Link to="/login">login now</Link>.
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -10,7 +10,7 @@ import { Home } from './views/home/Home';
 import { AddBoard } from './views/create-board/AddBoard';
 import { Board } from './views/board/Board';
 import { Toast } from './components/toast/Toast';
-import SignUp from './views/signUp/SignUp';
+import SignUp from './views/sign-up/SignUp';
 import Login from './views/login/Login';
 import ResetPassword from './views/reset-password/ResetPassword';
 

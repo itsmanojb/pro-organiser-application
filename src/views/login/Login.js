@@ -32,8 +32,7 @@ const Login = ({ history }) => {
           backgroundColor: '#d9534f',
           icon: 'warning'
         }
-      ]
-      );
+      ]);
       return;
     }
 
@@ -50,8 +49,7 @@ const Login = ({ history }) => {
             backgroundColor: '#5cb85c',
             icon: 'checkmark-circle'
           }
-        ]
-        );
+        ]);
         history.push('/');
       })
       .catch(err => {
@@ -61,7 +59,6 @@ const Login = ({ history }) => {
   }
 
   const handleError = error => {
-
     setToasts([
       ...toasts,
       {

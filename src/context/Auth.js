@@ -15,19 +15,10 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-
-  if(pending){
-    return <Loader />
-  }
-
-
-  return (
-    <AuthContext.Provider
-      value={{
-        currentUser
-      }}
-    >
+  return pending ? <Loader /> : (
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );
+
 };

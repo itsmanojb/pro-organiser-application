@@ -4,7 +4,7 @@ import { Loader } from '../common/loader/Loader';
 
 export const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [pending, setPending] = useState(true);
 

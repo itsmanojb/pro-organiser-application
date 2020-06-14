@@ -1,19 +1,35 @@
 import React, { useState, useContext } from 'react';
+import { withRouter, Redirect, Link } from 'react-router-dom';
+
 import styles from './../../common/styles/formStyles.module.css';
 import commonStyle from './../../common/styles/styles.module.css';
+
 import { firebaseApp } from '../../firebase/init';
-import { withRouter, Redirect, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth';
-import { Alert } from '../../common/alert/Alert';
+import { ToastsContext } from '../../context/Toasts';
+
 
 const Login = ({ history }) => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
 
-  function handleLogin() {
+  const [toasts, setToasts] = useContext(ToastsContext);
+
+  const handleLogin = (e) => {
     if (!email || !password) {
-      return setError('All fields are required');
+      setToasts([
+        ...toasts,
+        {
+          id: toasts.length,
+          title: 'Danger',
+          message: 'All fields are required',
+          backgroundColor: '#d9534f',
+          icon: 'warning'
+        }
+      ]
+      );
+      return;
     }
 
     firebaseApp
@@ -36,7 +52,6 @@ const Login = ({ history }) => {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formHeader}>Login</div>
-      {error && <Alert> {error} </Alert>}
       <div className={styles.formGroup}>
         <label htmlFor="email">Email</label>
         <input
@@ -60,7 +75,7 @@ const Login = ({ history }) => {
         />
       </div>
       <div className={styles.formGroup}>
-        <button className={commonStyle.info} onClick={handleLogin}>Login</button>
+        <button className={commonStyle.info} onClick={(e) => handleLogin(e)}>Login</button>
       </div>
       <div className={styles.meta}>
         Dont have an account? <Link to="/signup">Sign up</Link>.

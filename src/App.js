@@ -8,7 +8,6 @@ import PrivateRoute from './common/guards/PrivateRoute';
 
 import { Home } from './views/home/Home';
 import { AddBoard } from './views/create-board/AddBoard';
-import { Header } from './components/header/Header';
 import { Board } from './views/board/Board';
 import { Toast } from './components/toast/Toast';
 import SignUp from './views/signUp/SignUp';
@@ -20,7 +19,6 @@ function App() {
     <ToastsContextProvider>
       <AuthContextProvider>
         <Router>
-          <Header />
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute path="/createboard" component={AddBoard} />

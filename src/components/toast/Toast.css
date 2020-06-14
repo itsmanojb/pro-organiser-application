@@ -8,29 +8,29 @@
 .top-right {
   top: 12px;
   right: 12px;
-  transition: transform .6s ease-in-out;
-  animation: toast-in-right .7s;
+  transition: transform .3s ease-in-out;
+  animation: toast-in-right .4s;
 }
 
 .bottom-right {
   bottom: 12px;
   right: 12px;
-  transition: transform .6s ease-in-out;
-  animation: toast-in-right .7s;
+  transition: transform .3s ease-in-out;
+  animation: toast-in-right .4s;
 }
 
 .top-left {
   top: 12px;
   left: 12px;
-  transition: transform .6s ease-in;
-  animation: toast-in-left .7s;
+  transition: transform .3s ease-in;
+  animation: toast-in-left .74;
 }
 
 .bottom-left {
   bottom: 12px;
   left: 12px;
-  transition: transform .6s ease-in;
-  animation: toast-in-left .7s;
+  transition: transform .3s ease-in;
+  animation: toast-in-left .74;
 }
 
 .notification {
@@ -45,7 +45,7 @@
   width: 300px;
   /* max-height: 100px; */
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(168, 168, 168, 0.6);
+  box-shadow: 0 0 10px rgba(168, 168, 168, 0.8);
   color: #000;
   opacity: .9;
 }

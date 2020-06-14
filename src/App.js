@@ -12,6 +12,7 @@ import { Board } from './views/board/Board';
 import { Toast } from './components/toast/Toast';
 import SignUp from './views/signUp/SignUp';
 import Login from './views/login/Login';
+import ResetPassword from './views/reset-password/ResetPassword';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <PrivateRoute path="/board/:name" component={Board} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
+            <Route path="/reset-password" component={ResetPassword} />
             <Route exact path="*" component={Home} />
           </Switch>
           <Toast position="bottom-right" />

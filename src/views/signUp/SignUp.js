@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../common/styles/formStyles.module.css';
 import commonStyle from '../../common/styles/styles.module.css';
 import { withRouter, Link } from 'react-router-dom';
@@ -6,6 +6,11 @@ import { firebaseApp } from '../../firebase/init';
 import { Alert } from '../../common/alert/Alert';
 
 const SignUp = ({ history }) => {
+
+  useEffect(() => {
+    document.title = 'TaskForce - Sign Up'
+  }, []);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

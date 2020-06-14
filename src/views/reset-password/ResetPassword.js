@@ -1,34 +1,32 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter, Redirect, Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import styles from './../../common/styles/formStyles.module.css';
 import commonStyle from './../../common/styles/styles.module.css';
 
 import { firebaseApp } from '../../firebase/init';
-import { AuthContext } from '../../context/Auth';
 import { ToastsContext } from '../../context/Toasts';
 
 
-const Login = ({ history }) => {
+const ResetPassword = ({ history }) => {
 
   useEffect(() => {
-    document.title = 'TaskForce - Login'
+    document.title = 'TaskForce - Reset Password'
   }, []);
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   const [toasts, setToasts] = useContext(ToastsContext);
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!email) {
       setToasts([
         ...toasts,
         {
           id: toasts.length,
           title: 'Hey Man',
-          message: 'All fields are required',
+          message: 'First enter the registered email',
           backgroundColor: '#d9534f',
           icon: 'warning'
         }
@@ -39,24 +37,24 @@ const Login = ({ history }) => {
 
     firebaseApp
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .sendPasswordResetEmail(email)
       .then(() => {
         setToasts([
           ...toasts,
           {
             id: toasts.length,
             title: 'Oh Yes',
-            message: 'Logged in successfully.',
+            message: 'Password reset mail has been sent to your email address successfully.',
             backgroundColor: '#5cb85c',
             icon: 'checkmark-circle'
           }
         ]
         );
-        history.push('/');
+        // history.push('/');
       })
       .catch(err => {
         // console.log(err);
-        handleError(err)
+        handleError(err);
       });
   }
 
@@ -75,15 +73,9 @@ const Login = ({ history }) => {
     );
   }
 
-  const { currentUser } = useContext(AuthContext);
-
-  if (currentUser) {
-    return <Redirect to="/" />;
-  }
-
   return (
     <form className={styles.formContainer}>
-      <div className={styles.formHeader}>Login</div>
+      <div className={styles.formHeader}>Reset Password</div>
       <div className={styles.formGroup}>
         <label htmlFor="email">Email</label>
         <input
@@ -96,27 +88,16 @@ const Login = ({ history }) => {
         />
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder='******'
-        />
+        <button type="submit" className={commonStyle.info} onClick={(e) => handleSubmit(e)}>Submit</button>
       </div>
       <div className={styles.meta}>
-        Forgot password ? <Link to="/reset-password">Reset</Link>.
-      </div>
-      <div className={styles.formGroup}>
-        <button type="submit" className={commonStyle.info} onClick={(e) => handleLogin(e)}>Login</button>
+        Don't have an account? <Link to="/signup">Sign up</Link>.
       </div>
       <div className={styles.meta}>
-        Dont have an account? <Link to="/signup">Sign up</Link>.
+        or try <Link to="/login">Login</Link> again.
       </div>
     </form>
   );
 };
 
-export default withRouter(Login);
+export default withRouter(ResetPassword);

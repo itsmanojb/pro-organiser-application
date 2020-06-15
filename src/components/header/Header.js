@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './Header.module.css';
 import { AuthContext } from '../../context/Auth';
 import { firebaseApp } from '../../firebase/init';
 
@@ -18,46 +17,29 @@ export const Header = () => {
   }
 
   return (
-    <header className={styles.header}>
-      <nav className={styles.nav}>
-        <div className={styles.brand}>
+    <header>
+      <nav>
+        <div>
           <NavLink to="/">Task Force</NavLink>
         </div>
-        <ul className={styles.menu}>
-          {currentUser && currentUser.displayName ? (
-            <>
-              <li>
-                <NavLink exact activeClassName={styles.activeLink} to="/">
-                  Home
+        <ul>
+          <li>
+            <NavLink exact to="/">
+              Home
                 </NavLink>
-              </li>
-              <li>
-                <NavLink to="/createboard" activeClassName={styles.activeLink}>
-                  Create a board
+          </li>
+          <li>
+            <NavLink to="/createboard" activeClassName='active'>
+              Create a board
                 </NavLink>
-              </li>
-              <li className={styles.dropdown} onClick={toggleDropdown}>
-                {currentUser.displayName}
-              </li>
-            </>
-          ) : (
-              <>
-                <li>
-                  <NavLink activeClassName={styles.activeLink} to="/login">
-                    Login
-                </NavLink>
-                </li>
-                <li>
-                  <NavLink activeClassName={styles.activeLink} to="/signup">
-                    Sign Up
-                </NavLink>
-                </li>
-              </>
-            )}
+          </li>
+          <li onClick={toggleDropdown}>
+            {currentUser.displayName}
+          </li>
         </ul>
         {isDropdown && (
-          <div className={styles.dropdownMenu}>
-            <div className={styles.dropdownItem} onClick={handleLogout}>
+          <div>
+            <div onClick={handleLogout}>
               Logout
             </div>
           </div>

@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import styles from '../../common/styles/formStyles.module.css';
-import commonStyle from '../../common/styles/styles.module.css';
-
 import { firebaseApp } from '../../firebase/init';
 import { ToastsContext } from '../../context/Toasts';
 
@@ -81,9 +78,9 @@ const SignUp = ({ history }) => {
   }
 
   return (
-    <form className={styles.formContainer}>
-      <div className={styles.formHeader}>Getting started</div>
-      <div className={styles.formGroup}>
+    <form>
+      <div>Getting started</div>
+      <div>
         <label htmlFor="name">Name</label>
         <input
           type="text"
@@ -94,7 +91,7 @@ const SignUp = ({ history }) => {
           placeholder="Your Name"
         />
       </div>
-      <div className={styles.formGroup}>
+      <div>
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -105,7 +102,7 @@ const SignUp = ({ history }) => {
           placeholder="mail@example.com"
         />
       </div>
-      <div className={styles.formGroup}>
+      <div>
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -116,12 +113,12 @@ const SignUp = ({ history }) => {
           placeholder="******"
         />
       </div>
-      <div className={styles.formGroup}>
-        <button type="submit" className={commonStyle.info} onClick={(e) => handleSignUp(e)}>
+      <div>
+        <button type="submit" onClick={(e) => handleSignUp(e)}>
           Sign Up
         </button>
       </div>
-      <div className={styles.meta}>
+      <div>
         Have an account? <Link to="/login">login now</Link>.
       </div>
     </form>

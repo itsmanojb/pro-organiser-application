@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Modal } from '../../common/modal/Modal';
-import styles from './AddColumn.module.css';
-import commonStyles from './../../common/styles/styles.module.css';
 
 export const AddColumn = ({ handleAdd, handleClose }) => {
   const [columnName, setColumnName] = useState('');
@@ -16,14 +14,14 @@ export const AddColumn = ({ handleAdd, handleClose }) => {
 
   return (
     <Modal>
-      <div className={styles.modalHead}>
+      <div>
         <div>Add Column</div>
-        <div className={styles.close} onClick={handleClose}>
+        <div onClick={handleClose}>
           &times;
         </div>
       </div>
-      <div className={styles.modalBody}>
-        <div className={styles.field}>
+      <div>
+        <div>
           <label htmlFor="column_name">Enter a Column Name:</label>
           <input
             type="text"
@@ -33,11 +31,10 @@ export const AddColumn = ({ handleAdd, handleClose }) => {
             onChange={e => setColumnName(e.target.value)}
           />
         </div>
-        <div className={styles.action}>
+        <div>
           <button
             id="CreateColumn"
             onClick={handleAddCloumn}
-            className={commonStyles.info}
           >
             Add Column
           </button>

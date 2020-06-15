@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { getBoards } from '../../utils/data';
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
-import { Header } from '../../components/header/Header';
+import Header from '../../components/header/Header';
 import { AuthContext } from '../../context/Auth';
 
 export const Home = () => {

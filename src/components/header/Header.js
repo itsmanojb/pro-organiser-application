@@ -9,14 +9,15 @@ import { firebaseApp } from '../../firebase/init';
 
 import './Header.scss';
 
-import { ReactComponent as BellIcon } from '../../icons/bell.svg';
-import { ReactComponent as MessengerIcon } from '../../icons/messenger.svg';
-import { ReactComponent as CaretIcon } from '../../icons/caret.svg';
-import { ReactComponent as PlusIcon } from '../../icons/plus.svg';
-import { ReactComponent as CogIcon } from '../../icons/cog.svg';
-import { ReactComponent as ChevronIcon } from '../../icons/chevron.svg';
-import { ReactComponent as ArrowIcon } from '../../icons/arrow.svg';
-import { ReactComponent as BoltIcon } from '../../icons/bolt.svg';
+import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
+import { ReactComponent as BellIcon } from '../../assets/icons/bell.svg';
+import { ReactComponent as MessengerIcon } from '../../assets/icons/messenger.svg';
+import { ReactComponent as CaretIcon } from '../../assets/icons/caret.svg';
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus.svg';
+import { ReactComponent as CogIcon } from '../../assets/icons/cog.svg';
+import { ReactComponent as ChevronIcon } from '../../assets/icons/chevron.svg';
+import { ReactComponent as ArrowIcon } from '../../assets/icons/arrow.svg';
+import { ReactComponent as BoltIcon } from '../../assets/icons/bolt.svg';
 
 function Navbar(props) {
   return (
@@ -81,13 +82,7 @@ function DropdownMenu() {
             goToMenu="settings">
             Settings
           </DropdownItem>
-          <DropdownItem
-            leftIcon="🦧"
-            rightIcon={<ChevronIcon />}
-            goToMenu="animals">
-            Animals
-          </DropdownItem>
-
+          <DropdownItem>Log Out</DropdownItem>
         </div>
       </CSSTransition>
 
@@ -108,22 +103,6 @@ function DropdownMenu() {
         </div>
       </CSSTransition>
 
-      <CSSTransition
-        in={activeMenu === 'animals'}
-        timeout={500}
-        classNames="menu-secondary"
-        unmountOnExit
-        onEnter={calcHeight}>
-        <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
-            <h2>Animals</h2>
-          </DropdownItem>
-          <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
-          <DropdownItem leftIcon="🐸">Frog</DropdownItem>
-          <DropdownItem leftIcon="🦋">Horse?</DropdownItem>
-          <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem>
-        </div>
-      </CSSTransition>
     </div>
   );
 }
@@ -142,15 +121,22 @@ const Header = () => {
   }
 
   return (
-    <Navbar>
-      <NavItem icon={<PlusIcon />} />
-      <NavItem icon={<BellIcon />} />
-      <NavItem icon={<MessengerIcon />} />
+    <header>
 
-      <NavItem icon={<CaretIcon />}>
-        <DropdownMenu></DropdownMenu>
-      </NavItem>
-    </Navbar>
+      <NavLink to="/" className="brand">
+        <Logo />
+        Task Force
+      </NavLink>
+
+      <Navbar>
+        <NavItem icon={<PlusIcon />} />
+        <NavItem icon={<BellIcon />} />
+        <NavItem icon={<MessengerIcon />} />
+        <NavItem icon={<CaretIcon />}>
+          <DropdownMenu></DropdownMenu>
+        </NavItem>
+      </Navbar>
+    </header>
     // <header>
     //   <nav>
     //     <div>

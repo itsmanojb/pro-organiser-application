@@ -49,6 +49,7 @@ header {
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer;
 }
 
 .icon-button {
@@ -102,6 +103,7 @@ header {
       transition: background var(--speed);
       padding: 0.5rem 1rem;
       font-size: 1rem;
+      cursor: pointer;
 
       .icon-button {
         margin-right: 0.5rem;

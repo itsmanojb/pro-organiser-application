@@ -4,15 +4,14 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
+import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
 import Icon from '../../components/misc/IonIcon';
 import { AuthContext } from '../../context/Auth';
 import { firebaseApp } from '../../firebase/init';
 
 import './Header.scss';
 
-import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-
-function Navbar(props) {
+const Navbar = (props) => {
   return (
     <nav className="navbar">
       <ul className="navbar-nav">{props.children}</ul>
@@ -20,21 +19,28 @@ function Navbar(props) {
   );
 }
 
-function NavItem(props) {
+const NavItem = (props) => {
   const [open, setOpen] = useState(false);
 
-  return (
+  return props.link ? (
     <li className="nav-item">
-      <a href="#" className="icon-button" onClick={() => setOpen(!open)}>
+      <NavLink to={props.link} className="icon-button">
         {props.icon}
-      </a>
-
-      {open && props.children}
+      </NavLink>
     </li>
-  );
+  ) : (
+      <li className="nav-item">
+        <a className="icon-button" onClick={() => setOpen(!open)}>
+          {props.icon}
+        </a>
+        {open && props.children}
+      </li>
+    );
 }
 
-function DropdownMenu() {
+const DropdownMenu = () => {
+  const { currentUser } = useContext(AuthContext);
+
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
@@ -48,9 +54,14 @@ function DropdownMenu() {
     setMenuHeight(height + 32);
   }
 
-  function DropdownItem(props) {
+  async function handleLogout() {
+    await firebaseApp.auth().signOut();
+  }
+
+
+  const DropdownItem = (props) => {
     return (
-      <a href="#" className="menu-item" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+      <a className="menu-item" onClick={() => props.goToMenu ? setActiveMenu(props.goToMenu) : props.clicked()}>
         <span className="icon-button">{props.leftIcon}</span>
         {props.children}
         <span className="icon-right">{props.rightIcon}</span>
@@ -68,14 +79,15 @@ function DropdownMenu() {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem leftIcon={<Icon name="person-outline" />}>My Profile</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
           <DropdownItem
             leftIcon={<Icon name="settings-outline" />}
             rightIcon={<Icon name="chevron-forward" />}
-            goToMenu="settings">
+            goToMenu="settings"
+          >
             Settings
           </DropdownItem>
-          <DropdownItem leftIcon={<Icon name="log-out-outline" />}>Log Out</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="log-out-outline" />} clicked={handleLogout}>Log Out</DropdownItem>
         </div>
       </CSSTransition>
 
@@ -98,62 +110,20 @@ function DropdownMenu() {
 }
 
 const Header = () => {
-  const { currentUser } = useContext(AuthContext);
-  const [isDropdown, setIsDropdown] = useState(false);
-
-  function toggleDropdown() {
-    setIsDropdown(!isDropdown);
-  }
-
-  async function handleLogout() {
-    await firebaseApp.auth().signOut();
-    setIsDropdown(false);
-  }
 
   return (
     <header>
-
       <NavLink to="/" className="brand">
-        <Logo />
-        Task Force
+        <Logo /> Task Force
       </NavLink>
-
       <Navbar>
-        <NavItem icon={<Icon name="home" />} />
+        <NavItem link="/" icon={<Icon name="home" />} />
+        <NavItem link="/createboard" icon={<Icon name="clipboard-outline" />} />
         <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>
         </NavItem>
       </Navbar>
     </header>
-    // <header>
-    //   <nav>
-    //     <div>
-    //       <NavLink to="/">Task Force</NavLink>
-    //     </div>
-    //     <ul>
-    //       <li>
-    //         <NavLink exact to="/">
-    //           Home
-    //             </NavLink>
-    //       </li>
-    //       <li>
-    //         <NavLink to="/createboard" activeClassName='active'>
-    //           Create a board
-    //             </NavLink>
-    //       </li>
-    //       <li onClick={toggleDropdown}>
-    //         {currentUser.displayName}
-    //       </li>
-    //     </ul>
-    //     {isDropdown && (
-    //       <div>
-    //         <div onClick={handleLogout}>
-    //           Logout
-    //         </div>
-    //       </div>
-    //     )}
-    //   </nav>
-    // </header>
   );
 };
 

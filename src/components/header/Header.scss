@@ -1,6 +1,7 @@
 header {
   --bg: #fff;
   --bg-accent: #f2f2f2;
+  --bg-light: #f8f8f8;
   --text-color: #73849a;
   --nav-size: 60px;
   --border: 1px solid #fafafa;
@@ -56,7 +57,7 @@ header {
   --button-size: calc(var(--nav-size) * 0.6);
   width: var(--button-size);
   height: var(--button-size);
-  background-color: var(--bg-accent);
+  background-color: var(--bg-light);
   border-radius: 50%;
   padding: 5px;
   margin: 2px;
@@ -64,10 +65,10 @@ header {
   align-items: center;
   justify-content: center;
   opacity: .8;
-  transition: opacity 300ms;
+  transition: background 300ms;
 
   &:hover {
-    opacity: 1;
+    background-color: var(--bg-accent);
   }
 
   svg {
@@ -100,10 +101,15 @@ header {
       display: flex;
       align-items: center;
       border-radius: var(--border-radius);
-      transition: background var(--speed);
+      // transition: background var(--speed);
       padding: 0.5rem 1rem;
       font-size: 1rem;
       cursor: pointer;
+
+      h2 {
+        font-size: 20px;
+        font-weight: 400;
+      }
 
       .icon-button {
         margin-right: 0.5rem;
@@ -157,12 +163,25 @@ header {
     transition: all var(--speed) ease;
   }
 
-  &-exit {
-    // position: absolute;
-  }
+  // &-exit {
+  //   // position: absolute;
+  // }
 
   &-exit-active {
     transform: translateX(110%);
     transition: all var(--speed) ease;
   }
 }
+
+// .menu-secondary-enter,
+// .menu-secondary-enter-active,
+// .menu-secondary-enter-done,
+// .menu-secondary-exit,
+// .menu-secondary-exit-active,
+// .menu-secondary-exit-done {
+//   .menu-item:first-of-type {
+//     .icon-button {
+//       background-color: transparent;
+//     }
+//   }
+// }

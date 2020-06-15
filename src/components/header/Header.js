@@ -58,15 +58,20 @@ const DropdownMenu = () => {
     await firebaseApp.auth().signOut();
   }
 
-
   const DropdownItem = (props) => {
-    return (
-      <a className="menu-item" onClick={() => props.goToMenu ? setActiveMenu(props.goToMenu) : props.clicked()}>
+    return props.link ? (
+      <NavLink to={props.link} className="menu-item">
         <span className="icon-button">{props.leftIcon}</span>
         {props.children}
         <span className="icon-right">{props.rightIcon}</span>
-      </a>
-    );
+      </NavLink>
+    ) : (
+        <a className="menu-item" onClick={() => props.goToMenu ? setActiveMenu(props.goToMenu) : props.clicked()}>
+          <span className="icon-button">{props.leftIcon}</span>
+          {props.children}
+          <span className="icon-right">{props.rightIcon}</span>
+        </a>
+      );
   }
 
   return (
@@ -98,10 +103,10 @@ const DropdownMenu = () => {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon={<Icon name="arrow-back" />}>
-            <h2>My Tutorial</h2>
+          <DropdownItem goToMenu="main" leftIcon={<Icon name="chevron-back" />}>
+            <h2>Settings</h2>
           </DropdownItem>
-          <DropdownItem leftIcon={<Icon name="logo-apple" />}>Apple</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="shield-checkmark-outline" />} link='/'>Change Password</DropdownItem>
         </div>
       </CSSTransition>
 

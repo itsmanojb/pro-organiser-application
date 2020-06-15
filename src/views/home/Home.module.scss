@@ -1,5 +1,5 @@
 .container {
-  composes: container from '../../common/styles/styles.module.css';
+  composes: container from '../../common/styles/styles.module.scss';
   padding: 15px 0 30px;
 }
 

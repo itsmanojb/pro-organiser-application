@@ -7,7 +7,7 @@
 }
 
 .nav {
-  composes: container from '../../common/styles/styles.module.css';
+  composes: container from '../../common/styles/styles.module.scss';
   display: flex;
   justify-content: space-between;
   align-items: center;

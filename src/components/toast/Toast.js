@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ToastsContext } from '../../context/Toasts';
-import './Toast.css';
+import './Toast.scss';
 
 export const Toast = props => {
 

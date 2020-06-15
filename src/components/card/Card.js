@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import styles from './Card.module.css';
-import commonStyles from './../../common/styles/styles.module.css';
 import { Team } from '../team-tags/Team';
 import { Modal } from '../../common/modal/Modal';
 import { convertDateToNice } from '../../utils/utility';
@@ -23,35 +21,35 @@ export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
 
   const detailsModal = (
     <Modal>
-      <div className={styles.modalHeader}>
-        <div className={styles.title}>
+      <div>
+        <div>
           {card.title}
-          <div className={styles.meta}>
+          <div>
             in <span>{board.name}</span>
           </div>
         </div>
-        <div className={styles.btnGroup}>
-          <button className={commonStyles.info} onClick={doEdit}>
+        <div>
+          <button onClick={doEdit}>
             Edit
           </button>
-          <button className={commonStyles.danger} onClick={doArchive}>
+          <button onClick={doArchive}>
             Archive
           </button>
         </div>
-        <div className={styles.modalClose} onClick={() => setIsDetails(false)}>
+        <div onClick={() => setIsDetails(false)}>
           &times;
         </div>
       </div>
-      <div className={styles.modalBody}>
-        <div className={styles.det}>
+      <div>
+        <div>
           <header>Description</header>
           <div>{card.description}</div>
         </div>
-        <div className={styles.det}>
+        <div>
           <header>Members</header>
-          <div className={styles.detTeam}>{members}</div>
+          <div>{members}</div>
         </div>
-        <div className={styles.det}>
+        <div>
           <header>Due Date</header>
           <div>{dueDate}</div>
         </div>
@@ -67,14 +65,13 @@ export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
   return (
     <>
       <li
-        className={styles.item}
         onDragStart={e => dragStart(e, card)}
         draggable
         onClick={() => setIsDetails(true)}
       >
-        <div className={styles.text}>{card.title}</div>
-        <div className={styles.actions}>
-          <div className={styles.actionBtn}>
+        <div>{card.title}</div>
+        <div>
+          <div>
             <i
               className="material-icons"
               style={{ fontSize: '30px', cursor: 'move' }}
@@ -82,7 +79,7 @@ export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
               list
             </i>
           </div>
-          <div className={styles.team}>{members}</div>
+          <div>{members}</div>
         </div>
       </li>
       {isDetails && detailsModal}

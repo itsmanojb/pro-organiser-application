@@ -1,5 +1,5 @@
 .modalHead {
-  composes: modalHead from './../../common/styles/styles.module.css';
+  composes: modalHead from './../../common/styles/styles.module.scss';
   color: #3998e6;
   font-size: 24px;
   padding-bottom: 20px;
@@ -7,7 +7,7 @@
 }
 
 .close {
-  composes: modalClose from './../../common/styles/styles.module.css';
+  composes: modalClose from './../../common/styles/styles.module.scss';
 }
 
 .modalBody {

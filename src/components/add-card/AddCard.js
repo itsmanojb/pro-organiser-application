@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '../../common/modal/Modal';
-import styles from './AddCard.module.css';
-import commonStyles from './../../common/styles/styles.module.css';
 import { Alert } from '../../common/alert/Alert';
 
 export const AddCard = ({
@@ -75,9 +73,9 @@ export const AddCard = ({
 
   return (
     <Modal>
-      <div className={styles.modalHead}>
+      <div>
         <div>{isAdd ? 'Add Card' : 'Edit Card'}</div>
-        <div className={styles.close} onClick={handleClose}>
+        <div onClick={handleClose}>
           &times;
         </div>
       </div>
@@ -88,8 +86,8 @@ export const AddCard = ({
           canClose={() => setError(null)}
         />
       )}
-      <div className={styles.modalBody}>
-        <div className={styles.formField}>
+      <div>
+        <div>
           <label htmlFor="title">Enter the title for your task</label>
           <input
             type="text"
@@ -100,7 +98,7 @@ export const AddCard = ({
             onChange={e => setTitle(e.target.value)}
           />
         </div>
-        <div className={styles.formField}>
+        <div>
           <label htmlFor="title">
             Choose members for this task(select multiple, if needed)
           </label>
@@ -118,7 +116,7 @@ export const AddCard = ({
             ))}
           </select>
         </div>
-        <div className={styles.formField}>
+        <div>
           <label htmlFor="title">Add the descriptions for your task</label>
           <input
             type="text"
@@ -129,7 +127,7 @@ export const AddCard = ({
             onChange={e => setDescription(e.target.value)}
           />
         </div>
-        <div className={styles.formField}>
+        <div>
           <label htmlFor="title">Select the due date for this task</label>
           <input
             type="date"
@@ -139,16 +137,16 @@ export const AddCard = ({
             onChange={e => setDueDate(e.target.value)}
           />
         </div>
-        <div className={styles.formField}>
+        <div>
           {isAdd ? (
-            <button className={commonStyles.info} id="CreateCard" onClick={onAdd}>
+            <button id="CreateCard" onClick={onAdd}>
               Add Card
             </button>
           ) : (
-            <button className={commonStyles.info} onClick={onEdit}>
-              Edit Card
-            </button>
-          )}
+              <button onClick={onEdit}>
+                Edit Card
+              </button>
+            )}
         </div>
       </div>
     </Modal>

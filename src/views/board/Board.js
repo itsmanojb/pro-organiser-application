@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import commonStyles from './../../common/styles/styles.module.css';
-import styles from './Board.module.css';
+import * as shortid from 'shortid';
+
 import {
   getBoard,
   getColumns,
@@ -9,12 +9,12 @@ import {
   deleteColumn,
   deleteBoard,
 } from '../../utils/data';
+
 import { Loader } from '../../common/loader/Loader';
 import { Card } from '../../components/card/Card';
 import { AddCard } from '../../components/add-card/AddCard';
 import { AddColumn } from '../../components/add-column/AddColumn';
 import { createDeepCopy } from '../../utils/utility';
-import * as shortid from 'shortid';
 import { Alert } from '../../common/alert/Alert';
 
 export const Board = ({ match, history }) => {
@@ -184,82 +184,78 @@ export const Board = ({ match, history }) => {
       {loading ? (
         <Loader />
       ) : (
-        <div className={styles.container}>
-          <div className={styles.containerHeader}>
-            <h2 className={commonStyles.title}>{board.name}</h2>
-            <button className={commonStyles.danger} onClick={handleBoardDelete}>
-              Delete Board
+          <div>
+            <div>
+              <h2>{board.name}</h2>
+              <button onClick={handleBoardDelete}>
+                Delete Board
             </button>
-          </div>
-          {error && (
-            <Alert type={'error'} canClose={() => setError(null)}>
-              {error}
-            </Alert>
-          )}
-          <div className={styles.ui}>
-            <div className={styles.columns}>
-              {columns.map((column) => {
-                return (
-                  <div
-                    className={styles.column}
-                    key={column.id}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      onDragDrop(e, column);
-                    }}
-                  >
-                    <header>
-                      {column.name}
-                      <div
-                        className={styles.trash}
-                        onClick={() => handleDeleteColumn(column)}
-                      >
-                        <i
-                          className="material-icons"
-                          style={{ fontSize: '25px' }}
+            </div>
+            {error && (
+              <Alert type={'error'} canClose={() => setError(null)}>
+                {error}
+              </Alert>
+            )}
+            <div>
+              <div>
+                {columns.map((column) => {
+                  return (
+                    <div
+                      key={column.id}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        onDragDrop(e, column);
+                      }}
+                    >
+                      <header>
+                        {column.name}
+                        <div
+                          onClick={() => handleDeleteColumn(column)}
                         >
-                          delete_outline
+                          <i
+                            className="material-icons"
+                            style={{ fontSize: '25px' }}
+                          >
+                            delete_outline
                         </i>
+                        </div>
+                      </header>
+                      <ul>
+                        {column.cards.map(
+                          (card) =>
+                            !card.isArchive && (
+                              <Card
+                                card={card}
+                                board={board}
+                                key={card.id}
+                                hanldeEdit={() => openCardEdit(card, column)}
+                                hanldeArchive={() =>
+                                  handleCardArchive(card, column)
+                                }
+                                column={column}
+                              />
+                            )
+                        )}
+                      </ul>
+                      <footer>
+                        <div
+                          onClick={() => openAddCard(column)}
+                        >
+                          Add a card
                       </div>
-                    </header>
-                    <ul>
-                      {column.cards.map(
-                        (card) =>
-                          !card.isArchive && (
-                            <Card
-                              card={card}
-                              board={board}
-                              key={card.id}
-                              hanldeEdit={() => openCardEdit(card, column)}
-                              hanldeArchive={() =>
-                                handleCardArchive(card, column)
-                              }
-                              column={column}
-                            />
-                          )
-                      )}
-                    </ul>
-                    <footer>
-                      <div
-                        className={styles.add}
-                        onClick={() => openAddCard(column)}
-                      >
-                        Add a card
-                      </div>
-                    </footer>
-                  </div>
-                );
-              })}
-              <button
-                className={styles.addButton}
-                onClick={() => setIsColumnAdd(true)}
-              >
-                Add a column
+                      </footer>
+                    </div>
+                  );
+                })}
+                <button
+                  onClick={() => setIsColumnAdd(true)}
+                >
+                  Add a column
               </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       {isColumnAdd && (
         <AddColumn handleClose={handleModalClose} handleAdd={handleAddCloumn} />
       )}

@@ -1,6 +1,4 @@
 import React, { useState, useContext } from 'react';
-import commonStyles from './../../common/styles/styles.module.css';
-import styles from './AddBoard.module.css';
 import { addBoard } from '../../utils/data';
 import { Alert } from '../../common/alert/Alert';
 import { AuthContext } from '../../context/Auth';
@@ -46,14 +44,14 @@ export const AddBoard = ({ history }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       {error && (
         <Alert canClose={handleClose} type={'error'}>
           {error}
         </Alert>
       )}
-      <h2 className={commonStyles.title}>Create a board</h2>
-      <div className={styles.field}>
+      <h2>Create a board</h2>
+      <div>
         <label htmlFor="name">Enter a name for your board</label>
         <input
           type="text"
@@ -64,7 +62,7 @@ export const AddBoard = ({ history }) => {
           placeholder="eg. Agile Sprint Board"
         />
       </div>
-      <div className={styles.field}>
+      <div>
         <label htmlFor="team">Add your Team members</label>
         <input
           type="text"
@@ -75,7 +73,7 @@ export const AddBoard = ({ history }) => {
           placeholder="Add your team members(separated by commas)"
         />
       </div>
-      <div className={styles.field}>
+      <div>
         <label htmlFor="type">Enter the type for your board</label>
         <input
           type="text"
@@ -86,11 +84,10 @@ export const AddBoard = ({ history }) => {
           placeholder="eg. Design UX"
         />
       </div>
-      <div className={styles.field}>
+      <div>
         <button
           type="submit"
           onClick={saveBoard}
-          className={commonStyles.info}
           id="CreateBoard"
         >
           Create

@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
-import styles from './../../common/styles/formStyles.module.css';
-import commonStyle from './../../common/styles/styles.module.css';
-
 import { firebaseApp } from '../../firebase/init';
 import { AuthContext } from '../../context/Auth';
 import { ToastsContext } from '../../context/Toasts';
@@ -79,9 +76,9 @@ const Login = ({ history }) => {
   }
 
   return (
-    <form className={styles.formContainer}>
-      <div className={styles.formHeader}>Login</div>
-      <div className={styles.formGroup}>
+    <form>
+      <div>Login</div>
+      <div>
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -92,7 +89,7 @@ const Login = ({ history }) => {
           placeholder='mail@example.com'
         />
       </div>
-      <div className={styles.formGroup}>
+      <div>
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -103,14 +100,14 @@ const Login = ({ history }) => {
           placeholder='******'
         />
       </div>
-      <div className={styles.meta}>
+      <div>
         Forgot password ? <Link to="/reset-password">Reset</Link>.
       </div>
-      <div className={styles.formGroup}>
-        <button type="submit" className={commonStyle.info} onClick={(e) => handleLogin(e)}>Login</button>
+      <div>
+        <button type="submit" onClick={(e) => handleLogin(e)}>Login</button>
       </div>
-      <div className={styles.meta}>
-        Dont have an account? <Link to="/signup">Sign up</Link>.
+      <div>
+        Don't have an account? <Link to="/signup">Sign up</Link>.
       </div>
     </form>
   );

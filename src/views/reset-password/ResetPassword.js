@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import styles from './../../common/styles/formStyles.module.css';
-import commonStyle from './../../common/styles/styles.module.css';
-
 import { firebaseApp } from '../../firebase/init';
 import { ToastsContext } from '../../context/Toasts';
 
@@ -74,9 +71,9 @@ const ResetPassword = ({ history }) => {
   }
 
   return (
-    <form className={styles.formContainer}>
-      <div className={styles.formHeader}>Reset Password</div>
-      <div className={styles.formGroup}>
+    <form>
+      <div>Reset Password</div>
+      <div>
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -87,13 +84,13 @@ const ResetPassword = ({ history }) => {
           placeholder='mail@example.com'
         />
       </div>
-      <div className={styles.formGroup}>
-        <button type="submit" className={commonStyle.info} onClick={(e) => handleSubmit(e)}>Submit</button>
+      <div>
+        <button type="submit" onClick={(e) => handleSubmit(e)}>Submit</button>
       </div>
-      <div className={styles.meta}>
+      <div>
         Don't have an account? <Link to="/signup">Sign up</Link>.
       </div>
-      <div className={styles.meta}>
+      <div>
         or try <Link to="/login">Login</Link> again.
       </div>
     </form>

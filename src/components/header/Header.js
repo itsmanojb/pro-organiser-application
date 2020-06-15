@@ -4,20 +4,13 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
+import Icon from '../../components/misc/IonIcon';
 import { AuthContext } from '../../context/Auth';
 import { firebaseApp } from '../../firebase/init';
 
 import './Header.scss';
 
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import { ReactComponent as BellIcon } from '../../assets/icons/bell.svg';
-import { ReactComponent as MessengerIcon } from '../../assets/icons/messenger.svg';
-import { ReactComponent as CaretIcon } from '../../assets/icons/caret.svg';
-import { ReactComponent as PlusIcon } from '../../assets/icons/plus.svg';
-import { ReactComponent as CogIcon } from '../../assets/icons/cog.svg';
-import { ReactComponent as ChevronIcon } from '../../assets/icons/chevron.svg';
-import { ReactComponent as ArrowIcon } from '../../assets/icons/arrow.svg';
-import { ReactComponent as BoltIcon } from '../../assets/icons/bolt.svg';
 
 function Navbar(props) {
   return (
@@ -75,14 +68,14 @@ function DropdownMenu() {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem>My Profile</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="person-outline" />}>My Profile</DropdownItem>
           <DropdownItem
-            leftIcon={<CogIcon />}
-            rightIcon={<ChevronIcon />}
+            leftIcon={<Icon name="settings-outline" />}
+            rightIcon={<Icon name="chevron-forward" />}
             goToMenu="settings">
             Settings
           </DropdownItem>
-          <DropdownItem>Log Out</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="log-out-outline" />}>Log Out</DropdownItem>
         </div>
       </CSSTransition>
 
@@ -93,13 +86,10 @@ function DropdownMenu() {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
+          <DropdownItem goToMenu="main" leftIcon={<Icon name="arrow-back" />}>
             <h2>My Tutorial</h2>
           </DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>HTML</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>JavaScript</DropdownItem>
-          <DropdownItem leftIcon={<BoltIcon />}>Awesome!</DropdownItem>
+          <DropdownItem leftIcon={<Icon name="logo-apple" />}>Apple</DropdownItem>
         </div>
       </CSSTransition>
 
@@ -129,10 +119,8 @@ const Header = () => {
       </NavLink>
 
       <Navbar>
-        <NavItem icon={<PlusIcon />} />
-        <NavItem icon={<BellIcon />} />
-        <NavItem icon={<MessengerIcon />} />
-        <NavItem icon={<CaretIcon />}>
+        <NavItem icon={<Icon name="home" />} />
+        <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>
         </NavItem>
       </Navbar>

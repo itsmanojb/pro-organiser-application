@@ -19,13 +19,15 @@ header {
 .brand {
   align-items: center;
   display: flex;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 500;
+  padding: 0 10px;
 
   svg {
     width: 36px;
     height: 36px;
     margin-right: 10px;
+    opacity: 0.5;
   }
 }
 
@@ -50,7 +52,7 @@ header {
 }
 
 .icon-button {
-  --button-size: calc(var(--nav-size) * 0.5);
+  --button-size: calc(var(--nav-size) * 0.6);
   width: var(--button-size);
   height: var(--button-size);
   background-color: var(--bg-accent);
@@ -60,10 +62,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: filter 300ms;
+  opacity: .8;
+  transition: opacity 300ms;
 
   &:hover {
-    filter: brightness(1.2);
+    opacity: 1;
   }
 
   svg {
@@ -74,7 +77,7 @@ header {
 }
 
 .dropdown {
-  --border-radius: 4px;
+  // --border-radius: 4px;
   position: absolute;
   top: calc(var(--nav-size) - 4px);
   width: 300px;
@@ -82,7 +85,7 @@ header {
   background-color: var(--bg);
   border: var(--border);
   border-radius: var(--border-radius);
-  padding: 1rem;
+  padding: 1rem 0;
   overflow: hidden;
   transition: height var(--speed) ease;
   z-index: 1;
@@ -97,7 +100,7 @@ header {
       align-items: center;
       border-radius: var(--border-radius);
       transition: background var(--speed);
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
       font-size: 1rem;
 
       .icon-button {

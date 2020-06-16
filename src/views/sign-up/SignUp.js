@@ -112,13 +112,13 @@ const SignUp = ({ history }) => {
                 id="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder='mail@example.com'
+                placeholder="Email address"
                 className="floating__input"
                 autoComplete="false"
                 spellCheck="false"
               />
-              <label htmlFor="email" className="floating__label" data-content="Email">
-                <span className="hidden--visually">Email</span>
+              <label htmlFor="email" className="floating__label" data-content="Email address">
+                <span className="hidden--visually">Email address</span>
               </label>
             </div>
 
@@ -129,7 +129,7 @@ const SignUp = ({ history }) => {
                 id="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder='******'
+                placeholder="Password"
                 className="floating__input"
                 autoComplete="false"
               />
@@ -142,7 +142,7 @@ const SignUp = ({ history }) => {
               <button type="submit" className="button" onClick={(e) => handleSignUp(e)}>Sign Up</button>
             </div>
             <div className="help-block">
-              Already have an account? <Link to="/login">Sign in</Link>.
+              Already have an account? <Link to="/login">Sign in</Link>
             </div>
           </form>
         </div>

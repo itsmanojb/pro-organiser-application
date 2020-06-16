@@ -27,6 +27,12 @@ a:focus {
   --text-color-muted: #888;
 }
 
+@mixin small-ui {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -42,7 +48,7 @@ ul {
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--text-color);
   text-decoration: none;
 }
 
@@ -59,6 +65,11 @@ button:focus {
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: 100%;
+
+    @include small-ui {
+      grid-template-columns: 1fr;
+      grid-template-rows: 200px 1fr;
+    }
   }
 
   .form-wrapper {
@@ -92,6 +103,11 @@ button:focus {
       width: 100%;
       max-width: 550px;
       opacity: 0.85;
+
+      @include small-ui {
+        object-fit: cover;
+        max-width: 100%;
+      }
     }
 
   }
@@ -214,13 +230,19 @@ button:focus {
   transition: background .3s ease;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     background: var(--color-accent-alt);
   }
 }
 
 .form {
   width: 360px;
+
+  a {
+    color: var(--color-accent);
+  }
 
   p {
     color: var(--text-color-muted);
@@ -231,5 +253,12 @@ button:focus {
     font-weight: 500;
     margin: -10px 0 30px;
     color: var(--text-color);
+  }
+
+  @include small-ui {
+    width: 100%;
+    padding: 40px 20px;
+    max-width: 480px;
+    margin: 0 auto;
   }
 }

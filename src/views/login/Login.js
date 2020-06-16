@@ -94,13 +94,13 @@ const Login = ({ history }) => {
                 id="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder='mail@example.com'
+                placeholder='Email address'
                 className="floating__input"
                 autoComplete="false"
                 spellCheck="false"
               />
-              <label htmlFor="email" className="floating__label" data-content="Email">
-                <span className="hidden--visually">Email</span>
+              <label htmlFor="email" className="floating__label" data-content="Email address">
+                <span className="hidden--visually">Email address</span>
               </label>
             </div>
 
@@ -110,7 +110,7 @@ const Login = ({ history }) => {
                 id="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder='******'
+                placeholder='Password'
                 className="floating__input"
                 autoComplete="false"
               />
@@ -120,13 +120,13 @@ const Login = ({ history }) => {
             </div>
 
             <div className="help-block">
-              Forgot password ? <Link to="/reset-password">Reset</Link>.
+              Forgot password ? <Link to="/reset-password">Reset</Link>
             </div>
             <div className="form-buttons">
               <button type="submit" className="button" onClick={(e) => handleLogin(e)}>Login</button>
             </div>
             <div className="help-block">
-              Don't have an account? <Link to="/signup">Sign up</Link>.
+              Don't have an account? <Link to="/signup">Sign up</Link>
             </div>
           </form>
         </div>

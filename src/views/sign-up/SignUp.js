@@ -4,6 +4,8 @@ import { withRouter, Link } from 'react-router-dom';
 import { firebaseApp } from '../../firebase/init';
 import { ToastsContext } from '../../context/Toasts';
 
+import Image from '../../assets/login-bg.png';
+
 const SignUp = ({ history }) => {
 
   useEffect(() => {
@@ -78,50 +80,74 @@ const SignUp = ({ history }) => {
   }
 
   return (
-    <form>
-      <div>Getting started</div>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your Name"
-        />
+    <div className="login-ui">
+      <div className="wrapper">
+        <div className="graphics">
+          <img src={Image} alt="" />
+        </div>
+        <div className="form-wrapper">
+          <form className="form">
+            <p>Getting started</p>
+            <h2>Create your account</h2>
+
+            <div className="floating">
+              <input type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your Name"
+                className="floating__input"
+                autoComplete="false"
+                spellCheck="false"
+              />
+              <label htmlFor="name" className="floating__label" data-content="Name">
+                <span className="hidden--visually">Name</span>
+              </label>
+            </div>
+
+            <div className="floating">
+              <input type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder='mail@example.com'
+                className="floating__input"
+                autoComplete="false"
+                spellCheck="false"
+              />
+              <label htmlFor="email" className="floating__label" data-content="Email">
+                <span className="hidden--visually">Email</span>
+              </label>
+            </div>
+
+
+            <div className="floating">
+              <input type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder='******'
+                className="floating__input"
+                autoComplete="false"
+              />
+              <label htmlFor="password" className="floating__label" data-content="Password">
+                <span className="hidden--visually">Password</span>
+              </label>
+            </div>
+
+            <div className="form-buttons">
+              <button type="submit" className="button" onClick={(e) => handleSignUp(e)}>Sign Up</button>
+            </div>
+            <div className="help-block">
+              Already have an account? <Link to="/login">Sign in</Link>.
+            </div>
+          </form>
+        </div>
       </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="mail@example.com"
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="******"
-        />
-      </div>
-      <div>
-        <button type="submit" onClick={(e) => handleSignUp(e)}>
-          Sign Up
-        </button>
-      </div>
-      <div>
-        Have an account? <Link to="/login">login now</Link>.
-      </div>
-    </form>
+    </div>
   );
 };
 

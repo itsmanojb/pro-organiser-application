@@ -13,6 +13,7 @@ a:focus {
 }
 
 :root {
+  --page-bg: #fff;
   --color-accent: #3c97f7;
   --color-accent-alt: #3480de;
   --field-background: #fafafa;
@@ -52,10 +53,11 @@ button:focus {
 
 .login-ui {
   height: 100vh;
+  background-color: var(--page-bg);
 
   .wrapper {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1fr 1fr;
     height: 100%;
   }
 
@@ -218,13 +220,16 @@ button:focus {
 }
 
 .form {
-  background-color: #fff;
   width: 360px;
+
+  p {
+    color: var(--text-color-muted);
+  }
 
   h2 {
     font-size: 30px;
     font-weight: 500;
-    margin: 20px 0;
+    margin: -10px 0 30px;
     color: var(--text-color);
   }
 }

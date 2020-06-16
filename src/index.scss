@@ -12,6 +12,8 @@ a:focus {
   outline: 1px dotted var(--color-accent);
 }
 
+@import url('https://fonts.googleapis.com/css?family=Google+Sans:300,400,500,700');
+
 :root {
   --page-bg: #fff;
   --color-accent: #3c97f7;
@@ -38,7 +40,8 @@ a:focus {
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  // font-family: 'Roboto', sans-serif;
+  font-family: 'Google Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -231,11 +234,31 @@ button:focus {
   border-radius: var(--border-radius);
   transition: background .3s ease;
   cursor: pointer;
+  line-height: 1;
+  font-family: inherit;
 
   &:hover,
   &:active,
   &:focus {
     background: var(--color-accent-alt);
+  }
+
+  &.trans {
+    background: transparent;
+    color: #fff;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  &.inline {
+    width: auto;
+    font-size: 14px;
+    padding: 1rem 1.5rem;
+    display: inline-block;
   }
 }
 

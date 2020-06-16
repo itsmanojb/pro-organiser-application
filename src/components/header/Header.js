@@ -118,11 +118,11 @@ const Header = () => {
 
   return (
     <header>
-      <NavLink to="/" className="brand">
+      <NavLink to="/dashbaord" className="brand">
         <Logo /> Task Force
       </NavLink>
       <Navbar>
-        <NavItem link="/" icon={<Icon name="home" />} />
+        <NavItem link="/dashbaord" icon={<Icon name="home" />} />
         <NavItem link="/createboard" icon={<Icon name="clipboard-outline" />} />
         <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>

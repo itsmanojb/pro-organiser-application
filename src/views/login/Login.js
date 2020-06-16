@@ -39,17 +39,7 @@ const Login = ({ history }) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        // setToasts([
-        //   ...toasts,
-        //   {
-        //     id: toasts.length,
-        //     title: 'Oh Yes',
-        //     message: 'Logged in successfully.',
-        //     backgroundColor: '#5cb85c',
-        //     icon: 'checkmark-circle'
-        //   }
-        // ]);
-        history.push('/');
+        history.push('/dashboard');
       })
       .catch(err => {
         // console.log(err);
@@ -74,7 +64,7 @@ const Login = ({ history }) => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (

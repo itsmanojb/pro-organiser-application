@@ -6,10 +6,11 @@ import { ToastsContextProvider } from './context/Toasts';
 
 import PrivateRoute from './common/guards/PrivateRoute';
 
-import { Home } from './views/home/Home';
+import { Dashboard } from './views/dashboard/Dashboard';
 import { AddBoard } from './views/create-board/AddBoard';
 import { Board } from './views/board/Board';
 import { Toast } from './components/toast/Toast';
+import Home from './views/home/Home';
 import SignUp from './views/sign-up/SignUp';
 import Login from './views/login/Login';
 import ResetPassword from './views/reset-password/ResetPassword';
@@ -21,7 +22,8 @@ function App() {
       <AuthContextProvider>
         <Router>
           <Switch>
-            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/" exact component={Home} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute path="/createboard" component={AddBoard} />
             <PrivateRoute path="/board/:name" component={Board} />
             <Route path="/signup" component={SignUp} />

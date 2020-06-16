@@ -85,7 +85,7 @@ const Login = ({ history }) => {
         </div>
         <div className="form-wrapper">
           <form className="form">
-            <p>Let the Force guide you</p>
+            <p>Continue working</p>
             <h2>Login your account</h2>
 
             <div className="floating">

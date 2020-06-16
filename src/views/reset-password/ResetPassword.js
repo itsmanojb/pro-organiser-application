@@ -4,6 +4,8 @@ import { withRouter, Link } from 'react-router-dom';
 import { firebaseApp } from '../../firebase/init';
 import { ToastsContext } from '../../context/Toasts';
 
+import Image from '../../assets/login-bg.png';
+
 
 const ResetPassword = ({ history }) => {
 
@@ -71,29 +73,42 @@ const ResetPassword = ({ history }) => {
   }
 
   return (
-    <form>
-      <div>Reset Password</div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder='mail@example.com'
-        />
+    <div className="login-ui">
+      <div className="wrapper">
+        <div className="graphics">
+          <img src={Image} alt="" />
+        </div>
+        <div className="form-wrapper">
+          <form className="form">
+            <p>Recover account</p>
+            <h2>Password Reset</h2>
+
+            <div className="floating">
+              <input type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder='Email address'
+                className="floating__input"
+                autoComplete="false"
+                spellCheck="false"
+              />
+              <label htmlFor="email" className="floating__label" data-content="Email address">
+                <span className="hidden--visually">Email address</span>
+              </label>
+            </div>
+
+            <div className="form-buttons">
+              <button type="submit" className="button" onClick={(e) => handleSubmit(e)}>Submit</button>
+            </div>
+            <div className="help-block">
+              Don't have an account? <Link to="/signup">Sign up</Link>
+            </div>
+          </form>
+        </div>
       </div>
-      <div>
-        <button type="submit" onClick={(e) => handleSubmit(e)}>Submit</button>
-      </div>
-      <div>
-        Don't have an account? <Link to="/signup">Sign up</Link>.
-      </div>
-      <div>
-        or try <Link to="/login">Login</Link> again.
-      </div>
-    </form>
+    </div>
   );
 };
 

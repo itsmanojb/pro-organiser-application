@@ -1,6 +1,6 @@
-.container {
-  composes: container from '../../common/styles/styles.module.scss';
-  padding: 15px 0 30px;
+main.content {
+  height: calc(100vh - var(--nav-size));
+  overflow: auto;
 }
 
 .boards {
@@ -24,7 +24,7 @@
   text-transform: capitalize;
 }
 
-.board:hover{
+.board:hover {
   transform: scale(1.02) translateY(-10px);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }

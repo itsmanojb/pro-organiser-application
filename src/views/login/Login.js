@@ -39,16 +39,16 @@ const Login = ({ history }) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        setToasts([
-          ...toasts,
-          {
-            id: toasts.length,
-            title: 'Oh Yes',
-            message: 'Logged in successfully.',
-            backgroundColor: '#5cb85c',
-            icon: 'checkmark-circle'
-          }
-        ]);
+        // setToasts([
+        //   ...toasts,
+        //   {
+        //     id: toasts.length,
+        //     title: 'Oh Yes',
+        //     message: 'Logged in successfully.',
+        //     backgroundColor: '#5cb85c',
+        //     icon: 'checkmark-circle'
+        //   }
+        // ]);
         history.push('/');
       })
       .catch(err => {

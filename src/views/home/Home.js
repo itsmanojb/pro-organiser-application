@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AuthContext } from '../../context/Auth';
 import { getBoards } from '../../utils/data';
+
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
 import Header from '../../components/header/Header';
-import { AuthContext } from '../../context/Auth';
+
+import './Home.scss';
 
 export const Home = () => {
+
+  useEffect(() => {
+    document.title = 'TaskForce - Dashboard'
+  }, []);
+
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
@@ -30,7 +38,7 @@ export const Home = () => {
       ) : (
           <>
             <Header />
-            <div>
+            <main className="content">
               <h2>Boards</h2>
               {boards.length === 0 && (
                 <Alert type="info" isClosable={false}>
@@ -50,7 +58,7 @@ export const Home = () => {
                   );
                 })}
               </div>
-            </div>
+            </main>
           </>
         )}
     </>

@@ -4,6 +4,28 @@
   box-sizing: border-box;
 }
 
+*:focus {
+  outline-color: transparent;
+}
+
+a:focus {
+  outline: 1px dotted var(--color-accent);
+}
+
+:root {
+  --color-accent: #3c97f7;
+  --color-accent-alt: #3480de;
+  --field-background: #fafafa;
+  --field-background-hover: #f8f8f8;
+  --label-offset: 1rem;
+  --input-border: rgba(0, 0, 0, 0.1);
+  --input-border-hover: rgba(0, 0, 0, 0.2);
+  --label-color: #222;
+  --border-radius: 4px;
+  --text-color: #666;
+  --text-color-muted: #888;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -19,6 +41,190 @@ ul {
 }
 
 a {
-  color: var(--text-color);
+  color: var(--color-accent);
   text-decoration: none;
+}
+
+button:focus {
+  outline-color: var(--color-accent-alt);
+}
+
+
+.login-ui {
+  height: 100vh;
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    height: 100%;
+  }
+
+  .form-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+
+    .help-block {
+      margin: 20px 0;
+      font-size: 16px;
+      color: var(--text-color-muted);
+    }
+  }
+
+  .form-buttons {
+    margin: 40px 0 10px;
+  }
+
+  .graphics {
+    background-color: #eff6fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    img {
+      height: 100%;
+      object-fit: contain;
+      width: 100%;
+      max-width: 550px;
+      opacity: 0.85;
+    }
+
+  }
+}
+
+.floating {
+  margin-bottom: 20px;
+  background-color: var(--field-background);
+  transition: background-color 0.2s ease;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+
+  &:hover,
+  &:focus-within {
+    background-color: var(--field-background-hover);
+  }
+
+  &:hover {
+    .floating__input {
+      border-color: var(--input-border-hover);
+    }
+  }
+
+  &__input {
+    background: none;
+    border-width: 0;
+    display: block;
+    width: 100%;
+    padding: 1.8rem var(--label-offset) 0.6rem;
+    font-size: 1rem;
+    border-bottom: 0.1rem solid var(--input-border);
+    transition: border-color 0.2s ease;
+    caret-color: var(--color-accent);
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  &__label {
+    display: block;
+    position: relative;
+    max-height: 0;
+    font-weight: 500;
+    pointer-events: none;
+
+    &::before {
+      color: var(--label-color);
+      content: attr(data-content);
+      display: inline-block;
+      filter: blur(0);
+      backface-visibility: hidden;
+      transform-origin: left top;
+      transition: transform 0.2s ease;
+      left: var(--label-offset);
+      position: relative;
+      font-weight: 400;
+    }
+
+    &::after {
+      bottom: 1rem;
+      content: "";
+      height: 0.1rem;
+      position: absolute;
+      transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 180ms cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+      opacity: 0;
+      left: 0;
+      top: 100%;
+      margin-top: -0.1rem;
+      transform: scale3d(0, 1, 1);
+      width: 100%;
+      background-color: var(--color-accent);
+    }
+  }
+}
+
+.floating__input:focus+.floating__label::after {
+  transform: scale3d(1, 1, 1);
+  opacity: 1;
+}
+
+.floating__input:placeholder-shown+.floating__label::before {
+  transform: translate3d(0, -2.2rem, 0) scale3d(1, 1, 1);
+}
+
+.floating__label::before,
+.floating__input:focus+.floating__label::before {
+  transform: translate3d(0, -3.12rem, 0) scale3d(0.82, 0.82, 1);
+}
+
+.floating__input:focus+.floating__label::before {
+  color: var(--color-accent);
+}
+
+.hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.button {
+  background: var(--color-accent);
+  border-width: 0;
+  color: #fff;
+  display: block;
+  width: 100%;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: var(--border-radius);
+  transition: background .3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-accent-alt);
+  }
+}
+
+.form {
+  background-color: #fff;
+  width: 360px;
+
+  h2 {
+    font-size: 30px;
+    font-weight: 500;
+    margin: 20px 0;
+    color: var(--text-color);
+  }
 }

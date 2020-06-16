@@ -5,6 +5,8 @@ import { firebaseApp } from '../../firebase/init';
 import { AuthContext } from '../../context/Auth';
 import { ToastsContext } from '../../context/Toasts';
 
+import Image from '../../assets/login-bg.png';
+
 
 const Login = ({ history }) => {
 
@@ -76,40 +78,60 @@ const Login = ({ history }) => {
   }
 
   return (
-    <form>
-      <div>Login</div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder='mail@example.com'
-        />
+    <div className="login-ui">
+      <div className="wrapper">
+        <div className="graphics">
+          <img src={Image} alt="" />
+        </div>
+        <div className="form-wrapper">
+          <form className="form">
+            <p>Let the Force guide you</p>
+            <h2>Login your account</h2>
+
+            <div className="floating">
+              <input type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder='mail@example.com'
+                className="floating__input"
+                autoComplete="false"
+                spellCheck="false"
+              />
+              <label htmlFor="email" className="floating__label" data-content="Email">
+                <span className="hidden--visually">Email</span>
+              </label>
+            </div>
+
+            <div className="floating">
+              <input type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder='******'
+                className="floating__input"
+                autoComplete="false"
+              />
+              <label htmlFor="password" className="floating__label" data-content="Password">
+                <span className="hidden--visually">Password</span>
+              </label>
+            </div>
+
+            <div className="help-block">
+              Forgot password ? <Link to="/reset-password">Reset</Link>.
+            </div>
+            <div className="form-buttons">
+              <button type="submit" className="button" onClick={(e) => handleLogin(e)}>Login</button>
+            </div>
+            <div className="help-block">
+              Don't have an account? <Link to="/signup">Sign up</Link>.
+            </div>
+          </form>
+        </div>
       </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder='******'
-        />
-      </div>
-      <div>
-        Forgot password ? <Link to="/reset-password">Reset</Link>.
-      </div>
-      <div>
-        <button type="submit" onClick={(e) => handleLogin(e)}>Login</button>
-      </div>
-      <div>
-        Don't have an account? <Link to="/signup">Sign up</Link>.
-      </div>
-    </form>
+    </div>
   );
 };
 

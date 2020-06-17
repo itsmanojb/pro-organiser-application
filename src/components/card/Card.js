@@ -1,58 +1,78 @@
 import React, { useState } from 'react';
-import { Team } from '../team-tags/Team';
+import Icon from '../../components/misc/IonIcon';
+import { Team } from '../../components/team-tags/Team';
 import { Modal } from '../../common/modal/Modal';
 import { convertDateToNice } from '../../utils/utility';
 
-export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
+export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
   const [isDetails, setIsDetails] = useState(false);
   const members = card.teamMembers.map(name => <Team name={name} key={name} />);
+  const allMembers = card.teamMembers;
   const date = new Date(card.date);
   const dueDate = convertDateToNice(date);
 
   function doEdit() {
     setIsDetails(false);
-    hanldeEdit();
+    handleEdit();
   }
 
   function doArchive() {
     setIsDetails(false);
-    hanldeArchive();
+    handleArchive();
   }
 
   const detailsModal = (
     <Modal>
-      <div>
-        <div>
-          {card.title}
-          <div>
-            in <span>{board.name}</span>
-          </div>
+      <div className="modal-header">
+        <div className="modal-title">
+          <button>
+            <Icon name="checkmark-outline" /><span>Mark Complete</span>
+          </button>
         </div>
-        <div>
+        <div className="modal-actions">
           <button onClick={doEdit}>
-            Edit
+            <Icon name="create-outline" /><span>Edit</span>
           </button>
           <button onClick={doArchive}>
-            Archive
+            <Icon name="trash-outline" /><span>Delete</span>
           </button>
         </div>
-        <div onClick={() => setIsDetails(false)}>
-          &times;
+        <div className="close" onClick={() => setIsDetails(false)}>
+          <Icon name="close" />
         </div>
       </div>
-      <div>
-        <div>
-          <header>Description</header>
-          <div>{card.description}</div>
-        </div>
-        <div>
-          <header>Members</header>
-          <div>{members}</div>
-        </div>
-        <div>
-          <header>Due Date</header>
-          <div>{dueDate}</div>
-        </div>
+      <div className="modal-content">
+        <h3 className="task-title">
+          {card.title}
+        </h3>
+        <dl>
+          <dt>Assignee</dt>
+          <dd>
+            <div className="assignee">
+              {allMembers.map((member) => <div className="member-name"> <span className="card__avatars--item">{member.charAt(0)}</span> {member} </div>)}
+            </div>
+          </dd>
+          <dt>Due Date</dt>
+          <dd>
+            <div className="date">
+              <div className="icon">
+                <Icon name="calendar-outline" />
+              </div>
+              <span>{dueDate}</span>
+            </div>
+          </dd>
+          <dt>Board</dt>
+          <dd><span className="board-name">{board.name}</span> </dd>
+          <dt>Priority</dt>
+          <dd>
+            <div className="tags">
+              <span className="card__tag card__tag--orange">High</span>
+              <span className="card__tag card__tag--green">Low </span>
+            </div>
+          </dd>
+          <dt>Description</dt>
+          <dd>{card.description}</dd>
+        </dl>
       </div>
     </Modal>
   );
@@ -68,8 +88,8 @@ export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
         onDragStart={e => dragStart(e, card)}
         draggable
         onClick={() => setIsDetails(true)}>
-        <span className="card__tag card__tag--orange">High</span>
-        <span className="card__tag card__tag--green">Low </span>
+        {/* <span className="card__tag card__tag--orange">High</span>
+        <span className="card__tag card__tag--green">Low </span> */}
         <h6 className="card__title">{card.title}</h6>
         <ol className="card__actions">
           <li className="card__actions--wrapper">

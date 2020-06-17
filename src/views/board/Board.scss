@@ -16,7 +16,7 @@
 
   --column-bg-color: #e6e9ec;
   --border-radius: 4px;
-  --column-min-height: 115px;
+  --column-min-height: 135px;
 
 
   .column__list {
@@ -33,7 +33,7 @@
   .column__item {
     border-radius: var(--border-radius);
     background-color: var(--column-bg-color);
-    min-width: calc(300px + 1rem);
+    min-width: calc(350px + 1rem);
     height: 100%;
     overflow-y: auto;
     padding: 0 .5rem;
@@ -88,22 +88,27 @@
   .column__title--wrapper {
     background-color: var(--column-bg-color);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 30px;
     padding: .5rem .25rem;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 1;
+    // z-index: 1;
 
     h2 {
       color: #17394d;
-      font-weight: 700;
-      font-size: .9rem;
+      font-weight: 600;
+      font-size: 18px;
     }
 
-    i {
-      text-align: right;
+    span {
+      justify-self: center;
+      cursor: pointer;
+    }
+
+    ion-icon {
       color: #798d99;
+      font-size: 22px;
     }
   }
 
@@ -118,17 +123,19 @@
     border-radius: var(--border-radius);
     margin: 10px 0;
     cursor: pointer;
+    border: 1px solid #f2f2f2;
 
-    i {
-      margin-right: .25rem;
+    span {
+      margin-left: 5px;
     }
   }
 
   .card__list {
     margin: 0;
     overflow-y: auto;
-    max-height: calc(100vh - 256px);
+    max-height: calc(100vh - 266px);
     border-radius: var(--border-radius);
+    padding: 0 0 2px;
   }
 
   .card__item {
@@ -136,6 +143,7 @@
     border-radius: var(--border-radius);
     box-shadow: 0 1px 0 rgba(9, 45, 66, .25);
     padding: .5rem;
+    cursor: grab;
 
     &+.card__item {
       margin-top: 10px;
@@ -144,8 +152,8 @@
 
   .card__tag {
     font-size: .75rem;
-    padding: .1rem .5rem;
-    border-radius: .25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.15rem;
     font-weight: 700;
     color: white;
     margin-bottom: .75rem;

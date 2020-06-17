@@ -57,7 +57,7 @@ export const getColumns = async (boardId) => {
     const snapshot = await db
       .collection('columns')
       .where('boardId', '==', boardId)
-      .orderBy('created')
+      // .orderBy('created')
       .get();
     const boards = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
     return boards;

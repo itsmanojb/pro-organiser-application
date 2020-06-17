@@ -14,6 +14,8 @@ header {
   background-color: var(--bg);
   box-shadow: var(--box-shadow);
   padding: 0 .5rem;
+  position: sticky;
+  top: 0;
 }
 
 .brand {
@@ -24,8 +26,8 @@ header {
   padding: 0 10px;
 
   svg {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
     opacity: 0.5;
   }

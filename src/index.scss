@@ -18,6 +18,8 @@ a:focus {
   --page-bg: #fff;
   --color-accent: #3c97f7;
   --color-accent-alt: #3480de;
+  --color-danger: #f73c7a;
+  --color-danger-alt: #d82561;
   --field-background: #fafafa;
   --field-background-hover: #f8f8f8;
   --label-offset: 1rem;
@@ -46,7 +48,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -254,11 +257,26 @@ button:focus {
     }
   }
 
+  &.bg-red {
+    background: var(--color-danger);
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: var(--color-danger-alt);
+    }
+  }
+
   &.inline {
     width: auto;
     font-size: 14px;
     padding: 1rem 1.5rem;
     display: inline-block;
+  }
+
+  &.sm {
+    font-size: 13px;
+    padding: .75rem 1rem;
   }
 }
 

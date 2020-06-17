@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './Modal.module.scss';
+import './Modal.scss';
 
 export const Modal = ({ children }) => {
   return (
-    <div className={styles.modalContainer}>
-      <div className={styles.modal}>{children}</div>
+    <div className="overlay">
+      <div className="modal">{children}</div>
     </div>
   );
 };

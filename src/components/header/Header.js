@@ -5,9 +5,9 @@ import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import Icon from '../../components/misc/IonIcon';
 import { AuthContext } from '../../context/Auth';
 import { firebaseApp } from '../../firebase/init';
+import Icon from '../../components/misc/IonIcon';
 
 import './Header.scss';
 

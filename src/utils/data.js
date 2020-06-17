@@ -5,7 +5,7 @@ export const getBoards = async (email) => {
     const snapshot = await db
       .collection('boards')
       .where('user', '==', email)
-      // .orderBy('name', 'desc')
+      // .orderBy('name')
       .get();
     const boards = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
     return boards;

@@ -18,6 +18,7 @@ import { createDeepCopy } from '../../utils/utility';
 import { Alert } from '../../common/alert/Alert';
 
 import Header from '../../components/header/Header';
+import Icon from '../../components/misc/IonIcon';
 import './Board.scss';
 
 export const Board = ({ match, history }) => {
@@ -215,7 +216,9 @@ export const Board = ({ match, history }) => {
                       >
                         <div className="column__title--wrapper">
                           <h2>{column.name}</h2>
-                          <i className="fas fa-ellipsis-h" onClick={() => handleDeleteColumn(column)}></i>
+                          <span onClick={(e) => handleDeleteColumn(column)}>
+                            <Icon name="trash-outline" />
+                          </span>
                         </div>
                         <ul className="card__list">
                           {column.cards.map(
@@ -225,8 +228,8 @@ export const Board = ({ match, history }) => {
                                   card={card}
                                   board={board}
                                   key={card.id}
-                                  hanldeEdit={() => openCardEdit(card, column)}
-                                  hanldeArchive={() =>
+                                  handleEdit={() => openCardEdit(card, column)}
+                                  handleArchive={() =>
                                     handleCardArchive(card, column)
                                   }
                                   column={column}
@@ -235,7 +238,7 @@ export const Board = ({ match, history }) => {
                           )}
                         </ul>
                         <div className="column__item--cta" onClick={() => openAddCard(column)}>
-                          <i className="fas fa-plus"></i>
+                          <Icon name="add"></Icon>
                           <span>Add a card</span>
                         </div>
                       </li>

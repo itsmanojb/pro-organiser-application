@@ -17,6 +17,9 @@ import { AddColumn } from '../../components/add-column/AddColumn';
 import { createDeepCopy } from '../../utils/utility';
 import { Alert } from '../../common/alert/Alert';
 
+import Header from '../../components/header/Header';
+import './Board.scss';
+
 export const Board = ({ match, history }) => {
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
@@ -184,77 +187,69 @@ export const Board = ({ match, history }) => {
       {loading ? (
         <Loader />
       ) : (
-          <div>
-            <div>
-              <h2>{board.name}</h2>
-              <button onClick={handleBoardDelete}>
-                Delete Board
-            </button>
-            </div>
-            {error && (
-              <Alert type={'error'} canClose={() => setError(null)}>
-                {error}
-              </Alert>
-            )}
-            <div>
-              <div>
-                {columns.map((column) => {
-                  return (
-                    <div
-                      key={column.id}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        onDragDrop(e, column);
-                      }}
-                    >
-                      <header>
-                        {column.name}
-                        <div
-                          onClick={() => handleDeleteColumn(column)}
-                        >
-                          <i
-                            className="material-icons"
-                            style={{ fontSize: '25px' }}
-                          >
-                            delete_outline
-                        </i>
-                        </div>
-                      </header>
-                      <ul>
-                        {column.cards.map(
-                          (card) =>
-                            !card.isArchive && (
-                              <Card
-                                card={card}
-                                board={board}
-                                key={card.id}
-                                hanldeEdit={() => openCardEdit(card, column)}
-                                hanldeArchive={() =>
-                                  handleCardArchive(card, column)
-                                }
-                                column={column}
-                              />
-                            )
-                        )}
-                      </ul>
-                      <footer>
-                        <div
-                          onClick={() => openAddCard(column)}
-                        >
-                          Add a card
-                      </div>
-                      </footer>
-                    </div>
-                  );
-                })}
-                <button
-                  onClick={() => setIsColumnAdd(true)}
-                >
-                  Add a column
-              </button>
+          <>
+            <Header />
+            <main className="content">
+              <div className="board-header">
+                <h2>{board.name}</h2>
+                <button onClick={handleBoardDelete} className="button inline bg-red sm">
+                  Delete Board
+                </button>
               </div>
-            </div>
-          </div>
+              {error && (
+                <Alert type={'error'} canClose={() => setError(null)}>
+                  {error}
+                </Alert>
+              )}
+              <div className="trello-board">
+                <ul className="column__list">
+                  {columns.map((column) => {
+                    return (
+                      <li
+                        className="column__item"
+                        key={column.id}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          onDragDrop(e, column);
+                        }}
+                      >
+                        <div className="column__title--wrapper">
+                          <h2>{column.name}</h2>
+                          <i className="fas fa-ellipsis-h" onClick={() => handleDeleteColumn(column)}></i>
+                        </div>
+                        <ul className="card__list">
+                          {column.cards.map(
+                            (card) =>
+                              !card.isArchive && (
+                                <Card
+                                  card={card}
+                                  board={board}
+                                  key={card.id}
+                                  hanldeEdit={() => openCardEdit(card, column)}
+                                  hanldeArchive={() =>
+                                    handleCardArchive(card, column)
+                                  }
+                                  column={column}
+                                />
+                              )
+                          )}
+                        </ul>
+                        <div className="column__item--cta" onClick={() => openAddCard(column)}>
+                          <i className="fas fa-plus"></i>
+                          <span>Add a card</span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                  <li className="column__item trans">
+                    <div className="column__item--new">
+                      <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </main>
+          </>
         )}
       {isColumnAdd && (
         <AddColumn handleClose={handleModalClose} handleAdd={handleAddCloumn} />

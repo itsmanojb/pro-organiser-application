@@ -64,23 +64,20 @@ export const Card = ({ card, board, hanldeEdit, hanldeArchive, column }) => {
 
   return (
     <>
-      <li
+      <li className="card__item"
         onDragStart={e => dragStart(e, card)}
         draggable
-        onClick={() => setIsDetails(true)}
-      >
-        <div>{card.title}</div>
-        <div>
-          <div>
-            <i
-              className="material-icons"
-              style={{ fontSize: '30px', cursor: 'move' }}
-            >
-              list
-            </i>
-          </div>
-          <div>{members}</div>
-        </div>
+        onClick={() => setIsDetails(true)}>
+        <span className="card__tag card__tag--orange">High</span>
+        <span className="card__tag card__tag--green">Low </span>
+        <h6 className="card__title">{card.title}</h6>
+        <ol className="card__actions">
+          <li className="card__actions--wrapper">
+            <i className="far fa-check-square"></i><span className="card__actions--text">1/4</span></li>
+          <ol className="card__avatars">
+            {members}
+          </ol>
+        </ol>
       </li>
       {isDetails && detailsModal}
     </>

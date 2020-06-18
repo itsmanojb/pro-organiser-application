@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const AddColumn = ({ handleAdd, handleClose }) => {
   const [columnName, setColumnName] = useState('');
+
+  useEffect(() => {
+    function escFunction(event) {
+      if (event.keyCode === 27) {
+        handleClose();
+      }
+    }
+    window.addEventListener('keydown', escFunction);
+    return () => window.removeEventListener('keydown', escFunction);
+  }, [handleClose]);
 
   function handleAddColumn() {
     if (!columnName) {

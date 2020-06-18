@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '../../components/misc/IonIcon';
 import { Team } from '../../components/team-tags/Team';
 import { Modal } from '../../common/modal/Modal';
 import { convertDateToNice } from '../../utils/utility';
+import Priority from '../misc/Priority';
 
-export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
+export const Card = ({ card, board, column, handleEdit, handleArchive, handleCompletion }) => {
   const [isDetails, setIsDetails] = useState(false);
   const members = card.teamMembers.map(name => <Team name={name} key={name} />);
   const allMembers = card.teamMembers;
   const date = new Date(card.date);
   const dueDate = convertDateToNice(date);
+
+  useEffect(() => {
+    function escFunction(event) {
+      if (event.keyCode === 27) {
+        setIsDetails(false);
+      }
+    }
+    window.addEventListener('keydown', escFunction);
+    return () => window.removeEventListener('keydown', escFunction);
+  }, [setIsDetails]);
 
   function doEdit() {
     setIsDetails(false);
@@ -21,20 +32,32 @@ export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
     handleArchive();
   }
 
+  function markComplete() {
+    setIsDetails(false);
+    handleCompletion();
+  }
+
   const detailsModal = (
     <Modal>
       <div className="modal-header">
         <div className="modal-title">
-          <button>
-            <Icon name="checkmark-outline" /><span>Mark Complete</span>
-          </button>
+          {card.isCompleted ?
+            (<button disabled>
+              <Icon name="checkmark-done-outline" /><span> Completed </span>
+            </button>) : (
+              <button onClick={markComplete}>
+                <Icon name="checkmark-outline" /><span> Mark Complete </span>
+              </button>
+            )}
         </div>
-        <div className="modal-actions">
-          <button onClick={doEdit}>
-            <Icon name="create-outline" /><span>Edit</span>
+        <div className="modal-actions no-text">
+          <button onClick={doEdit} disabled={card.isCompleted}>
+            <Icon name="options-outline" />
+            <span>Edit</span>
           </button>
           <button onClick={doArchive}>
-            <Icon name="trash-outline" /><span>Delete</span>
+            <Icon name="archive-outline" />
+            <span>Delete</span>
           </button>
         </div>
         <div className="close" onClick={() => setIsDetails(false)}>
@@ -66,12 +89,11 @@ export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
           <dt>Priority</dt>
           <dd>
             <div className="tags">
-              <span className="card__tag card__tag--orange">High</span>
-              <span className="card__tag card__tag--green">Low </span>
+              <Priority value={card.priority} />
             </div>
           </dd>
           <dt>Description</dt>
-          <dd>{card.description}</dd>
+          <dd><p>{card.description}</p> </dd>
         </dl>
       </div>
     </Modal>
@@ -88,8 +110,7 @@ export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
         onDragStart={e => dragStart(e, card)}
         draggable
         onClick={() => setIsDetails(true)}>
-        {/* <span className="card__tag card__tag--orange">High</span>
-        <span className="card__tag card__tag--green">Low </span> */}
+        <Priority value={card.priority} showText={false} />
         <h6 className="card__title">{card.title}</h6>
         <ol className="card__actions">
           <li className="card__actions--wrapper">

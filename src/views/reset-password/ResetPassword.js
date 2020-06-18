@@ -11,7 +11,7 @@ import Image from '../../assets/login-bg.png';
 const ResetPassword = ({ history }) => {
 
   useEffect(() => {
-    document.title = 'TaskForce - Reset Password'
+    document.title = 'Reset Password - TaskForce'
   }, []);
 
   const { currentUser } = useContext(AuthContext);
@@ -97,7 +97,7 @@ const ResetPassword = ({ history }) => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder='Email address'
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
                 spellCheck="false"
               />
               <label htmlFor="email" className="floating__label" data-content="Email address">

@@ -123,7 +123,7 @@ const Header = () => {
       </NavLink>
       <Navbar>
         <NavItem link="/dashbaord" icon={<Icon name="home" />} />
-        <NavItem link="/createboard" icon={<Icon name="clipboard-outline" />} />
+        <NavItem link="/new-board" icon={<Icon name="clipboard-outline" />} />
         <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>
         </NavItem>

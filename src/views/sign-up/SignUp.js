@@ -10,7 +10,7 @@ import Image from '../../assets/login-bg.png';
 const SignUp = ({ history }) => {
 
   useEffect(() => {
-    document.title = 'TaskForce - Sign Up'
+    document.title = 'Sign Up - TaskForce'
   }, []);
 
   const { currentUser } = useContext(AuthContext);
@@ -105,7 +105,7 @@ const SignUp = ({ history }) => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your Name"
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
                 spellCheck="false"
               />
               <label htmlFor="name" className="floating__label" data-content="Name">
@@ -121,7 +121,7 @@ const SignUp = ({ history }) => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="Email address"
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
                 spellCheck="false"
               />
               <label htmlFor="email" className="floating__label" data-content="Email address">
@@ -138,7 +138,7 @@ const SignUp = ({ history }) => {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Password"
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
               />
               <label htmlFor="password" className="floating__label" data-content="Password">
                 <span className="hidden--visually">Password</span>

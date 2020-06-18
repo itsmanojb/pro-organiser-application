@@ -11,7 +11,7 @@ import Image from '../../assets/login-bg.png';
 const Login = ({ history }) => {
 
   useEffect(() => {
-    document.title = 'TaskForce - Login'
+    document.title = 'Login - TaskForce'
   }, []);
 
   const [email, setEmail] = useState('');
@@ -86,7 +86,7 @@ const Login = ({ history }) => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder='Email address'
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
                 spellCheck="false"
               />
               <label htmlFor="email" className="floating__label" data-content="Email address">
@@ -102,7 +102,7 @@ const Login = ({ history }) => {
                 onChange={e => setPassword(e.target.value)}
                 placeholder='Password'
                 className="floating__input"
-                autoComplete="false"
+                autoComplete="off"
               />
               <label htmlFor="password" className="floating__label" data-content="Password">
                 <span className="hidden--visually">Password</span>

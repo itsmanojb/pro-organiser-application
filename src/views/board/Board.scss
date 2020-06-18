@@ -14,7 +14,7 @@
 .trello-board {
   padding: 0;
 
-  --column-bg-color: #e6e9ec;
+  --column-bg-color: rgb(238, 242, 246);
   --border-radius: 4px;
   --column-min-height: 135px;
 
@@ -25,6 +25,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     max-height: calc(100vh - 130px);
+    min-height: calc(100vh - 130px);
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -54,6 +55,26 @@
       height: var(--column-min-height);
     }
 
+    &--input {
+      background: var(--column-bg-color);
+      padding: 20px 10px;
+      height: 100%;
+      border-radius: inherit;
+
+      input {
+        background: transparent;
+        border: none;
+        color: #17394d;
+        font-weight: 600;
+        font-size: 18px;
+        margin: 4px 0;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
     &--new {
       opacity: 0.8;
       border-radius: var(--border-radius);
@@ -61,7 +82,7 @@
       height: 100%;
       display: grid;
       transition: all .3s ease;
-      border: 1px dashed #aaa;
+      border: 1px dashed #ddd;
 
       &:hover {
         background-color: var(--column-bg-color);
@@ -72,7 +93,8 @@
         cursor: pointer;
         background-color: transparent;
         border: none;
-        font-size: 16px;
+        font-size: 15px;
+        color: #888;
 
         &:focus {
           outline: none;
@@ -101,14 +123,22 @@
       font-size: 18px;
     }
 
-    span {
+    span.btn {
+      transition: opacity .3s ease;
       justify-self: center;
       cursor: pointer;
-    }
+      opacity: 0;
 
-    ion-icon {
-      color: #798d99;
-      font-size: 22px;
+      ion-icon {
+        color: #798d99;
+        font-size: 22px;
+      }
+    }
+  }
+
+  .column__item:hover {
+    .column__title--wrapper span.btn {
+      opacity: 1;
     }
   }
 
@@ -188,7 +218,6 @@
     width: 100%;
     margin-bottom: .25rem;
   }
-
 
   .card__title {
     color: #17394d;

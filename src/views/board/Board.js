@@ -62,7 +62,7 @@ export const Board = ({ match, history }) => {
       });
   }
 
-  function handleModalClose() {
+  function cancelNewColumn() {
     setIsColumnAdd(false);
   }
 
@@ -216,7 +216,7 @@ export const Board = ({ match, history }) => {
                       >
                         <div className="column__title--wrapper">
                           <h2>{column.name}</h2>
-                          <span onClick={(e) => handleDeleteColumn(column)}>
+                          <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
                             <Icon name="trash-outline" />
                           </span>
                         </div>
@@ -245,18 +245,19 @@ export const Board = ({ match, history }) => {
                     );
                   })}
                   <li className="column__item trans">
-                    <div className="column__item--new">
-                      <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
-                    </div>
+                    {isColumnAdd ? (
+                      <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
+                    ) : (
+                        <div className="column__item--new">
+                          <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
+                        </div>
+                      )}
                   </li>
                 </ul>
               </div>
             </main>
           </>
         )}
-      {isColumnAdd && (
-        <AddColumn handleClose={handleModalClose} handleAdd={handleAddCloumn} />
-      )}
       {isCardAdd && (
         <AddCard
           board={board}

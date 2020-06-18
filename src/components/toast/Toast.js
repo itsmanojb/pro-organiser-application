@@ -22,7 +22,7 @@ export const Toast = props => {
               className={`notification toast ${position}`}
               style={{ backgroundColor: toast.backgroundColor }}
             >
-              <button onClick={(e) => removeToast(i)}><ion-icon name="close"></ion-icon></button>
+              <button onClick={(e) => removeToast(toast.id)}><ion-icon name="close"></ion-icon></button>
               <div className="notification-icon">
                 <ion-icon name={toast.icon}></ion-icon>
               </div>

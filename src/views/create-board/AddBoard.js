@@ -52,7 +52,6 @@ export const AddBoard = ({ history }) => {
     history.push('/');
   }
 
-
   const showError = (message) => {
     setToasts([
       ...toasts,

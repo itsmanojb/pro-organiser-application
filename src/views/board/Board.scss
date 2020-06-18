@@ -14,7 +14,7 @@
 .trello-board {
   padding: 0;
 
-  --column-bg-color: rgb(238, 242, 246);
+  --column-bg-color: rgb(232, 236, 241);
   --border-radius: 4px;
   --column-min-height: 135px;
 
@@ -172,12 +172,16 @@
     background-color: white;
     border-radius: var(--border-radius);
     box-shadow: 0 1px 0 rgba(9, 45, 66, .25);
-    padding: .5rem;
+    padding: .75rem .5rem .5rem .5rem;
     cursor: grab;
 
     &+.card__item {
       margin-top: 10px;
     }
+  }
+
+  .overlay+.card__item {
+    margin-top: 10px;
   }
 
   .card__tag {
@@ -188,6 +192,8 @@
     color: white;
     margin-bottom: .75rem;
     display: inline-block;
+    min-width: 50px;
+    text-align: center;
 
     &+.card__tag {
       margin-left: 3px;
@@ -198,15 +204,20 @@
     }
 
     &--pink {
-      background-color: #c377e0;
+      background-color: #fa60d4;
     }
 
     &--yellow {
-      background-color: #f2d600;
+      background-color: #ffe417;
+      color: #333;
     }
 
     &--orange {
-      background-color: #eb5a46;
+      background-color: #ff843d;
+    }
+
+    &--red {
+      background-color: #c52e1a;
     }
 
     &--blue {

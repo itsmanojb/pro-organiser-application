@@ -27,6 +27,7 @@ export const AddCard = ({
       setTeam(card.teamMembers);
       const date = new Date(card.date);
       setDueDate(date.toISOString().substr(0, 10));
+      setPriority(card.priority)
     }
   }, [isAdd, card]);
 
@@ -161,20 +162,21 @@ export const AddCard = ({
               value={priority}
               onChange={onPriorityChange}
             >
-              <option value="Urgent">Urgent</option>
               <option value="Immediate">Immediate</option>
+              <option value="Urgent">Urgent</option>
               <option value="High">High</option>
               <option value="Normal">Normal</option>
               <option value="Low">Low</option>
+              <option value="Hold">On Hold</option>
             </select>
           </div>
         </div>
       </div>
       <div className="modal-footer">
         <div className="footer-left-buttons">
-          {!isAdd && <button className="aux">
+          {/* {!isAdd && <button className="aux">
             <Icon name="checkmark" /> <span>Mark as complete</span>
-          </button>}
+          </button>} */}
         </div>
         <div className="footer-right-buttons">
           <button onClick={handleClose}>
@@ -186,7 +188,7 @@ export const AddCard = ({
             </button>
           ) : (
               <button className="prime" onClick={onEdit}>
-                <Icon name="create-outline" /><span>Edit</span>
+                <Icon name="save-outline" /><span>Save</span>
               </button>
             )}
         </div>

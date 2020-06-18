@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import * as shortid from 'shortid';
 
+import { ToastsContext } from '../../context/Toasts';
+
+import { Loader } from '../../common/loader/Loader';
+import { Card } from '../../components/card/Card';
+import { AddCard } from '../../components/add-card/AddCard';
+import { AddColumn } from '../../components/add-column/AddColumn';
+import { createDeepCopy } from '../../utils/utility';
 import {
   getBoard,
   getColumns,
@@ -10,18 +17,13 @@ import {
   deleteBoard,
 } from '../../utils/data';
 
-import { Loader } from '../../common/loader/Loader';
-import { Card } from '../../components/card/Card';
-import { AddCard } from '../../components/add-card/AddCard';
-import { AddColumn } from '../../components/add-column/AddColumn';
-import { createDeepCopy } from '../../utils/utility';
-import { Alert } from '../../common/alert/Alert';
-
 import Header from '../../components/header/Header';
 import Icon from '../../components/misc/IonIcon';
+
 import './Board.scss';
 
 export const Board = ({ match, history }) => {
+
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [isColumnAdd, setIsColumnAdd] = useState(false);
@@ -30,7 +32,8 @@ export const Board = ({ match, history }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
-  const [error, setError] = useState(null);
+
+  const [toasts, setToasts] = useContext(ToastsContext);
 
   useEffect(() => {
     (async function () {
@@ -40,6 +43,19 @@ export const Board = ({ match, history }) => {
       setLoading(false);
     })();
   }, [match]);
+
+  const showError = (message) => {
+    setToasts([
+      ...toasts,
+      {
+        message,
+        id: toasts.length,
+        title: 'Error',
+        backgroundColor: '#d9534f',
+        icon: 'warning'
+      }
+    ]);
+  }
 
   function handleAddCloumn(columnName) {
     const newColumn = {
@@ -58,7 +74,7 @@ export const Board = ({ match, history }) => {
         }
       })
       .catch((error) => {
-        setError(error.message);
+        showError(error.message);
       });
   }
 
@@ -67,6 +83,7 @@ export const Board = ({ match, history }) => {
   }
 
   function openAddCard(column) {
+    setIsAdd(true);
     setIsCardAdd(true);
     setSelectedColumn(column);
     setInEditCard(null);
@@ -84,7 +101,7 @@ export const Board = ({ match, history }) => {
         setIsCardAdd(false);
       }
     } catch (error) {
-      setError(error.message);
+      showError(error.message);
     }
   }
 
@@ -111,7 +128,7 @@ export const Board = ({ match, history }) => {
         setInEditCard(null);
       }
     } catch (error) {
-      setError(error.message);
+      showError(error.message);
     }
   }
 
@@ -126,7 +143,22 @@ export const Board = ({ match, history }) => {
         afterUpdateColumn(columns, column, upColumn, setColumns);
       }
     } catch (error) {
-      setError(error.message);
+      showError(error.message);
+    }
+  }
+
+  async function handleCardCompletion(card, column) {
+    try {
+      card.isCompleted = true;
+      const newCards = column.cards.filter((c) => c.id !== card.id);
+      const upColumn = createDeepCopy(column);
+      upColumn.cards = [...newCards, card];
+      const val = await updateColumn(column.id, upColumn);
+      if (val) {
+        afterUpdateColumn(columns, column, upColumn, setColumns);
+      }
+    } catch (error) {
+      showError(error.message);
     }
   }
 
@@ -151,7 +183,7 @@ export const Board = ({ match, history }) => {
         setColumns(sortedCols);
       }
     } catch (error) {
-      setError(error.message);
+      showError(error.message);
     }
   }
 
@@ -164,7 +196,7 @@ export const Board = ({ match, history }) => {
         setColumns(newCols);
       })
       .catch((err) => {
-        setError(err.message);
+        showError(err.message);
       });
   }
 
@@ -197,11 +229,6 @@ export const Board = ({ match, history }) => {
                   Delete Board
                 </button>
               </div>
-              {error && (
-                <Alert type={'error'} canClose={() => setError(null)}>
-                  {error}
-                </Alert>
-              )}
               <div className="trello-board">
                 <ul className="column__list">
                   {columns.map((column) => {
@@ -229,9 +256,8 @@ export const Board = ({ match, history }) => {
                                   board={board}
                                   key={card.id}
                                   handleEdit={() => openCardEdit(card, column)}
-                                  handleArchive={() =>
-                                    handleCardArchive(card, column)
-                                  }
+                                  handleArchive={() => handleCardArchive(card, column)}
+                                  handleCompletion={() => handleCardCompletion(card, column)}
                                   column={column}
                                 />
                               )

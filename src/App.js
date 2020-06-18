@@ -24,7 +24,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
-            <PrivateRoute path="/createboard" component={AddBoard} />
+            <PrivateRoute path="/new-board" component={AddBoard} />
             <PrivateRoute path="/board/:name" component={Board} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />

@@ -13,7 +13,7 @@ import './Dashboard.scss';
 export const Dashboard = () => {
 
   useEffect(() => {
-    document.title = 'TaskForce - Dashboard'
+    document.title = 'Dashboard - TaskForce'
   }, []);
 
   const { currentUser } = useContext(AuthContext);

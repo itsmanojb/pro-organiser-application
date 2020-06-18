@@ -49,7 +49,7 @@ export const Card = ({ card, board, handleEdit, handleArchive, column }) => {
           <dt>Assignee</dt>
           <dd>
             <div className="assignee">
-              {allMembers.map((member) => <div className="member-name"> <span className="card__avatars--item">{member.charAt(0)}</span> {member} </div>)}
+              {allMembers.map((member, i) => <div className="member-name" key={i}> <span className="card__avatars--item">{member.charAt(0)}</span> {member} </div>)}
             </div>
           </dd>
           <dt>Due Date</dt>

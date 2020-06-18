@@ -1,45 +1,35 @@
 import React, { useState } from 'react';
-import { Modal } from '../../common/modal/Modal';
 
 export const AddColumn = ({ handleAdd, handleClose }) => {
   const [columnName, setColumnName] = useState('');
 
-  function handleAddCloumn() {
+  function handleAddColumn() {
     if (!columnName) {
-      return alert('Enter a column name');
+      handleClose();
+    } else {
+      handleAdd(columnName);
     }
+  }
 
-    handleAdd(columnName);
+  function keyPressed(event) {
+    if (event.key === 'Enter') {
+      handleAddColumn();
+    }
   }
 
   return (
-    <Modal>
-      <div>
-        <div>Add Column</div>
-        <div onClick={handleClose}>
-          &times;
-        </div>
-      </div>
-      <div>
-        <div>
-          <label htmlFor="column_name">Enter a Column Name:</label>
-          <input
-            type="text"
-            value={columnName}
-            name="column_name"
-            id="column_name"
-            onChange={e => setColumnName(e.target.value)}
-          />
-        </div>
-        <div>
-          <button
-            id="CreateColumn"
-            onClick={handleAddCloumn}
-          >
-            Add Column
-          </button>
-        </div>
-      </div>
-    </Modal>
+    <div className="column__item--input">
+      <input type="text"
+        autoFocus
+        autoComplete="off"
+        placeholder="Column name"
+        value={columnName}
+        name="column_name"
+        id="column_name"
+        onChange={e => setColumnName(e.target.value)}
+        onBlur={handleAddColumn}
+        onKeyPress={keyPressed}
+      />
+    </div>
   );
 };

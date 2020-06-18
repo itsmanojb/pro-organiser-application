@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Modal } from '../../common/modal/Modal';
-import { Alert } from '../../common/alert/Alert';
+import Icon from '../../components/misc/IonIcon';
+import { ToastsContext } from '../../context/Toasts';
 
 export const AddCard = ({
   board,
@@ -10,11 +11,14 @@ export const AddCard = ({
   isAdd = true,
   handleEdit
 }) => {
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [priority, setPriority] = useState('Normal');
   const [team, setTeam] = useState([]);
-  const [error, setError] = useState(null);
+
+  const [toasts, setToasts] = useContext(ToastsContext);
 
   useEffect(() => {
     if (card) {
@@ -26,81 +30,102 @@ export const AddCard = ({
     }
   }, [isAdd, card]);
 
+  useEffect(() => {
+    function escFunction(event) {
+      if (event.keyCode === 27) {
+        handleClose();
+      }
+    }
+    window.addEventListener('keydown', escFunction);
+    return () => window.removeEventListener('keydown', escFunction);
+  }, [handleClose]);
+
+
   function onSelectChange(e) {
     const values = [...e.target.selectedOptions].map(opt => opt.value);
     setTeam(values);
   }
 
+  function onPriorityChange(e) {
+    const value = e.target.value;
+    setPriority(value);
+  }
+
   function onAdd() {
     if (!title || !description || !dueDate || team.length === 0) {
-      setError('All the fields are required');
+      showError('All the fields are required');
       return;
     }
 
     const checkDateBool = checkDate(dueDate);
-
     if (checkDateBool) {
-      setError('Cannot select a past date.');
+      showError('Due date already passed.');
       return;
     }
 
-    setError(null);
-
-    const card = createCard(dueDate, title, team, description);
-
+    const card = createCard(dueDate, title, team, description, priority);
     handleCardAdd(card);
   }
 
   function onEdit() {
     if (!title || !description || !dueDate || team.length === 0) {
-      setError('All the fields are required');
+      showError('All the fields are required');
       return;
     }
 
     const checkDateBool = checkDate(dueDate);
-
     if (checkDateBool) {
-      setError('Cannot select a past date.');
+      showError('Due date already passed.');
       return;
     }
 
-    setError(null);
-
-    const card = createCard(dueDate, title, team, description);
-
+    const card = createCard(dueDate, title, team, description, priority);
     handleEdit(card);
+  }
+
+  const showError = (message) => {
+    setToasts([
+      ...toasts,
+      {
+        message,
+        id: toasts.length,
+        title: 'Error',
+        backgroundColor: '#d9534f',
+        icon: 'warning'
+      }
+    ]);
   }
 
   return (
     <Modal>
-      <div>
-        <div>{isAdd ? 'Add Card' : 'Edit Card'}</div>
-        <div onClick={handleClose}>
-          &times;
+      <div className="modal-header cleaner">
+        <div className="modal-title">
+          {isAdd ? 'New Task' : 'Edit Task'}
         </div>
       </div>
-      {error && (
-        <Alert
-          children={error}
-          type={'error'}
-          canClose={() => setError(null)}
-        />
-      )}
-      <div>
-        <div>
-          <label htmlFor="title">Enter the title for your task</label>
+      <div className="modal-content">
+        <div className="input-row">
           <input
             type="text"
             name="title"
             id="title"
-            placeholder="eg. Add a new Icon"
+            placeholder="Task title"
             value={title}
             onChange={e => setTitle(e.target.value)}
+            autoComplete="off"
+          />
+          <textarea
+            name="title"
+            id="description"
+            placeholder="Description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            autoComplete="off"
           />
         </div>
-        <div>
+        <div className="input-row">
           <label htmlFor="title">
-            Choose members for this task(select multiple, if needed)
+            Choose members for this task (select multiple, if needed)
           </label>
           <select
             name="members"
@@ -116,35 +141,52 @@ export const AddCard = ({
             ))}
           </select>
         </div>
-        <div>
-          <label htmlFor="title">Add the descriptions for your task</label>
-          <input
-            type="text"
-            name="title"
-            id="description"
-            placeholder="Add your description here"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-          />
+        <div className="input-row columns">
+          <div>
+            <label htmlFor="title">Due date:</label>
+            <input
+              type="date"
+              name="title"
+              id="due_date"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <div>
+            <label htmlFor="priority">Priority</label>
+            <select
+              name="priority"
+              id="priority"
+              value={priority}
+              onChange={onPriorityChange}
+            >
+              <option value="Urgent">Urgent</option>
+              <option value="Immediate">Immediate</option>
+              <option value="High">High</option>
+              <option value="Normal">Normal</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
         </div>
-        <div>
-          <label htmlFor="title">Select the due date for this task</label>
-          <input
-            type="date"
-            name="title"
-            id="due_date"
-            value={dueDate}
-            onChange={e => setDueDate(e.target.value)}
-          />
+      </div>
+      <div className="modal-footer">
+        <div className="footer-left-buttons">
+          {!isAdd && <button className="aux">
+            <Icon name="checkmark" /> <span>Mark as complete</span>
+          </button>}
         </div>
-        <div>
+        <div className="footer-right-buttons">
+          <button onClick={handleClose}>
+            <span>Cancel</span>
+          </button>
           {isAdd ? (
-            <button id="CreateCard" onClick={onAdd}>
-              Add Card
+            <button className="prime" onClick={onAdd}>
+              <Icon name="add" /><span>Add</span>
             </button>
           ) : (
-              <button onClick={onEdit}>
-                Edit Card
+              <button className="prime" onClick={onEdit}>
+                <Icon name="create-outline" /><span>Edit</span>
               </button>
             )}
         </div>
@@ -156,21 +198,21 @@ export const AddCard = ({
 function checkDate(dueDate) {
   const today = new Date().getTime();
   const dueDateMili = new Date(dueDate).getTime();
-
   if (dueDateMili < today) {
     return true;
   }
-
-  return false;
+  return;
 }
 
-function createCard(dueDate, title, teamMembers, description) {
+function createCard(dueDate, title, teamMembers, description, priority) {
   const date = new Date(dueDate).getTime();
   return {
     title,
     description,
     teamMembers,
     date,
-    isArchive: false
+    priority,
+    isArchive: false,
+    isCompleted: false
   };
 }

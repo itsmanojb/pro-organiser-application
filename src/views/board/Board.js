@@ -220,69 +220,66 @@ export const Board = ({ match, history }) => {
       {loading ? (
         <Loader />
       ) : (
-          <>
-            <Header />
-            <main className="content">
-              <div className="board-header">
-                <h2>{board.name}</h2>
-                <button onClick={handleBoardDelete} className="button inline bg-red sm">
-                  Delete Board
+          <main className="content">
+            <div className="board-header">
+              <h2>{board.name}</h2>
+              <button onClick={handleBoardDelete} className="button inline bg-red sm">
+                Delete Board
                 </button>
-              </div>
-              <div className="trello-board">
-                <ul className="column__list">
-                  {columns.map((column) => {
-                    return (
-                      <li
-                        className="column__item"
-                        key={column.id}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => {
-                          onDragDrop(e, column);
-                        }}
-                      >
-                        <div className="column__title--wrapper">
-                          <h2>{column.name}</h2>
-                          <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
-                            <Icon name="trash-outline" />
-                          </span>
-                        </div>
-                        <ul className="card__list">
-                          {column.cards.map(
-                            (card) =>
-                              !card.isArchive && (
-                                <Card
-                                  card={card}
-                                  board={board}
-                                  key={card.id}
-                                  handleEdit={() => openCardEdit(card, column)}
-                                  handleArchive={() => handleCardArchive(card, column)}
-                                  handleCompletion={() => handleCardCompletion(card, column)}
-                                  column={column}
-                                />
-                              )
-                          )}
-                        </ul>
-                        <div className="column__item--cta" onClick={() => openAddCard(column)}>
-                          <Icon name="add"></Icon>
-                          <span>Add a card</span>
-                        </div>
-                      </li>
-                    );
-                  })}
-                  <li className="column__item trans">
-                    {isColumnAdd ? (
-                      <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
-                    ) : (
-                        <div className="column__item--new">
-                          <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
-                        </div>
-                      )}
-                  </li>
-                </ul>
-              </div>
-            </main>
-          </>
+            </div>
+            <div className="trello-board">
+              <ul className="column__list">
+                {columns.map((column) => {
+                  return (
+                    <li
+                      className="column__item"
+                      key={column.id}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        onDragDrop(e, column);
+                      }}
+                    >
+                      <div className="column__title--wrapper">
+                        <h2>{column.name}</h2>
+                        <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
+                          <Icon name="trash-outline" />
+                        </span>
+                      </div>
+                      <ul className="card__list">
+                        {column.cards.map(
+                          (card) =>
+                            !card.isArchive && (
+                              <Card
+                                card={card}
+                                board={board}
+                                key={card.id}
+                                handleEdit={() => openCardEdit(card, column)}
+                                handleArchive={() => handleCardArchive(card, column)}
+                                handleCompletion={() => handleCardCompletion(card, column)}
+                                column={column}
+                              />
+                            )
+                        )}
+                      </ul>
+                      <div className="column__item--cta" onClick={() => openAddCard(column)}>
+                        <Icon name="add"></Icon>
+                        <span>Add a card</span>
+                      </div>
+                    </li>
+                  );
+                })}
+                <li className="column__item trans">
+                  {isColumnAdd ? (
+                    <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
+                  ) : (
+                      <div className="column__item--new">
+                        <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
+                      </div>
+                    )}
+                </li>
+              </ul>
+            </div>
+          </main>
         )}
       {isCardAdd && (
         <AddCard

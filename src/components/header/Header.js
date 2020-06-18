@@ -116,6 +116,9 @@ const DropdownMenu = () => {
 
 const Header = () => {
 
+  const { currentUser } = useContext(AuthContext);
+  if (!currentUser) return null;
+
   return (
     <header>
       <NavLink to="/dashbaord" className="brand">

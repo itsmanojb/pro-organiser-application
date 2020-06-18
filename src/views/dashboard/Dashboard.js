@@ -36,33 +36,30 @@ export const Dashboard = () => {
       {loading ? (
         <Loader />
       ) : (
-          <>
-            <Header />
-            <main className="content">
-              <div className="overflow-scroll">
-                <h2>Boards</h2>
-                {boards.length === 0 && (
-                  <Alert type="info" isClosable={false}>
-                    You haven't created any boards. Kindly click on the 'Create a
-                    Board' button in the navigation bar to create a board.
-                  </Alert>
-                )}
-                <div className="boards">
-                  {boards.map((board) => {
-                    return (
-                      <Link
-                        to={'/board/' + board.id}
-                        key={board.id}
-                        className="board"
-                      >
-                        <div>{board.name}</div>
-                      </Link>
-                    );
-                  })}
-                </div>
+          <main className="content">
+            <div className="overflow-scroll">
+              <h2>Boards</h2>
+              {boards.length === 0 && (
+                <Alert type="info" isClosable={false}>
+                  You haven't created any boards. Kindly click on the 'Create a
+                  Board' button in the navigation bar to create a board.
+                </Alert>
+              )}
+              <div className="boards">
+                {boards.map((board) => {
+                  return (
+                    <Link
+                      to={'/board/' + board.id}
+                      key={board.id}
+                      className="board"
+                    >
+                      <div>{board.name}</div>
+                    </Link>
+                  );
+                })}
               </div>
-            </main>
-          </>
+            </div>
+          </main>
         )}
     </>
   );

@@ -14,6 +14,7 @@ import Home from './views/home/Home';
 import SignUp from './views/sign-up/SignUp';
 import Login from './views/login/Login';
 import ResetPassword from './views/reset-password/ResetPassword';
+import Header from './components/header/Header';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
     <ToastsContextProvider>
       <AuthContextProvider>
         <Router>
+          <Header />
           <Switch>
             <Route path="/" exact component={Home} />
             <PrivateRoute path="/dashboard" component={Dashboard} />

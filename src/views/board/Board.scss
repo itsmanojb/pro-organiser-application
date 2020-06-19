@@ -4,9 +4,70 @@
   align-items: center;
   padding: 0 20px;
 
-  h2 {
-    font-weight: 500;
-    color: #888;
+  .board-name-editable {
+
+    >div {
+
+      display: flex;
+      align-items: center;
+      min-width: 320px;
+
+      span {
+        width: 30px;
+        text-align: center;
+        padding: 5px 0;
+        height: 30px;
+        cursor: pointer;
+        margin-left: 15px;
+        font-size: 14px;
+        color: var(--color-accent);
+        font-weight: 500;
+      }
+    }
+
+    .no-edit {
+
+      h2 {
+        font-weight: 500;
+        color: #888;
+        font-size: 24px;
+        padding: 0;
+        margin: 20px 0;
+        cursor: default;
+      }
+
+      span {
+        visibility: hidden;
+      }
+
+      &:hover span {
+        visibility: visible;
+      }
+    }
+
+    .edit-view {
+
+      input {
+        font-weight: 500;
+        color: #888;
+        font-size: 24px;
+        padding: 0;
+        margin: 20px 0;
+        background: transparent;
+        border: none;
+        width: 100%;
+        font-family: inherit;
+
+        &::placeholder {
+          color: #bbb;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+    }
   }
 }
 

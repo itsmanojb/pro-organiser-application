@@ -15,6 +15,7 @@ import {
   updateColumn,
   deleteColumn,
   deleteBoard,
+  renameBoard,
 } from '../../utils/data';
 
 import Icon from '../../components/misc/IonIcon';
@@ -31,13 +32,17 @@ export const Board = ({ match, history }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
-
+  const [boardName, setBoardName] = useState({});
+  const [boardNamePlaceholder, setBoardNamePlaceholder] = useState('');
+  const [boardNameEdit, setBoardNameEdit] = useState(false);
   const [toasts, setToasts] = useContext(ToastsContext);
 
   useEffect(() => {
     (async function () {
       const data = await getBoard(match.params.name);
       setBoard(data);
+      setBoardName(data.name);
+      setBoardNamePlaceholder(data.name);
       await getAllColumns(data.id, setColumns);
       setLoading(false);
     })();
@@ -77,17 +82,6 @@ export const Board = ({ match, history }) => {
       });
   }
 
-  function cancelNewColumn() {
-    setIsColumnAdd(false);
-  }
-
-  function openAddCard(column) {
-    setIsAdd(true);
-    setIsCardAdd(true);
-    setSelectedColumn(column);
-    setInEditCard(null);
-  }
-
   async function addCard(card) {
     try {
       card['id'] = shortid();
@@ -102,13 +96,6 @@ export const Board = ({ match, history }) => {
     } catch (error) {
       showError(error.message);
     }
-  }
-
-  function openCardEdit(card, column) {
-    setIsAdd(false);
-    setIsCardAdd(true);
-    setSelectedColumn(column);
-    setInEditCard(card);
   }
 
   async function handleCardEdit(upCard) {
@@ -186,6 +173,35 @@ export const Board = ({ match, history }) => {
     }
   }
 
+  async function handleBoardRename(newName) {
+    const renamed = await renameBoard(board.id, newName);
+    if (renamed) {
+      console.log(newName);
+
+      setBoardNameEdit(false);
+      setBoardName(newName);
+      setBoardNamePlaceholder(newName);
+    }
+  }
+
+  function cancelNewColumn() {
+    setIsColumnAdd(false);
+  }
+
+  function openAddCard(column) {
+    setIsAdd(true);
+    setIsCardAdd(true);
+    setSelectedColumn(column);
+    setInEditCard(null);
+  }
+
+  function openCardEdit(card, column) {
+    setIsAdd(false);
+    setIsCardAdd(true);
+    setSelectedColumn(column);
+    setInEditCard(card);
+  }
+
   function handleDeleteColumn(column) {
     const newCols = columns
       .filter((c) => c.id !== column.id)
@@ -214,6 +230,22 @@ export const Board = ({ match, history }) => {
     }
   }
 
+  // board name edit
+  function doBoardRename() {
+    if (!boardName) {
+      setBoardNameEdit(false);
+      setBoardName(boardNamePlaceholder);
+    } else {
+      handleBoardRename(boardName);
+    }
+  }
+
+  function keyPressed(event) {
+    if (event.key === 'Enter') {
+      doBoardRename();
+    }
+  }
+
   return (
     <>
       {loading ? (
@@ -221,10 +253,29 @@ export const Board = ({ match, history }) => {
       ) : (
           <main className="content">
             <div className="board-header">
-              <h2>{board.name}</h2>
+              <div className="board-name-editable">
+                {boardNameEdit
+                  ?
+                  <div className="edit-view">
+                    <input type="text"
+                      autoFocus
+                      value={boardName}
+                      placeholder={boardNamePlaceholder}
+                      onChange={e => setBoardName(e.target.value)}
+                      onBlur={doBoardRename}
+                      onKeyPress={keyPressed}
+                    />
+                    {/* <span>save</span> */}
+                  </div>
+                  : <div className="no-edit">
+                    <h2>{boardName}</h2>
+                    <span onClick={() => setBoardNameEdit(true)}>edit</span>
+                  </div>
+                }
+              </div>
               <button onClick={handleBoardDelete} className="button inline bg-red sm">
                 Delete Board
-                </button>
+              </button>
             </div>
             <div className="trello-board">
               <ul className="column__list">

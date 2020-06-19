@@ -6,7 +6,6 @@ import { getBoards } from '../../utils/data';
 
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
-import Header from '../../components/header/Header';
 
 import './Dashboard.scss';
 
@@ -37,8 +36,10 @@ export const Dashboard = () => {
         <Loader />
       ) : (
           <main className="content">
-            <div className="overflow-scroll">
+            <div className="board-header">
               <h2>Boards</h2>
+            </div>
+            <div className="overflow-scroll">
               {boards.length === 0 && (
                 <Alert type="info" isClosable={false}>
                   You haven't created any boards. Kindly click on the 'Create a

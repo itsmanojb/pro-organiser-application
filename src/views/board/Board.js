@@ -4,9 +4,9 @@ import * as shortid from 'shortid';
 import { ToastsContext } from '../../context/Toasts';
 
 import { Loader } from '../../common/loader/Loader';
-import { Card } from '../../components/card/Card';
-import { AddCard } from '../../components/add-card/AddCard';
-import { AddColumn } from '../../components/add-column/AddColumn';
+import { Card } from '../../components/cards/Card';
+import { AddCard } from '../../components/cards/AddCard';
+import { AddColumn } from '../../components/cards/AddColumn';
 import { createDeepCopy } from '../../utils/utility';
 import {
   getBoard,
@@ -17,7 +17,6 @@ import {
   deleteBoard,
 } from '../../utils/data';
 
-import Header from '../../components/header/Header';
 import Icon from '../../components/misc/IonIcon';
 
 import './Board.scss';

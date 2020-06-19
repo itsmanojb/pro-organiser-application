@@ -6,9 +6,10 @@ import { getBoards } from '../../utils/data';
 
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
-import Header from '../../components/header/Header';
+import SideNav from '../../components/sidenav/Sidenav';
 
 import './Dashboard.scss';
+import RightPanel from '../../components/right-panel/RightPanel';
 
 export const Dashboard = () => {
 
@@ -37,26 +38,38 @@ export const Dashboard = () => {
         <Loader />
       ) : (
           <main className="content">
-            <div className="overflow-scroll">
-              <h2>Boards</h2>
-              {boards.length === 0 && (
-                <Alert type="info" isClosable={false}>
-                  You haven't created any boards. Kindly click on the 'Create a
-                  Board' button in the navigation bar to create a board.
-                </Alert>
-              )}
-              <div className="boards">
-                {boards.map((board) => {
-                  return (
-                    <Link
-                      to={'/board/' + board.id}
-                      key={board.id}
-                      className="board"
-                    >
-                      <div>{board.name}</div>
-                    </Link>
-                  );
-                })}
+            <div className="dashboard">
+              <div>
+                <SideNav />
+              </div>
+              <div className="all-boards">
+                <div className="board-header">
+
+                </div>
+                <div className="boards-listing">
+                  {boards.length === 0 && (
+                    <Alert type="info" isClosable={false}>
+                      You haven't created any boards. Kindly click on the 'Create a
+                      Board' button in the navigation bar to create a board.
+                    </Alert>
+                  )}
+                  <div className="boards">
+                    {boards.map((board) => {
+                      return (
+                        <Link
+                          to={'/board/' + board.id}
+                          key={board.id}
+                          className="board"
+                        >
+                          <div>{board.name}</div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <RightPanel />
               </div>
             </div>
           </main>

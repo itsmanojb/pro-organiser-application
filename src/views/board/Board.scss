@@ -4,18 +4,59 @@
   align-items: center;
   padding: 0 20px;
 
-  h2 {
-    font-weight: 500;
-    color: #888;
+  .board-name-editable {
+
+    >div {
+
+      display: flex;
+      align-items: center;
+      min-width: 320px;
+
+    }
+
+    .no-edit {
+
+      h2 {
+        font-weight: 500;
+        color: #888;
+        font-size: 24px;
+        padding: 0;
+        margin: 20px 0;
+      }
+
+    }
+
+    .edit-view {
+
+      input {
+        font-weight: 500;
+        color: #888;
+        font-size: 24px;
+        padding: 0;
+        margin: 20px 0;
+        background: transparent;
+        border: none;
+        width: 100%;
+        font-family: inherit;
+
+        &::placeholder {
+          color: #bbb;
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+    }
   }
 }
-
 
 .trello-board {
   padding: 0;
 
-  --column-bg-color: rgb(232, 236, 241);
-  --border-radius: 4px;
+  --column-bg-color: #f9fbff;
+  --border-radius: 10px;
   --column-min-height: 135px;
 
 
@@ -121,6 +162,23 @@
       color: #17394d;
       font-weight: 600;
       font-size: 18px;
+      margin: 15px 0;
+    }
+
+    .column-name-input {
+      color: #17394d;
+      font-weight: 600;
+      font-size: 18px;
+      background-color: transparent;
+      border: none;
+      font-family: inherit;
+      margin: 15px 0;
+      width: 100%;
+      padding: 0;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     span.btn {

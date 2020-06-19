@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '../../components/misc/IonIcon';
-import { Team } from '../../components/team-tags/Team';
+import { Team } from '../../components/misc/Team';
 import { Modal } from '../../common/modal/Modal';
 import { convertDateToNice } from '../../utils/utility';
 import Priority from '../misc/Priority';

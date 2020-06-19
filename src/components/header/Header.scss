@@ -1,18 +1,18 @@
-header {
+.app-header {
   --bg: #fff;
-  --bg-accent: #f2f2f2;
+  --bg-accent: #fbfbfb;
   --bg-light: #f8f8f8;
   --text-color: #73849a;
   --border: 1px solid #fafafa;
-  --border-radius: 0px;
+  --border-radius: 10px;
   --box-shadow: rgba(2, 8, 20, 0.06) 0px 1px 3px, rgba(2, 8, 20, 0.04) 0px 1px 2px;
   --speed: 500ms;
 
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 60px auto 300px 180px;
   height: var(--nav-size);
   background-color: var(--bg);
-  box-shadow: var(--box-shadow);
+  // box-shadow: var(--box-shadow);
   padding: 0 .5rem;
   position: sticky;
   top: 0;
@@ -25,12 +25,61 @@ header {
   font-size: 22px;
   font-weight: 500;
   padding: 0 10px;
+  justify-content: center;
 
   svg {
     width: 30px;
     height: 30px;
-    margin-right: 10px;
+    margin-right: 4px;
     opacity: 0.5;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .tab-btn {
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 5px 30px;
+    border-radius: 50px;
+    line-height: 1;
+    font-size: 30px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-btn {
+    background-color: var(--color-accent);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    line-height: 1;
+    font-size: 15px;
+    font-weight: 500;
+    transition: .3s ease all;
+
+    &:hover {
+      box-shadow: 0 1px 17px rgba(60, 151, 247, 0.3)
+    }
   }
 }
 
@@ -44,15 +93,15 @@ header {
     display: flex;
     justify-content: flex-end;
   }
-}
 
-.nav-item {
-  width: calc(var(--nav-size) * 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
+  .nav-item {
+    width: calc(var(--nav-size) * 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+  }
 }
 
 .icon-button {
@@ -60,6 +109,7 @@ header {
   width: var(--button-size);
   height: var(--button-size);
   background-color: var(--bg-light);
+  color: var(--color-accent);
   border-radius: 50%;
   padding: 5px;
   margin: 2px;
@@ -73,10 +123,8 @@ header {
     background-color: var(--bg-accent);
   }
 
-  svg {
-    fill: var(--text-color);
-    width: 20px;
-    height: 20px;
+  &:focus {
+    outline: none;
   }
 }
 
@@ -174,6 +222,7 @@ header {
     transition: all var(--speed) ease;
   }
 }
+
 
 // .menu-secondary-enter,
 // .menu-secondary-enter-active,

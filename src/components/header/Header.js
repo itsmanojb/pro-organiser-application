@@ -120,13 +120,19 @@ const Header = () => {
   if (!currentUser) return null;
 
   return (
-    <header>
+    <header className="app-header">
       <NavLink to="/dashbaord" className="brand">
-        <Logo /> Task Force
+        <Logo />
+        {/* Task Force */}
       </NavLink>
+      <div className="nav-tabs">
+        <NavLink to='/' className="tab-btn"> Boards </NavLink>
+      </div>
+      <div className="cta">
+        <NavLink to='/new-board' className="cta-btn"> Create New Board </NavLink>
+      </div>
       <Navbar>
         <NavItem link="/dashbaord" icon={<Icon name="home" />} />
-        <NavItem link="/new-board" icon={<Icon name="clipboard-outline" />} />
         <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>
         </NavItem>

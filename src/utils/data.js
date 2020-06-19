@@ -52,6 +52,16 @@ export const deleteBoard = async (id) => {
   }
 };
 
+export const renameBoard = async (id, newName) => {
+  try {
+    await db.collection('boards').doc(id).update({ name: newName });
+    return true;
+  } catch (error) {
+    // console.log(error);
+    return error;
+  }
+};
+
 export const getColumns = async (boardId) => {
   try {
     const snapshot = await db
@@ -96,6 +106,20 @@ export const updateColumn = async (id, column) => {
 export const deleteColumn = async (id) => {
   try {
     await db.collection('columns').doc(id).delete();
+    return true;
+  } catch (error) {
+    return error;
+  }
+};
+
+/**
+ * to rename column
+ * @param {string} id the id of the column
+ * @param {string} name new name of the column
+ */
+export const renameColumn = async (id, name) => {
+  try {
+    await db.collection('columns').doc(id).update({ name });
     return true;
   } catch (error) {
     return error;

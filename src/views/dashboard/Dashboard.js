@@ -6,9 +6,10 @@ import { getBoards } from '../../utils/data';
 
 import { Alert } from '../../common/alert/Alert';
 import { Loader } from '../../common/loader/Loader';
+import SideNav from '../../components/sidenav/Sidenav';
 
 import './Dashboard.scss';
-import SideNav from './Sidenav';
+import RightPanel from '../../components/right-panel/RightPanel';
 
 export const Dashboard = () => {
 
@@ -67,7 +68,9 @@ export const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="sidebar right"></div>
+              <div>
+                <RightPanel />
+              </div>
             </div>
           </main>
         )}

@@ -6,7 +6,7 @@ main.content {
 .dashboard {
   height: 100%;
   display: grid;
-  grid-template-columns: var(--sidenav-size) 1fr 300px;
+  grid-template-columns: var(--sidenav-size) 1fr 320px;
   padding: 12px 0 0;
 
   .all-boards {

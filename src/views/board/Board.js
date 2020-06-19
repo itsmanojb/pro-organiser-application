@@ -7,15 +7,18 @@ import { Loader } from '../../common/loader/Loader';
 import { Card } from '../../components/cards/Card';
 import { AddCard } from '../../components/cards/AddCard';
 import { AddColumn } from '../../components/cards/AddColumn';
+import ColumnHead from '../../components/cards/ColumnHead';
+
 import { createDeepCopy } from '../../utils/utility';
 import {
   getBoard,
   getColumns,
   addColumn,
   updateColumn,
+  renameColumn,
   deleteColumn,
-  deleteBoard,
   renameBoard,
+  deleteBoard,
 } from '../../utils/data';
 
 import Icon from '../../components/misc/IonIcon';
@@ -176,8 +179,6 @@ export const Board = ({ match, history }) => {
   async function handleBoardRename(newName) {
     const renamed = await renameBoard(board.id, newName);
     if (renamed) {
-      console.log(newName);
-
       setBoardNameEdit(false);
       setBoardName(newName);
       setBoardNamePlaceholder(newName);
@@ -213,6 +214,10 @@ export const Board = ({ match, history }) => {
       .catch((err) => {
         showError(err.message);
       });
+  }
+
+  function handleRenameColumn(column, newName) {
+    renameColumn(column.id, newName);
   }
 
   async function handleBoardDelete() {
@@ -264,12 +269,12 @@ export const Board = ({ match, history }) => {
                       onChange={e => setBoardName(e.target.value)}
                       onBlur={doBoardRename}
                       onKeyPress={keyPressed}
+                      autoComplete="off"
                     />
                     {/* <span>save</span> */}
                   </div>
                   : <div className="no-edit">
-                    <h2>{boardName}</h2>
-                    <span onClick={() => setBoardNameEdit(true)}>edit</span>
+                    <h2 onDoubleClick={() => setBoardNameEdit(true)}>{boardName}</h2>
                   </div>
                 }
               </div>
@@ -290,7 +295,7 @@ export const Board = ({ match, history }) => {
                       }}
                     >
                       <div className="column__title--wrapper">
-                        <h2>{column.name}</h2>
+                        <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
                         <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
                           <Icon name="trash-outline" />
                         </span>

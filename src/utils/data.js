@@ -111,3 +111,17 @@ export const deleteColumn = async (id) => {
     return error;
   }
 };
+
+/**
+ * to rename column
+ * @param {string} id the id of the column
+ * @param {string} name new name of the column
+ */
+export const renameColumn = async (id, name) => {
+  try {
+    await db.collection('columns').doc(id).update({ name });
+    return true;
+  } catch (error) {
+    return error;
+  }
+};

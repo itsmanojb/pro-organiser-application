@@ -12,17 +12,6 @@
       align-items: center;
       min-width: 320px;
 
-      span {
-        width: 30px;
-        text-align: center;
-        padding: 5px 0;
-        height: 30px;
-        cursor: pointer;
-        margin-left: 15px;
-        font-size: 14px;
-        color: var(--color-accent);
-        font-weight: 500;
-      }
     }
 
     .no-edit {
@@ -33,16 +22,8 @@
         font-size: 24px;
         padding: 0;
         margin: 20px 0;
-        cursor: default;
       }
 
-      span {
-        visibility: hidden;
-      }
-
-      &:hover span {
-        visibility: visible;
-      }
     }
 
     .edit-view {
@@ -70,7 +51,6 @@
     }
   }
 }
-
 
 .trello-board {
   padding: 0;
@@ -182,6 +162,23 @@
       color: #17394d;
       font-weight: 600;
       font-size: 18px;
+      margin: 15px 0;
+    }
+
+    .column-name-input {
+      color: #17394d;
+      font-weight: 600;
+      font-size: 18px;
+      background-color: transparent;
+      border: none;
+      font-family: inherit;
+      margin: 15px 0;
+      width: 100%;
+      padding: 0;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     span.btn {

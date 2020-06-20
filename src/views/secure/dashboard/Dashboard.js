@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../../context/Auth';
-import { getBoards } from '../../utils/data';
+import { AuthContext } from 'context/Auth';
+import { getBoards } from 'utils/data';
 
-import { Alert } from '../../common/alert/Alert';
-import { Loader } from '../../common/loader/Loader';
-import SideNav from '../../components/sidenav/Sidenav';
+import { Alert } from 'common/alert/Alert';
+import { Loader } from 'common/loader/Loader';
+import SideNav from 'components/sidenav/Sidenav';
+import RightPanel from 'components/right-panel/RightPanel';
 
 import './Dashboard.scss';
-import RightPanel from '../../components/right-panel/RightPanel';
 
-export const Dashboard = () => {
+export const Dashboard = (props) => {
 
   useEffect(() => {
     document.title = 'Dashboard - TaskForce'
@@ -22,6 +22,7 @@ export const Dashboard = () => {
   const [boards, setBoards] = useState([]);
 
   useEffect(() => {
+
     getBoards(currentUser.email)
       .then((boards) => {
         setBoards(boards);
@@ -30,7 +31,7 @@ export const Dashboard = () => {
       .catch(() => {
         setBoards([]);
       });
-  }, [currentUser]);
+  }, [currentUser, props.update]);
 
   return (
     <>
@@ -57,7 +58,7 @@ export const Dashboard = () => {
                     {boards.map((board) => {
                       return (
                         <Link
-                          to={'/board/' + board.id}
+                          to={'/s/board/' + board.id}
                           key={board.id}
                           className="board"
                         >

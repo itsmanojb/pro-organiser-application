@@ -130,6 +130,7 @@ button:focus {
   transition: background-color 0.2s ease;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
+  font-family: inherit;
 
   &:hover,
   &:focus-within {
@@ -152,6 +153,7 @@ button:focus {
     border-bottom: 0.1rem solid var(--input-border);
     transition: border-color 0.2s ease;
     caret-color: var(--color-accent);
+    font-family: inherit;
 
     &::placeholder {
       color: rgba(0, 0, 0, 0);

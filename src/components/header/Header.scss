@@ -76,9 +76,15 @@
     font-size: 15px;
     font-weight: 500;
     transition: .3s ease all;
+    border: navajowhite;
+    font-family: inherit;
 
     &:hover {
       box-shadow: 0 1px 17px rgba(60, 151, 247, 0.3)
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 }

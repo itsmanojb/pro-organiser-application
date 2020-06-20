@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { withRouter, Link, Redirect } from 'react-router-dom';
 
-import { firebaseApp } from '../../firebase/init';
-import { AuthContext } from '../../context/Auth';
-import { ToastsContext } from '../../context/Toasts';
+import { firebaseApp } from 'firebase/init';
+import { AuthContext } from 'context/Auth';
+import { ToastsContext } from 'context/Toasts';
 
-import Image from '../../assets/login-bg.png';
+import Image from 'assets/login-bg.png';
 
 
 const ResetPassword = ({ history }) => {

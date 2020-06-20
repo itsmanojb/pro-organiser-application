@@ -1,27 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter, Redirect, Link } from 'react-router-dom';
+import { withRouter, Link, Redirect } from 'react-router-dom';
 
-import { firebaseApp } from '../../firebase/init';
-import { AuthContext } from '../../context/Auth';
-import { ToastsContext } from '../../context/Toasts';
+import { firebaseApp } from 'firebase/init';
+import { AuthContext } from 'context/Auth';
+import { ToastsContext } from 'context/Toasts';
 
-import Image from '../../assets/login-bg.png';
+import Image from 'assets/login-bg.png';
 
-
-const Login = ({ history }) => {
+const SignUp = ({ history }) => {
 
   useEffect(() => {
-    document.title = 'Login - TaskForce'
+    document.title = 'Sign Up - TaskForce'
   }, []);
 
+  const { currentUser } = useContext(AuthContext);
+
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [toasts, setToasts] = useContext(ToastsContext);
 
-  const handleLogin = (e) => {
+  const handleSignUp = (e) => {
+
     e.preventDefault();
-    if (!email || !password) {
+    if (!email || !password || !name) {
       setToasts([
         ...toasts,
         {
@@ -37,13 +40,31 @@ const Login = ({ history }) => {
 
     firebaseApp
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        history.push('/dashboard');
+        const user = firebaseApp.auth().currentUser;
+        user
+          .updateProfile({ displayName: name })
+          .then(() => {
+            setToasts([
+              ...toasts,
+              {
+                id: toasts.length,
+                title: 'Oh Yes',
+                message: 'Signed up successfully.',
+                backgroundColor: '#5cb85c',
+                icon: 'checkmark-circle'
+              }
+            ]);
+            history.push('/');
+          })
+          .catch((err) => {
+            throw Error(err);
+          });
       })
-      .catch(err => {
+      .catch((err) => {
         // console.log(err);
-        handleError(err)
+        handleError(err);
       });
   }
 
@@ -61,10 +82,8 @@ const Login = ({ history }) => {
     );
   }
 
-  const { currentUser } = useContext(AuthContext);
-
   if (currentUser) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/s" />;
   }
 
   return (
@@ -75,8 +94,24 @@ const Login = ({ history }) => {
         </div>
         <div className="form-wrapper">
           <form className="form">
-            <p>Continue working</p>
-            <h2>Login your account</h2>
+            <p>Getting started</p>
+            <h2>Create your account</h2>
+
+            <div className="floating">
+              <input type="text"
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your Name"
+                className="floating__input"
+                autoComplete="off"
+                spellCheck="false"
+              />
+              <label htmlFor="name" className="floating__label" data-content="Name">
+                <span className="hidden--visually">Name</span>
+              </label>
+            </div>
 
             <div className="floating">
               <input type="email"
@@ -84,7 +119,7 @@ const Login = ({ history }) => {
                 id="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder='Email address'
+                placeholder="Email address"
                 className="floating__input"
                 autoComplete="off"
                 spellCheck="false"
@@ -94,13 +129,14 @@ const Login = ({ history }) => {
               </label>
             </div>
 
+
             <div className="floating">
               <input type="password"
                 name="password"
                 id="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder='Password'
+                placeholder="Password"
                 className="floating__input"
                 autoComplete="off"
               />
@@ -109,14 +145,11 @@ const Login = ({ history }) => {
               </label>
             </div>
 
-            <div className="help-block">
-              Forgot password ? <Link to="/reset-password">Reset</Link>
-            </div>
             <div className="form-buttons">
-              <button type="submit" className="button" onClick={(e) => handleLogin(e)}>Login</button>
+              <button type="submit" className="button" onClick={(e) => handleSignUp(e)}>Sign Up</button>
             </div>
             <div className="help-block">
-              Don't have an account? <Link to="/signup">Sign up</Link>
+              Already have an account? <Link to="/login">Sign in</Link>
             </div>
           </form>
         </div>
@@ -125,4 +158,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default withRouter(Login);
+export default withRouter(SignUp);

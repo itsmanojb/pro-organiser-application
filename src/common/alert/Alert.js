@@ -4,8 +4,8 @@ export const Alert = ({ children, canClose, type, isClosable = true }) => {
   const alert = {
     display: 'block',
     padding: '12px 15px',
-    margin: '20px 0',
-    borderRadius: '5px',
+    margin: '20px',
+    borderRadius: '12px',
     position: 'relative',
     fontSize: '15px',
     fontWeight: '500'
@@ -35,7 +35,7 @@ export const Alert = ({ children, canClose, type, isClosable = true }) => {
   return (
     <div style={alert}>
       {isClosable && (
-        <div style={close} onClick={() => canClose(true)}>
+        <div style={close} onClick={(e) => canClose(true)}>
           &times;
         </div>
       )}

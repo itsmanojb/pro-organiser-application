@@ -10,6 +10,8 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     app.auth().onAuthStateChanged(user => {
+      // console.log(user);
+
       setCurrentUser(user);
       setPending(false);
     });

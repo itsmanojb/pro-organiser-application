@@ -99,6 +99,13 @@ button:focus {
 
   .form-buttons {
     margin: 40px 0 10px;
+
+    button {
+      &:disabled {
+        pointer-events: none;
+        opacity: 0.75;
+      }
+    }
   }
 
   .graphics {

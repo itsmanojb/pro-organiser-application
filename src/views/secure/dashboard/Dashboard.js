@@ -45,7 +45,7 @@ export const Dashboard = (props) => {
             <SideNav />
           </div>
           <div className="all-boards">
-            {!loading && boards.length === 0 ? (
+            {boards.length === 0 ? (
               <Alert type="info" isClosable={false}>
                 You haven't created any boards. Kindly click on the 'Create a
                 Board' button in the navigation bar to create a board.

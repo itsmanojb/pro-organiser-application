@@ -1,4 +1,4 @@
-import db from './../firebase/init';
+import { db } from 'firebase/init';
 
 export const getBoards = async (email) => {
   try {

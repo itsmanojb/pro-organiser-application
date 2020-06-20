@@ -8,6 +8,7 @@ import { Alert } from 'common/alert/Alert';
 import { Loader } from 'common/loader/Loader';
 import SideNav from 'components/sidenav/Sidenav';
 import RightPanel from 'components/right-panel/RightPanel';
+import { Team } from 'components/misc/Team';
 
 import './Dashboard.scss';
 
@@ -44,30 +45,31 @@ export const Dashboard = (props) => {
                 <SideNav />
               </div>
               <div className="all-boards">
-                <div className="board-header">
-
-                </div>
-                <div className="boards-listing">
-                  {boards.length === 0 && (
-                    <Alert type="info" isClosable={false}>
-                      You haven't created any boards. Kindly click on the 'Create a
-                      Board' button in the navigation bar to create a board.
-                    </Alert>
+                {boards.length === 0 ? (
+                  <Alert type="info" isClosable={false}>
+                    You haven't created any boards. Kindly click on the 'Create a
+                    Board' button in the navigation bar to create a board.
+                  </Alert>
+                ) : (
+                    <>
+                      <div className="board-header">
+                      </div>
+                      <div className="boards-listing grid">
+                        <div className="boards">
+                          {boards.map((board) => {
+                            return (
+                              <Link to={'/s/board/' + board.id} key={board.id} className="board" >
+                                <div className="board-name">{board.name}</div>
+                                <ul className="board-members">
+                                  {board.teamMembers.map(name => <Team name={name} key={name} />)}
+                                </ul>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
                   )}
-                  <div className="boards">
-                    {boards.map((board) => {
-                      return (
-                        <Link
-                          to={'/s/board/' + board.id}
-                          key={board.id}
-                          className="board"
-                        >
-                          <div>{board.name}</div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
               <div>
                 <RightPanel />

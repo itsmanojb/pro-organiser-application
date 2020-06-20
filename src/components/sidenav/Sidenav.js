@@ -10,7 +10,7 @@ const SideNav = () => {
       <ul className="sidenav-nav">
         <li className="nav-item">
           <a className="nav-link">
-            <Icon name="grid-outline" />
+            <Icon name="layers-outline" />
           </a>
         </li>
         <li className="nav-item">

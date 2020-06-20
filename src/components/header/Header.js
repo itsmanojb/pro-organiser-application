@@ -132,9 +132,9 @@ const Header = () => {
         <button disabled={modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
       </div>
       <Navbar>
-        <NavItem link="/s/dashboard" icon={<Icon name="home" />} />
-        <NavItem icon={<Icon name="caret-down" />}>
-          <DropdownMenu></DropdownMenu>
+        {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
+        <NavItem icon={<Icon name="ellipsis-vertical" />}>
+          <DropdownMenu />
         </NavItem>
       </Navbar>
     </header>

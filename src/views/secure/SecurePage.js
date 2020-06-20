@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
 import { ModalPageContext } from 'context/ModalPage';
 import { Dashboard } from 'views/secure/dashboard/Dashboard';
@@ -24,7 +24,8 @@ const SecurePage = () => {
   }
 
   return (
-    <>
+
+    <Router>
       <Header />
       <Switch>
         <Route exact path={path}>
@@ -36,14 +37,15 @@ const SecurePage = () => {
             <Dashboard {...props} update={updateTime} />
           )}
         />
-        <Route path={`${path}/board/:name/:id`} component={Board} />
+        <Route path={`${path}/board/:id`} component={Board} />
       </Switch>
       {modalPage === 'addboard' &&
         <AddBoard
           added={(e) => updatePage(e)}
           closed={() => setModalPage('')}
         />}
-    </>
+    </Router>
+
   );
 }
 

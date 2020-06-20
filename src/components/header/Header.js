@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AuthContext } from 'context/Auth';
@@ -115,14 +115,17 @@ const DropdownMenu = () => {
   );
 }
 
-const Header = () => {
+const Header = ({ location }) => {
 
-  let breadcrumb = '';
-  const { pathname } = useLocation();
-  if (pathname.startsWith('/s/board/')) {
-    breadcrumb = pathname.split('/')[3];
-    console.log(breadcrumb);
-  }
+  const [currentPage, setCurrentPage] = useState('');
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/s/board/')) {
+      setCurrentPage(location.state.boardName)
+    } else {
+      setCurrentPage('')
+    }
+  }, [location])
 
   const [modalPage, setModalPage] = useContext(ModalPageContext);
 
@@ -133,7 +136,8 @@ const Header = () => {
         {/* Task Force */}
       </NavLink>
       <div className="nav-tabs">
-        <NavLink to={{ pathname: '/s/dashboard', update: new Date() }} className="tab-btn"> Boards </NavLink>
+        <NavLink to='/s/dashboard' className="tab-btn"> Boards </NavLink>
+        <span className="tab-btn current"> {currentPage}</span>
       </div>
       <div className="cta">
         <button disabled={modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
@@ -149,4 +153,4 @@ const Header = () => {
 };
 
 
-export default Header;
+export default withRouter(Header);

@@ -78,7 +78,13 @@ export const Dashboard = (props) => {
                     <div className="boards">
                       {boards.map((board) => {
                         return (
-                          <Link to={'/s/board/' + board.id} key={board.id} className="board" >
+                          <Link
+                            to={{
+                              pathname: `/s/board/${board.id}`,
+                              state: { boardName: board.name }
+                            }}
+                            key={board.id}
+                            className="board" >
                             <div className="board-name">{board.name}</div>
                             <div className="board-type">
                               <span>{board.type}</span>

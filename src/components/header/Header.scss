@@ -43,19 +43,33 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  padding: 0 15px;
 
   .tab-btn {
     font-weight: 500;
-    color: #888;
     cursor: pointer;
     text-decoration: none;
-    padding: 5px 30px;
+    padding: 5px 15px;
     border-radius: 50px;
     line-height: 1;
     font-size: 30px;
+    color: #ccc;
+    line-height: 28px;
+    transition: color .3s ease;
+
+    &.current,
+    &:not(.current):hover {
+      color: #888;
+    }
 
     &:focus {
       outline: none;
+    }
+
+    &.current {
+      font-size: 20px;
+      padding-top: 8px;
+      cursor: default;
     }
   }
 }

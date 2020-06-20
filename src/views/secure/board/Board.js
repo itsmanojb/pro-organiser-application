@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid, no-lone-blocks */
+
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import * as shortid from 'shortid';
@@ -14,14 +16,28 @@ import Icon from 'components/misc/IonIcon';
 import { createDeepCopy } from 'utils/utility';
 
 import {
-  getBoard, getColumns, addColumn, updateColumn, renameColumn,
-  deleteColumn, renameBoard, deleteBoard
+  getBoard, getColumns, addColumn, updateColumn,
+  renameColumn, deleteColumn, deleteBoard,
+  // renameBoard, 
 } from 'utils/data';
 import './Board.scss';
 
+function afterUpdateColumn(columns, selectedColumn, upColumn, setColumns) {
+  const filColumns = columns.filter((cl) => cl.id !== selectedColumn.id);
+  const newColumns = [...filColumns, upColumn];
+  newColumns.sort((a, b) => a.created - b.created);
+  setColumns(newColumns);
+}
+
+async function getAllColumns(id, setColumns) {
+  const resCols = await getColumns(id);
+  setColumns(resCols);
+}
+
 export const Board = ({ history }) => {
 
-  let { name } = useParams();
+  let { id } = useParams();
+
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [isColumnAdd, setIsColumnAdd] = useState(false);
@@ -30,21 +46,25 @@ export const Board = ({ history }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
-  const [boardName, setBoardName] = useState({});
-  const [boardNamePlaceholder, setBoardNamePlaceholder] = useState('');
-  const [boardNameEdit, setBoardNameEdit] = useState(false);
+
   const [toasts, setToasts] = useContext(ToastsContext);
+
+  // Required for Board name quick edit
+
+  // const [boardName, setBoardName] = useState({});
+  // const [boardNamePlaceholder, setBoardNamePlaceholder] = useState('');
+  // const [boardNameEdit, setBoardNameEdit] = useState(false);
 
   useEffect(() => {
     (async function () {
-      const data = await getBoard(name);
+      const data = await getBoard(id);
       setBoard(data);
-      setBoardName(data.name);
-      setBoardNamePlaceholder(data.name);
+      // setBoardName(data.name);
+      // setBoardNamePlaceholder(data.name);
       await getAllColumns(data.id, setColumns);
       setLoading(false);
     })();
-  }, [name]);
+  }, [id]);
 
   const showError = (message) => {
     setToasts([
@@ -57,6 +77,31 @@ export const Board = ({ history }) => {
         icon: 'warning'
       }
     ]);
+  }
+
+  // sidenav
+  const SideNav = () => {
+    return (
+      <div className="sidenav">
+        <ul className="sidenav-nav">
+          <li className="nav-item">
+            <a className="nav-link">
+              <Icon name="layers-outline" />
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link">
+              <Icon name="analytics-outline" />
+            </a>
+          </li>
+          <li className="nav-item" onClick={handleBoardDelete} >
+            <a className="nav-link">
+              <Icon name="trash" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
   }
 
   function handleAddCloumn(columnName) {
@@ -171,14 +216,14 @@ export const Board = ({ history }) => {
     }
   }
 
-  async function handleBoardRename(newName) {
-    const renamed = await renameBoard(board.id, newName);
-    if (renamed) {
-      setBoardNameEdit(false);
-      setBoardName(newName);
-      setBoardNamePlaceholder(newName);
-    }
-  }
+  // async function handleBoardRename(newName) {
+  //   const renamed = await renameBoard(board.id, newName);
+  //   if (renamed) {
+  //     setBoardNameEdit(false);
+  //     setBoardName(newName);
+  //     setBoardNamePlaceholder(newName);
+  //   }
+  // }
 
   function cancelNewColumn() {
     setIsColumnAdd(false);
@@ -225,110 +270,91 @@ export const Board = ({ history }) => {
       );
       const val = await deleteBoard(board.id);
       if (val) {
-        history.push('/');
+        history.push('/s/dashboard');
       }
     }
   }
 
   // board name edit
-  function doBoardRename() {
-    if (!boardName) {
-      setBoardNameEdit(false);
-      setBoardName(boardNamePlaceholder);
-    } else {
-      handleBoardRename(boardName);
-    }
-  }
+  // function doBoardRename() {
+  //   if (!boardName) {
+  //     setBoardNameEdit(false);
+  //     setBoardName(boardNamePlaceholder);
+  //   } else {
+  //     handleBoardRename(boardName);
+  //   }
+  // }
 
-  function keyPressed(event) {
-    if (event.key === 'Enter') {
-      doBoardRename();
-    }
-  }
+  // function keyPressed(event) {
+  //   if (event.key === 'Enter') {
+  //     doBoardRename();
+  //   }
+  // }
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-          <main className="content">
-            <div className="board-header">
-              <div className="board-name-editable">
-                {boardNameEdit
-                  ?
-                  <div className="edit-view">
-                    <input type="text"
-                      autoFocus
-                      value={boardName}
-                      placeholder={boardNamePlaceholder}
-                      onChange={e => setBoardName(e.target.value)}
-                      onBlur={doBoardRename}
-                      onKeyPress={keyPressed}
-                      autoComplete="off"
-                    />
-                    {/* <span>save</span> */}
-                  </div>
-                  : <div className="no-edit">
-                    <h2 onDoubleClick={() => setBoardNameEdit(true)}>{boardName}</h2>
-                  </div>
-                }
+          <main className="board-content">
+            <div>
+              <SideNav />
+            </div>
+            <div className="scroll">
+              <div className="trello-board">
+                <ul className="column__list">
+                  {columns.map((column) => {
+                    return (
+                      <li
+                        className="column__item"
+                        key={column.id}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          onDragDrop(e, column);
+                        }}
+                      >
+                        <div className="column__title--wrapper">
+                          <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
+                          <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
+                            <Icon name="trash-outline" />
+                          </span>
+                        </div>
+                        <ul className="card__list">
+                          {column.cards.map(
+                            (card) =>
+                              !card.isArchive && (
+                                <Card
+                                  card={card}
+                                  board={board}
+                                  key={card.id}
+                                  handleEdit={() => openCardEdit(card, column)}
+                                  handleArchive={() => handleCardArchive(card, column)}
+                                  handleCompletion={() => handleCardCompletion(card, column)}
+                                  column={column}
+                                />
+                              )
+                          )}
+                        </ul>
+                        <div className="column__item--cta" onClick={() => openAddCard(column)}>
+                          <Icon name="add"></Icon>
+                          <span>Add a card</span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                  <li className="column__item trans">
+                    {isColumnAdd ? (
+                      <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
+                    ) : (
+                        <div className="column__item--new">
+                          <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
+                        </div>
+                      )}
+                  </li>
+                </ul>
               </div>
-              <button onClick={handleBoardDelete} className="button inline bg-red sm">
-                Delete Board
-              </button>
             </div>
-            <div className="trello-board">
-              <ul className="column__list">
-                {columns.map((column) => {
-                  return (
-                    <li
-                      className="column__item"
-                      key={column.id}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        onDragDrop(e, column);
-                      }}
-                    >
-                      <div className="column__title--wrapper">
-                        <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
-                        <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
-                          <Icon name="trash-outline" />
-                        </span>
-                      </div>
-                      <ul className="card__list">
-                        {column.cards.map(
-                          (card) =>
-                            !card.isArchive && (
-                              <Card
-                                card={card}
-                                board={board}
-                                key={card.id}
-                                handleEdit={() => openCardEdit(card, column)}
-                                handleArchive={() => handleCardArchive(card, column)}
-                                handleCompletion={() => handleCardCompletion(card, column)}
-                                column={column}
-                              />
-                            )
-                        )}
-                      </ul>
-                      <div className="column__item--cta" onClick={() => openAddCard(column)}>
-                        <Icon name="add"></Icon>
-                        <span>Add a card</span>
-                      </div>
-                    </li>
-                  );
-                })}
-                <li className="column__item trans">
-                  {isColumnAdd ? (
-                    <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
-                  ) : (
-                      <div className="column__item--new">
-                        <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
-                      </div>
-                    )}
-                </li>
-              </ul>
-            </div>
+            <div></div>
           </main>
         )}
       {isCardAdd && (
@@ -345,14 +371,27 @@ export const Board = ({ history }) => {
   );
 };
 
-function afterUpdateColumn(columns, selectedColumn, upColumn, setColumns) {
-  const filColumns = columns.filter((cl) => cl.id !== selectedColumn.id);
-  const newColumns = [...filColumns, upColumn];
-  newColumns.sort((a, b) => a.created - b.created);
-  setColumns(newColumns);
-}
 
-async function getAllColumns(id, setColumns) {
-  const resCols = await getColumns(id);
-  setColumns(resCols);
-}
+
+{/* <div className="board-header">
+  <div className="board-name-editable">
+    {boardNameEdit
+      ?
+      <div className="edit-view">
+        <input type="text"
+          autoFocus
+          value={boardName}
+          placeholder={boardNamePlaceholder}
+          onChange={e => setBoardName(e.target.value)}
+          onBlur={doBoardRename}
+          onKeyPress={keyPressed}
+          autoComplete="off"
+        />
+        <span>save</span> 
+      </div>
+      : <div className="no-edit">
+        <h2 onDoubleClick={() => setBoardNameEdit(true)}>{boardName}</h2>
+      </div>
+    }
+  </div>
+</div> */}

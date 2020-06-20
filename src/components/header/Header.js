@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AuthContext } from 'context/Auth';
@@ -117,6 +117,13 @@ const DropdownMenu = () => {
 
 const Header = () => {
 
+  let breadcrumb = '';
+  const { pathname } = useLocation();
+  if (pathname.startsWith('/s/board/')) {
+    breadcrumb = pathname.split('/')[3];
+    console.log(breadcrumb);
+  }
+
   const [modalPage, setModalPage] = useContext(ModalPageContext);
 
   return (
@@ -126,7 +133,7 @@ const Header = () => {
         {/* Task Force */}
       </NavLink>
       <div className="nav-tabs">
-        <NavLink to='/s/dashboard' className="tab-btn"> Boards </NavLink>
+        <NavLink to={{ pathname: '/s/dashboard', update: new Date() }} className="tab-btn"> Boards </NavLink>
       </div>
       <div className="cta">
         <button disabled={modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>

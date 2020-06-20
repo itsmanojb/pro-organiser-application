@@ -1,6 +1,6 @@
 main.content {
   height: calc(100vh - var(--nav-size));
-  overflow: auto;
+  overflow: hidden;
 }
 
 .dashboard {
@@ -8,6 +8,10 @@ main.content {
   display: grid;
   grid-template-columns: var(--sidenav-size) 1fr 350px;
   padding: 12px 0 0;
+
+  >div {
+    overflow-y: auto;
+  }
 
   .all-boards {
     height: 100%;
@@ -114,6 +118,8 @@ main.content {
 
 .boards-listing {
   padding: 0 25px;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   &:not(grid) {
     .boards {
@@ -333,7 +339,6 @@ main.content {
         }
 
         @media screen and (max-width:1200px) {
-
           .board-desc {
             display: block;
           }
@@ -351,6 +356,10 @@ main.content {
           box-shadow: 0 0px 20px rgba(60, 151, 247, 0.15);
           border-color: #fff;
           transform: translateY(-2px)
+        }
+
+        &+.board {
+          margin-top: 0;
         }
       }
     }

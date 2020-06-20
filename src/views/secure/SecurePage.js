@@ -4,8 +4,8 @@ import { BrowserRouter as Switch, Route, useRouteMatch, Redirect } from 'react-r
 import { ModalPageContext } from 'context/ModalPage';
 import { Dashboard } from 'views/secure/dashboard/Dashboard';
 import { Board } from 'views/secure/board/Board';
-import { AddBoard } from 'views/secure/create-board/AddBoard';
 
+import { AddBoard } from 'views/secure/create-board/AddBoard';
 import Header from 'components/header/Header';
 
 const SecurePage = () => {
@@ -36,7 +36,7 @@ const SecurePage = () => {
             <Dashboard {...props} update={updateTime} />
           )}
         />
-        <Route path={`${path}/board/:name`} component={Board} />
+        <Route path={`${path}/board/:name/:id`} component={Board} />
       </Switch>
       {modalPage === 'addboard' &&
         <AddBoard

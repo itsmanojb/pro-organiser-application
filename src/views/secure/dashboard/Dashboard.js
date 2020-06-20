@@ -60,9 +60,18 @@ export const Dashboard = (props) => {
                             return (
                               <Link to={'/s/board/' + board.id} key={board.id} className="board" >
                                 <div className="board-name">{board.name}</div>
+                                <div className="board-type">
+                                  <span>{board.type}</span>
+                                </div>
+                                <div className="board-desc">
+                                  <p>6 cards</p>
+                                  <p>16 tasks</p>
+                                  <p>70% completion</p>
+                                </div>
                                 <ul className="board-members">
                                   {board.teamMembers.map(name => <Team name={name} key={name} />)}
                                 </ul>
+                                <span className="meta">1 day ago</span>
                               </Link>
                             );
                           })}

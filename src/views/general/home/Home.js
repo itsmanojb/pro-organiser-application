@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { withRouter, Redirect, NavLink } from 'react-router-dom';
 
-import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import { AuthContext } from '../../context/Auth';
+import { ReactComponent as Logo } from 'assets/icons/logo.svg';
+import { AuthContext } from 'context/Auth';
 import './Home.scss';
 
 const Home = () => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/s" />;
   }
 
   return (

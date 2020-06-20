@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Icon from '../../components/misc/IonIcon';
-import { Team } from '../../components/misc/Team';
-import { Modal } from '../../common/modal/Modal';
-import { convertDateToNice } from '../../utils/utility';
-import Priority from '../misc/Priority';
+import Icon from 'components/misc/IonIcon';
+import { Team } from 'components/misc/Team';
+import Priority from 'components/misc/Priority';
+import { Modal } from 'common/modal/Modal';
+import { convertDateToNice } from 'utils/utility';
 
 export const Card = ({ card, board, column, handleEdit, handleArchive, handleCompletion }) => {
   const [isDetails, setIsDetails] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Modal } from '../../common/modal/Modal';
-import Icon from '../../components/misc/IonIcon';
-import { ToastsContext } from '../../context/Toasts';
+import { Modal } from 'common/modal/Modal';
+import { ToastsContext } from 'context/Toasts';
+import Icon from 'components/misc/IonIcon';
 
 export const AddCard = ({
   board,

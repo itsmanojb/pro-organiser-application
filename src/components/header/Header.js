@@ -4,11 +4,12 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
-import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import { AuthContext } from '../../context/Auth';
-import { firebaseApp } from '../../firebase/init';
-import Icon from '../../components/misc/IonIcon';
+import { AuthContext } from 'context/Auth';
+import { ModalPageContext } from 'context/ModalPage';
+import { firebaseApp } from 'firebase/init';
 
+import { ReactComponent as Logo } from 'assets/icons/logo.svg';
+import Icon from 'components/misc/IonIcon';
 import './Header.scss';
 
 const Navbar = (props) => {
@@ -116,23 +117,22 @@ const DropdownMenu = () => {
 
 const Header = () => {
 
-  const { currentUser } = useContext(AuthContext);
-  if (!currentUser) return null;
+  const [modalPage, setModalPage] = useContext(ModalPageContext);
 
   return (
     <header className="app-header">
-      <NavLink to="/dashbaord" className="brand">
+      <NavLink to="/" className="brand">
         <Logo />
         {/* Task Force */}
       </NavLink>
       <div className="nav-tabs">
-        <NavLink to='/' className="tab-btn"> Boards </NavLink>
+        <NavLink to='/s/dashboard' className="tab-btn"> Boards </NavLink>
       </div>
       <div className="cta">
-        <NavLink to='/new-board' className="cta-btn"> Create New Board </NavLink>
+        <button disabled={modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
       </div>
       <Navbar>
-        <NavItem link="/dashbaord" icon={<Icon name="home" />} />
+        <NavItem link="/s/dashboard" icon={<Icon name="home" />} />
         <NavItem icon={<Icon name="caret-down" />}>
           <DropdownMenu></DropdownMenu>
         </NavItem>

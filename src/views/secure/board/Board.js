@@ -1,32 +1,27 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import * as shortid from 'shortid';
 
-import { ToastsContext } from '../../context/Toasts';
+import { ToastsContext } from 'context/Toasts';
 
-import { Loader } from '../../common/loader/Loader';
-import { Card } from '../../components/cards/Card';
-import { AddCard } from '../../components/cards/AddCard';
-import { AddColumn } from '../../components/cards/AddColumn';
-import ColumnHead from '../../components/cards/ColumnHead';
+import { Loader } from 'common/loader/Loader';
+import { Card } from 'components/cards/Card';
+import { AddCard } from 'components/cards/AddCard';
+import { AddColumn } from 'components/cards/AddColumn';
+import ColumnHead from 'components/cards/ColumnHead';
+import Icon from 'components/misc/IonIcon';
 
-import { createDeepCopy } from '../../utils/utility';
+import { createDeepCopy } from 'utils/utility';
+
 import {
-  getBoard,
-  getColumns,
-  addColumn,
-  updateColumn,
-  renameColumn,
-  deleteColumn,
-  renameBoard,
-  deleteBoard,
-} from '../../utils/data';
-
-import Icon from '../../components/misc/IonIcon';
-
+  getBoard, getColumns, addColumn, updateColumn, renameColumn,
+  deleteColumn, renameBoard, deleteBoard
+} from 'utils/data';
 import './Board.scss';
 
-export const Board = ({ match, history }) => {
+export const Board = ({ history }) => {
 
+  let { name } = useParams();
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [isColumnAdd, setIsColumnAdd] = useState(false);
@@ -42,14 +37,14 @@ export const Board = ({ match, history }) => {
 
   useEffect(() => {
     (async function () {
-      const data = await getBoard(match.params.name);
+      const data = await getBoard(name);
       setBoard(data);
       setBoardName(data.name);
       setBoardNamePlaceholder(data.name);
       await getAllColumns(data.id, setColumns);
       setLoading(false);
     })();
-  }, [match]);
+  }, [name]);
 
   const showError = (message) => {
     setToasts([

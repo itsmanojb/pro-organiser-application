@@ -3,7 +3,11 @@
   height: 100vh;
   width: 100%;
   place-content: center;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  background: rgba(255, 255, 255, .9);
 
   .close {
     position: absolute;

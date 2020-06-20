@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React from 'react';
-import Icon from '../../components/misc/IonIcon';
+import Icon from 'components/misc/IonIcon';
 import './Sidenav.scss';
 
 const SideNav = () => {

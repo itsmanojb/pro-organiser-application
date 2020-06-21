@@ -67,6 +67,9 @@ button:focus {
   outline-color: var(--color-accent-alt);
 }
 
+.clickable {
+  cursor: pointer;
+}
 
 .login-ui {
   height: 100vh;

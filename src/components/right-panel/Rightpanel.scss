@@ -14,11 +14,11 @@
     .greet {
       display: flex;
       flex-direction: column;
-      font-size: 24px;
+      font-size: 22px;
 
       strong {
         color: var(--color-accent);
-        font-size: 28px;
+        font-size: 25px;
       }
     }
 
@@ -117,6 +117,20 @@
         font-weight: 500;
         color: #555;
         margin-top: 5px;
+      }
+    }
+
+    .feed-list {
+      ul {
+        margin-top: 20px;
+
+        li {
+          color: #888;
+
+          &+li {
+            margin-top: 10px;
+          }
+        }
       }
     }
   }

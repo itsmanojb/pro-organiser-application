@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from 'context/Auth';
 import './Rightpanel.scss';
 
 const RightPanel = () => {
+
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <div className="sidebar right">
       <div className="user-info">
-        <div className="greet">hello <strong>User name</strong></div>
+        <div className="greet">Hello <strong>{currentUser.displayName}</strong></div>
         <div className="avatar">
-          <img src="//via.placeholder.com/200" alt="" />
+          <img src={currentUser.photoURL} alt="" />
         </div>
       </div>
       <div className="stats">
@@ -20,7 +24,11 @@ const RightPanel = () => {
         <div className="header">
           Activity <span>Feed</span>
         </div>
-        <div className="feed-list"></div>
+        <div className="feed-list">
+          <ul>
+            <li><small>No activities</small></li>
+          </ul>
+        </div>
       </div>
     </div>
   );

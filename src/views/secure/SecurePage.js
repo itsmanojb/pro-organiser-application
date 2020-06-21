@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
+import { ProjectContextProvider } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { Dashboard } from 'views/secure/dashboard/Dashboard';
 import { Board } from 'views/secure/board/Board';
@@ -24,28 +25,28 @@ const SecurePage = () => {
   }
 
   return (
-
-    <Router>
-      <Header />
-      <Switch>
-        <Route exact path={path}>
-          <Redirect to={`${path}/dashboard`} />
-        </Route>
-        <Route
-          path={`${path}/dashboard`}
-          render={(props) => (
-            <Dashboard {...props} update={updateTime} />
-          )}
-        />
-        <Route path={`${path}/board/:id`} component={Board} />
-      </Switch>
-      {modalPage === 'addboard' &&
-        <AddBoard
-          added={(e) => updatePage(e)}
-          closed={() => setModalPage('')}
-        />}
-    </Router>
-
+    <ProjectContextProvider>
+      <Router>
+        <Header />
+        <Switch>
+          <Route exact path={path}>
+            <Redirect to={`${path}/dashboard`} />
+          </Route>
+          <Route
+            path={`${path}/dashboard`}
+            render={(props) => (
+              <Dashboard {...props} update={updateTime} />
+            )}
+          />
+          <Route path={`${path}/board/:id`} component={Board} />
+        </Switch>
+        {modalPage === 'addboard' &&
+          <AddBoard
+            added={(e) => updatePage(e)}
+            closed={() => setModalPage('')}
+          />}
+      </Router>
+    </ProjectContextProvider>
   );
 }
 

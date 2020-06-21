@@ -1,5 +1,19 @@
 import { db } from 'firebase/init';
 
+export const getProjects = async (email) => {
+  try {
+    const snapshot = await db
+      .collection('projects')
+      .where('manager', '==', email)
+      .orderBy('name')
+      .get();
+    const projects = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
+    return projects;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const getBoards = async (email) => {
   try {
     const snapshot = await db

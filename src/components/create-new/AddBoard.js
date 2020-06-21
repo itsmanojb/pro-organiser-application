@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { addBoard } from 'utils/data';
 import { AuthContext } from 'context/Auth';
 import { ToastsContext } from 'context/Toasts';
@@ -9,25 +9,35 @@ import './AddNew.scss';
 export const AddBoard = ({ added, closed }) => {
 
   const { currentUser } = useContext(AuthContext);
+
+  const [project, setProject] = useState(null);
   const [name, setName] = useState('');
-  const [teamMember, setTeamMember] = useState('');
+  const [teamMember, setTeamMember] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [type, setType] = useState('');
 
   const [toasts, setToasts] = useContext(ToastsContext);
 
+  useEffect(() => {
+    const project = JSON.parse(localStorage.getItem('currentProject'));
+    if (project) {
+      setProject(project);
+    }
+  }, []);
+
   const saveBoard = () => {
-    if (!name && !teamMember) {
+    if (!name && teamMember.length === 0) {
       showError('Please fill mandatory (*) fields');
       return;
     }
 
-    const teamMembers = teamMember.split(',').map((el) => el.trim());
     const newBoard = {
-      user: currentUser.email,
       name,
-      teamMembers,
       type,
+      user: currentUser.email,
+      teamMembers: teamMember,
+      projectId: project.id,
+      createdOn: new Date().getTime()
     };
 
     setFormSubmitted(true);
@@ -44,6 +54,11 @@ export const AddBoard = ({ added, closed }) => {
         return;
       });
   };
+
+  function onSelectChange(e) {
+    const values = [...e.target.selectedOptions].map(opt => opt.value);
+    setTeamMember(values);
+  }
 
   const goBack = () => {
     closed();
@@ -86,7 +101,7 @@ export const AddBoard = ({ added, closed }) => {
               <span className="hidden--visually">Board's name</span>
             </label>
           </div>
-          <div className="floating">
+          {/* <div className="floating">
             <input
               type="text"
               name="team"
@@ -103,7 +118,23 @@ export const AddBoard = ({ added, closed }) => {
           </div>
           <div className="help-block">
             Use comma (,) as separator
-        </div>
+        </div> */}
+          <div className="input-row">
+            <label htmlFor="members">Choose members (select multiple, if needed)</label>
+            <select
+              name="members"
+              id="members"
+              multiple={true}
+              value={teamMember}
+              onChange={onSelectChange}
+            >
+              {project && project.members.map((member, i) => (
+                <option value={member} key={i}>
+                  {member}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="floating">
             <input
               type="text"

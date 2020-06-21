@@ -116,7 +116,7 @@ export const AddCard = ({
             autoComplete="off"
           />
           <textarea
-            name="title"
+            name="description"
             id="description"
             placeholder="Description"
             value={description}
@@ -125,7 +125,7 @@ export const AddCard = ({
           />
         </div>
         <div className="input-row">
-          <label htmlFor="title">
+          <label htmlFor="members">
             Choose members for this task (select multiple, if needed)
           </label>
           <select

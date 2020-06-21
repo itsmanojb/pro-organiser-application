@@ -5,15 +5,14 @@ import { AuthContext } from 'context/Auth';
 import { ProjectContext } from 'context/Project';
 import { getBoards } from 'utils/data';
 
-import { Alert } from 'common/alert/Alert';
 import { LineLoader } from 'common/loader/LineLoader';
 import SideNav from 'components/sidenav/Sidenav';
 import RightPanel from 'components/right-panel/RightPanel';
 import ProjectSelector from 'components/project/ProjectSelector';
 import { Team } from 'components/misc/Team';
 
-import './Dashboard.scss';
 import Icon from 'components/misc/IonIcon';
+import './Dashboard.scss';
 
 export const Dashboard = ({ update }) => {
 
@@ -50,11 +49,10 @@ export const Dashboard = ({ update }) => {
             {!currentProject ? <ProjectSelector update={update} />
               : <>
                 {boards.length === 0 ?
-                  <Alert type="info" isClosable={false}>
-                    You haven't created any boards. Kindly click on the 'Create a Board' button in the navigation bar to create a board.
-              </Alert>
-                  :
-                  <>
+                  <div className="no-boards">
+                    You haven't created any boards. To get started kindly click on the 'Create New Board'.
+                  </div>
+                  : <>
                     <div className="board-header">
                       <div className="menubar">
                         <div className="view-buttons">

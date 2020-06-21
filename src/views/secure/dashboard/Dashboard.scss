@@ -245,11 +245,11 @@ main.content {
         grid-template-columns: 1fr 1fr 1fr
       }
 
-      @media screen and (max-width:990px) {
+      @media screen and (max-width:1000px) {
         grid-template-columns: 1fr 1fr
       }
 
-      @media screen and (max-width:720px) {
+      @media screen and (max-width:840px) {
         grid-template-columns: 1fr
       }
 
@@ -362,6 +362,21 @@ main.content {
           margin-top: 0;
         }
       }
+    }
+  }
+}
+
+.no-boards {
+  padding: 50px 30px;
+  font-size: 18px;
+  color: #888;
+
+  span {
+    color: var(--color-accent);
+    border-bottom: 1px dotted transparent;
+
+    &:hover {
+      border-color: var(--color-accent);
     }
   }
 }

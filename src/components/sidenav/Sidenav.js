@@ -26,6 +26,11 @@ const SideNav = () => {
         </li>
         <li className="nav-item">
           <a className="nav-link">
+            <Icon name="folder-outline" />
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link">
             <Icon name="analytics-outline" />
           </a>
         </li>
@@ -35,17 +40,7 @@ const SideNav = () => {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link">
-            <Icon name="basketball-outline" />
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link">
-            <Icon name="folder-outline" />
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" onClick={handleLogout}>
+          <a className="nav-link" onClick={handleLogout} title="Log Out">
             <Icon name="power" />
           </a>
         </li>

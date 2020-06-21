@@ -1,0 +1,52 @@
+.prompt {
+
+  --border-radius: 10px;
+
+  &-wrapper {
+    width: 360px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: var(--border-radius);
+  }
+
+  .prompt-content {
+    padding: 20px;
+
+    h5 {
+      padding: 10px 0 0;
+      font-size: 20px;
+      margin: 0;
+      color: #444;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      margin: 10px 0;
+    }
+  }
+
+  .prompt-footer {
+    display: flex;
+    overflow: hidden;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+
+    button {
+      border-radius: 0;
+      letter-spacing: 0;
+
+      &.aux {
+        background-color: #f8f8f8;
+        color: var(--color-accent);
+
+        &:hover {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+  }
+
+}

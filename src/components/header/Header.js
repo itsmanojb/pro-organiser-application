@@ -118,6 +118,7 @@ const DropdownMenu = () => {
 const Header = ({ location }) => {
 
   const [currentPage, setCurrentPage] = useState('');
+  const [modalPage, setModalPage] = useContext(ModalPageContext);
 
   useEffect(() => {
     if (location.pathname.startsWith('/s/board/')) {
@@ -127,7 +128,6 @@ const Header = ({ location }) => {
     }
   }, [location])
 
-  const [modalPage, setModalPage] = useContext(ModalPageContext);
 
   return (
     <header className="app-header">

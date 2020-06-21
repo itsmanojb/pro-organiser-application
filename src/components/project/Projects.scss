@@ -23,12 +23,23 @@
     .project {
       background-color: #fff;
       border: 1px solid #fff;
-      min-height: 150px;
+      padding: 16px;
       border-radius: 10px;
       width: 180px;
       margin: 15px;
       transition: all .3s ease;
       cursor: pointer;
+
+      h4 {
+        margin: 12px 0 4px;
+        color: #777;
+      }
+
+      p {
+        color: #999;
+        font-size: 14px;
+        margin: 4px 0;
+      }
 
       &:not(.new):hover {
         box-shadow: 0 0px 20px rgba(60, 151, 247, 0.15);
@@ -37,6 +48,7 @@
       }
 
       &.new {
+        min-height: 150px;
         background-color: rgba(255, 255, 255, 0.4);
         border: 1px dashed #e7e9ea;
         display: flex;

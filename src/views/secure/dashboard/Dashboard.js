@@ -15,7 +15,7 @@ import { Team } from 'components/misc/Team';
 import './Dashboard.scss';
 import Icon from 'components/misc/IonIcon';
 
-export const Dashboard = (props) => {
+export const Dashboard = ({ update }) => {
 
   useEffect(() => {
     document.title = 'Dashboard - TaskForce'
@@ -24,7 +24,7 @@ export const Dashboard = (props) => {
   const { currentUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
-  const [currentProject, setCurrentProject] = useContext(ProjectContext);
+  const [currentProject] = useContext(ProjectContext);
   const [gridView, setGridView] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const Dashboard = (props) => {
       .catch(() => {
         setBoards([]);
       });
-  }, [currentUser, props.update]);
+  }, [currentUser, update]);
 
   return (
     <>
@@ -47,7 +47,7 @@ export const Dashboard = (props) => {
             <SideNav />
           </div>
           <div className="all-boards">
-            {!currentProject ? <ProjectSelector />
+            {!currentProject ? <ProjectSelector update={update} />
               : <>
                 {boards.length === 0 ?
                   <Alert type="info" isClosable={false}>

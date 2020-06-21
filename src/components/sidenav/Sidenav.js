@@ -2,15 +2,19 @@
 
 import React from 'react';
 import { firebaseApp } from 'firebase/init';
-
+import confirmService from 'components/confirm/ConfirmService';
 import Icon from 'components/misc/IonIcon';
 import './Sidenav.scss';
 
 const SideNav = () => {
 
   async function handleLogout() {
-    await firebaseApp.auth().signOut();
+    const result = await confirmService.show('Are you sure you want to log out?', 'Confirm!');
+    if (result) {
+      await firebaseApp.auth().signOut();
+    }
   }
+
 
   return (
     <div className="sidenav">

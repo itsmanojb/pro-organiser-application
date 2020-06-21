@@ -5,8 +5,11 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AuthContext } from 'context/Auth';
+import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
-import { firebaseApp } from 'firebase/init';
+import { DropdownContext } from 'context/Dropdown';
+
+import { getProjects } from 'utils/data';
 
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import Icon from 'components/misc/IonIcon';
@@ -20,28 +23,31 @@ const Navbar = (props) => {
   );
 }
 
-const NavItem = (props) => {
-  const [open, setOpen] = useState(false);
 
-  return props.link ? (
+const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
+  const [open, setOpen] = useContext(DropdownContext);
+
+  return link ? (
     <li className="nav-item">
-      <NavLink to={props.link} className="icon-button">
-        {props.icon}
+      <NavLink to={link} className={klass}>
+        {icon} {label}
       </NavLink>
     </li>
   ) : (
       <li className="nav-item">
-        <a className="icon-button" onClick={() => setOpen(!open)}>
-          {props.icon}
+        <a className={klass} onClick={() => setOpen(!open)}>
+          {icon} {label}
         </a>
-        {open && props.children}
+        {open && children}
       </li>
     );
 }
 
-const DropdownMenu = () => {
-  const { currentUser } = useContext(AuthContext);
 
+const DropdownMenu = ({ items, current, setProject }) => {
+
+  const [open, setOpen] = useContext(DropdownContext);
+  // const { currentUser } = useContext(AuthContext);
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
@@ -55,24 +61,38 @@ const DropdownMenu = () => {
     setMenuHeight(height + 32);
   }
 
-  async function handleLogout() {
-    await firebaseApp.auth().signOut();
+  function setCurrentProject(project) {
+    setProject(project);
+    localStorage.setItem('currentProject', JSON.stringify(project));
+    setOpen(false);
+  }
+
+  function resetProject() {
+    localStorage.removeItem('currentProject')
+    setProject(null);
+    setOpen(false);
   }
 
   const DropdownItem = (props) => {
-    return props.link ? (
-      <NavLink to={props.link} className="menu-item">
-        <span className="icon-button">{props.leftIcon}</span>
-        {props.children}
-        <span className="icon-right">{props.rightIcon}</span>
+
+    const { children, link, goToMenu, leftIcon, rightIcon, role, item } = props;
+
+    function handleClick(e) {
+      if (role === 'SET_PROJECT') {
+        setCurrentProject(item)
+      } else if (role === 'RESET_PROJECT') {
+        resetProject();
+      }
+    }
+
+    return link ?
+      <NavLink to={link} className="menu-item">
+        {leftIcon && <span className="icon-button">{leftIcon}</span>}{children}<span className="icon-right">{rightIcon}</span>
       </NavLink>
-    ) : (
-        <a className="menu-item" onClick={() => props.goToMenu ? setActiveMenu(props.goToMenu) : props.clicked()}>
-          <span className="icon-button">{props.leftIcon}</span>
-          {props.children}
-          <span className="icon-right">{props.rightIcon}</span>
-        </a>
-      );
+      :
+      <a className="menu-item" onClick={(e) => goToMenu ? setActiveMenu(goToMenu) : handleClick(e)}>
+        {leftIcon && <span className="icon-button">{leftIcon}</span>}{children}<span className="icon-right">{rightIcon}</span>
+      </a>
   }
 
   return (
@@ -85,15 +105,29 @@ const DropdownMenu = () => {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
-          <DropdownItem
-            leftIcon={<Icon name="settings-outline" />}
-            rightIcon={<Icon name="chevron-forward" />}
-            goToMenu="settings"
-          >
-            Settings
-          </DropdownItem>
-          <DropdownItem leftIcon={<Icon name="log-out-outline" />} clicked={handleLogout}>Log Out</DropdownItem>
+          <div className="overscroll">
+            {current ? <>
+              <div className="overscroll">
+                {items.filter(item => current.name !== item.name).map((item, i) => (
+                  <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
+                ))}
+              </div>
+              <span className="divider"></span>
+              <DropdownItem leftIcon={<Icon name="chevron-back" />} role={'RESET_PROJECT'}>Projects Home</DropdownItem>
+            </> : <>
+                {items.map((item, i) => (
+                  <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
+                ))}
+              </>}
+            {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
+            <DropdownItem
+              leftIcon={<Icon name="settings-outline" />}
+              rightIcon={<Icon name="chevron-forward" />}
+              goToMenu="settings"
+            >
+              Settings
+          </DropdownItem> */}
+          </div>
         </div>
       </CSSTransition>
 
@@ -115,42 +149,68 @@ const DropdownMenu = () => {
   );
 }
 
-const Header = ({ location }) => {
 
-  const [currentPage, setCurrentPage] = useState('');
+const Header = ({ update }) => {
+
+  const [currentPage, setCurrentPage] = useState('Select Project');
+  const [currentProject, setCurrentProject] = useContext(ProjectContext);
+  const { currentUser } = useContext(AuthContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
+  const [projects, setProjects] = useState([]);
+
+  // console.log(currentProject);
 
   useEffect(() => {
-    if (location.pathname.startsWith('/s/board/')) {
-      setCurrentPage(location.state.boardName)
+    (async function () {
+      const projects = await getProjects(currentUser.email);
+      setProjects(projects);
+      // console.log(projects);
+      // await getAllColumns(data.id, setColumns);
+    })();
+  }, [currentUser, update]);
+
+  useEffect(() => {
+    if (currentProject) {
+      const projectName = currentProject.name;
+      setCurrentPage(projectName);
     } else {
-      setCurrentPage('')
+      setCurrentPage('Select Project');
     }
-  }, [location])
+  }, [currentProject]);
+
+
+  // useEffect(() => {
+  //   if (location.pathname.startsWith('/s/board/')) {
+  //     setCurrentPage(location.state.boardName)
+  //   } else {
+  //     setCurrentPage('')
+  //   }
+  // }, [location]);
 
 
   return (
     <header className="app-header">
       <NavLink to="/" className="brand">
         <Logo />
-        {/* Task Force */}
       </NavLink>
-      <div className="nav-tabs">
-        <NavLink to='/s/dashboard' className="tab-btn"> Boards </NavLink>
-        <span className="tab-btn current"> {currentPage}</span>
+      <div className="nav-actions">
+        <Navbar>
+          {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
+          <NavItem label={currentPage} klass='text-button'>
+            <DropdownMenu items={projects} current={currentProject} setProject={setCurrentProject} />
+          </NavItem>
+        </Navbar>
       </div>
       <div className="cta">
-        <button disabled={modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
+        <button disabled={!currentProject} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
       </div>
-      <Navbar>
-        {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
-        <NavItem icon={<Icon name="ellipsis-vertical" />}>
-          <DropdownMenu />
-        </NavItem>
-      </Navbar>
+      <div className="search">
+        <Navbar>
+          <NavItem link="/s/dashboard" icon={<Icon name="search" />} />
+        </Navbar>
+      </div>
     </header>
   );
 };
-
 
 export default withRouter(Header);

@@ -2,10 +2,10 @@ import React, { useEffect, useContext, useState } from 'react';
 
 import { AuthContext } from 'context/Auth';
 import { ProjectContext } from 'context/Project';
+import { ModalPageContext } from 'context/ModalPage';
 import { getProjects } from 'utils/data';
 import Icon from 'components/misc/IonIcon';
 import './Projects.scss';
-import { ModalPageContext } from 'context/ModalPage';
 
 const ProjectSelector = ({ update }) => {
 
@@ -19,18 +19,23 @@ const ProjectSelector = ({ update }) => {
       const projects = await getProjects(currentUser.email);
       setProjects(projects);
       // await getAllColumns(data.id, setColumns);
-      console.log(projects);
+      // console.log(projects);
     })();
   }, [currentUser, update]);
+
+  const setProject = project => {
+    localStorage.setItem('currentProject', JSON.stringify(project));
+    setCurrentproject(project);
+  }
 
   return (
     <div className="project-wrapper">
       {projects.length ? (
         <div className="recent-projects">
-          <div className="info">Select from recent projects</div>
+          <div className="info">Recents projects</div>
           <div className="project-list">
             {projects.map((project, i) => (
-              <div className="project" key={i}>
+              <div className="project" key={i} onClick={(e) => setProject(project)}>
                 <h4>{project.name}</h4>
                 <p className="boards">{project.boards.length} Boards</p>
               </div>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 
 
 import { ProjectContextProvider } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
+import { DropdownContextProvider } from 'context/Dropdown';
 import { Dashboard } from 'views/secure/dashboard/Dashboard';
 import { Board } from 'views/secure/board/Board';
 
@@ -28,7 +29,9 @@ const SecurePage = () => {
   return (
     <ProjectContextProvider>
       <Router>
-        <Header />
+        <DropdownContextProvider>
+          <Header update={updateTime} />
+        </DropdownContextProvider>
         <Switch>
           <Route exact path={path}>
             <Redirect to={`${path}/dashboard`} />

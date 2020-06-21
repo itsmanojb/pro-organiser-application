@@ -1,4 +1,31 @@
-import db from './../firebase/init';
+import { db } from 'firebase/init';
+
+export const getProjects = async (email) => {
+  try {
+    const snapshot = await db
+      .collection('projects')
+      .where('manager', '==', email)
+      // .orderBy('name')
+      .get();
+    const projects = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
+    return projects;
+  } catch (error) {
+    return [];
+  }
+};
+
+/**
+ * Method which adds a project
+ * @param {object} project the project which has to be created
+ */
+export const addProject = async (project) => {
+  try {
+    await db.collection('projects').add(project);
+    return true;
+  } catch (error) {
+    return error;
+  }
+};
 
 export const getBoards = async (email) => {
   try {

@@ -1,20 +1,17 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { addBoard } from 'utils/data';
 import { AuthContext } from 'context/Auth';
 import { ToastsContext } from 'context/Toasts';
 import Icon from 'components/misc/IonIcon';
 
-import './AddBoard.scss';
+import './AddNew.scss';
 
 export const AddBoard = ({ added, closed }) => {
-
-  useEffect(() => {
-    document.title = 'Create New Board - TaskForce'
-  }, []);
 
   const { currentUser } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [teamMember, setTeamMember] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [type, setType] = useState('');
 
   const [toasts, setToasts] = useContext(ToastsContext);
@@ -33,15 +30,15 @@ export const AddBoard = ({ added, closed }) => {
       type,
     };
 
-    addBoard(newBoard)
-      .then((created) => {
-        if (created) {
-          added(new Date().getTime());
-        } else {
-          showError('Failed to add this board');
-          return;
-        }
-      })
+    setFormSubmitted(true);
+    addBoard(newBoard).then((created) => {
+      if (created) {
+        added(new Date().getTime());
+      } else {
+        showError('Failed to add this board');
+        return;
+      }
+    })
       .catch(() => {
         showError('Could not add Board. Some error occured.');
         return;
@@ -53,6 +50,7 @@ export const AddBoard = ({ added, closed }) => {
   }
 
   const showError = (message) => {
+    setFormSubmitted(false);
     setToasts([
       ...toasts,
       {
@@ -122,14 +120,9 @@ export const AddBoard = ({ added, closed }) => {
             </label>
           </div>
           <div className="form-buttons">
-            <button
-              type="submit"
-              onClick={saveBoard}
-              id="CreateBoard"
-              className="button"
-            >
-              Create
-          </button>
+            <button type="submit" onClick={saveBoard} disabled={formSubmitted} id="CreateBoard" className="button">
+              {formSubmitted ? 'Creating...' : 'Create'}
+            </button>
           </div>
         </div>
       </div>

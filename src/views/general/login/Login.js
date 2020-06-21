@@ -113,7 +113,7 @@ const Login = ({ history }) => {
               Forgot password ? <Link to="/reset-password">Reset</Link>
             </div>
             <div className="form-buttons">
-              <button type="submit" className="button" disabled={formSubmitted} onClick={(e) => handleLogin(e)}> {formSubmitted ? 'Logging in..' : 'Login'}</button>
+              <button type="submit" className="button" disabled={formSubmitted} onClick={(e) => handleLogin(e)}> {formSubmitted ? 'Logging In...' : 'Login'}</button>
             </div>
             <div className="help-block">
               Don't have an account? <Link to="/signup">Sign up</Link>

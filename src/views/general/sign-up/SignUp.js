@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { withRouter, Link, Redirect } from 'react-router-dom';
 
-import { firebaseApp } from 'firebase/init';
+import { firebaseApp, db } from 'firebase/init';
 import { AuthContext } from 'context/Auth';
 import { ToastsContext } from 'context/Toasts';
 
@@ -18,6 +18,7 @@ const SignUp = ({ history }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [toasts, setToasts] = useContext(ToastsContext);
 
@@ -37,32 +38,37 @@ const SignUp = ({ history }) => {
       ]);
       return;
     }
+    setFormSubmitted(true);
 
     firebaseApp
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(async () => {
         const user = firebaseApp.auth().currentUser;
-        user
-          .updateProfile({ displayName: name })
-          .then(() => {
+        const docRef = db.doc(`users/${user.uid}`);
+        const doc = (await db.doc(`users/${user.uid}`).get());
+        if (!doc.exists) {
+          try {
+            const photoURL = `https://api.adorable.io/avatars/120/${user.email}`;
+            const data = { uid: user.uid, email: user.email, displayName: name, photoURL };
+            await docRef.set(data);
+            await user.updateProfile({ displayName: name, photoURL });
             setToasts([
               ...toasts,
               {
                 id: toasts.length,
-                title: 'Oh Yes',
-                message: 'Signed up successfully.',
+                title: 'Great news',
+                message: 'Profile has been created successfully',
                 backgroundColor: '#5cb85c',
                 icon: 'checkmark-circle'
               }
             ]);
-            history.push('/');
-          })
-          .catch((err) => {
-            throw Error(err);
-          });
-      })
-      .catch((err) => {
+            history.push('/s');
+          } catch (error) {
+            handleError('Profile cannot be created. Sorry.');
+          }
+        }
+      }).catch((err) => {
         // console.log(err);
         handleError(err);
       });
@@ -78,8 +84,8 @@ const SignUp = ({ history }) => {
         backgroundColor: '#d9534f',
         icon: 'warning'
       }
-    ]
-    );
+    ]);
+    setFormSubmitted(false);
   }
 
   if (currentUser) {
@@ -146,7 +152,7 @@ const SignUp = ({ history }) => {
             </div>
 
             <div className="form-buttons">
-              <button type="submit" className="button" onClick={(e) => handleSignUp(e)}>Sign Up</button>
+              <button type="submit" className="button" disabled={formSubmitted} onClick={(e) => handleSignUp(e)}> {formSubmitted ? 'Signing Up...' : 'Sign Up'}</button>
             </div>
             <div className="help-block">
               Already have an account? <Link to="/login">Sign in</Link>

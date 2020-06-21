@@ -28,6 +28,8 @@ export const AddProject = ({ added, closed }) => {
       members,
       description,
       boards: [],
+      pinned: false,
+      archived: false,
       created: new Date().getTime()
     };
     setFormSubmitted(true);

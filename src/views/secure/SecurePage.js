@@ -28,7 +28,7 @@ const SecurePage = () => {
   return (
     <ProjectContextProvider>
       <Router>
-        <Header />
+        <Header update={updateTime} />
         <Switch>
           <Route exact path={path}>
             <Redirect to={`${path}/dashboard`} />

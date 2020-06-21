@@ -3,7 +3,9 @@ export const ProjectContext = React.createContext();
 
 export const ProjectContextProvider = ({ children }) => {
 
-  const [currentProject, setCurrentProject] = useState('');
+  const [currentProject, setCurrentProject] = useState(
+    JSON.parse(localStorage.getItem('currentProject'))
+  );
 
   return (
     <ProjectContext.Provider value={[currentProject, setCurrentProject]}>

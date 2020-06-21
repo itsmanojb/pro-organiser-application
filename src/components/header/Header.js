@@ -7,7 +7,8 @@ import { CSSTransition } from 'react-transition-group';
 import { AuthContext } from 'context/Auth';
 import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
-import { firebaseApp } from 'firebase/init';
+import { DropdownContext } from 'context/Dropdown';
+
 import { getProjects } from 'utils/data';
 
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
@@ -24,7 +25,7 @@ const Navbar = (props) => {
 
 
 const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useContext(DropdownContext);
 
   return link ? (
     <li className="nav-item">
@@ -43,9 +44,10 @@ const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
 }
 
 
-const DropdownMenu = ({ items, current }) => {
+const DropdownMenu = ({ items, current, setProject }) => {
 
-  const { currentUser } = useContext(AuthContext);
+  const [open, setOpen] = useContext(DropdownContext);
+  // const { currentUser } = useContext(AuthContext);
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
   const dropdownRef = useRef(null);
@@ -59,24 +61,38 @@ const DropdownMenu = ({ items, current }) => {
     setMenuHeight(height + 32);
   }
 
-  async function handleLogout() {
-    await firebaseApp.auth().signOut();
+  function setCurrentProject(project) {
+    setProject(project);
+    localStorage.setItem('currentProject', JSON.stringify(project));
+    setOpen(false);
+  }
+
+  function resetProject() {
+    localStorage.removeItem('currentProject')
+    setProject(null);
+    setOpen(false);
   }
 
   const DropdownItem = (props) => {
-    return props.link ? (
-      <NavLink to={props.link} className="menu-item">
-        <span className="icon-button">{props.leftIcon}</span>
-        {props.children}
-        <span className="icon-right">{props.rightIcon}</span>
+
+    const { children, link, goToMenu, leftIcon, rightIcon, role, item } = props;
+
+    function handleClick(e) {
+      if (role === 'SET_PROJECT') {
+        setCurrentProject(item)
+      } else if (role === 'RESET_PROJECT') {
+        resetProject();
+      }
+    }
+
+    return link ?
+      <NavLink to={link} className="menu-item">
+        {leftIcon && <span className="icon-button">{leftIcon}</span>}{children}<span className="icon-right">{rightIcon}</span>
       </NavLink>
-    ) : (
-        <a className="menu-item" onClick={() => props.goToMenu ? setActiveMenu(props.goToMenu) : props.clicked()}>
-          {props.leftIcon && <span className="icon-button">{props.leftIcon}</span>}
-          {props.children}
-          <span className="icon-right">{props.rightIcon}</span>
-        </a>
-      );
+      :
+      <a className="menu-item" onClick={(e) => goToMenu ? setActiveMenu(goToMenu) : handleClick(e)}>
+        {leftIcon && <span className="icon-button">{leftIcon}</span>}{children}<span className="icon-right">{rightIcon}</span>
+      </a>
   }
 
   return (
@@ -90,9 +106,19 @@ const DropdownMenu = ({ items, current }) => {
         onEnter={calcHeight}>
         <div className="menu">
           <div className="overscroll">
-            {items.filter(item => current.name !== item.name).map((item, i) => (
-              <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />}>{item.name}</DropdownItem>
-            ))}
+            {current ? <>
+              <div className="overscroll">
+                {items.filter(item => current.name !== item.name).map((item, i) => (
+                  <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
+                ))}
+              </div>
+              <span className="divider"></span>
+              <DropdownItem leftIcon={<Icon name="chevron-back" />} role={'RESET_PROJECT'}>Projects Home</DropdownItem>
+            </> : <>
+                {items.map((item, i) => (
+                  <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
+                ))}
+              </>}
             {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
             <DropdownItem
               leftIcon={<Icon name="settings-outline" />}
@@ -102,10 +128,6 @@ const DropdownMenu = ({ items, current }) => {
               Settings
           </DropdownItem> */}
           </div>
-          <span className="divider"></span>
-          <DropdownItem leftIcon={<Icon name="chevron-back" />}>Projects Home</DropdownItem>
-          {/* <span className="divider"></span>
-          <DropdownItem leftIcon={<Icon name="log-out-outline" />} clicked={handleLogout}>Log Out</DropdownItem> */}
         </div>
       </CSSTransition>
 
@@ -142,6 +164,7 @@ const Header = ({ update }) => {
     (async function () {
       const projects = await getProjects(currentUser.email);
       setProjects(projects);
+      // console.log(projects);
       // await getAllColumns(data.id, setColumns);
     })();
   }, [currentUser, update]);
@@ -150,6 +173,8 @@ const Header = ({ update }) => {
     if (currentProject) {
       const projectName = currentProject.name;
       setCurrentPage(projectName);
+    } else {
+      setCurrentPage('Select Project');
     }
   }, [currentProject]);
 
@@ -167,15 +192,12 @@ const Header = ({ update }) => {
     <header className="app-header">
       <NavLink to="/" className="brand">
         <Logo />
-        {/* Task Force */}
       </NavLink>
       <div className="nav-actions">
-        {/* <NavLink to='/s/dashboard' className="tab-btn"> Boards </NavLink> */}
-        {/* <span className="tab-btn current"> {currentPage}</span> */}
         <Navbar>
           {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
           <NavItem label={currentPage} klass='text-button'>
-            <DropdownMenu items={projects} current={currentProject} />
+            <DropdownMenu items={projects} current={currentProject} setProject={setCurrentProject} />
           </NavItem>
         </Navbar>
       </div>

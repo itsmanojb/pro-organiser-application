@@ -1,10 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React from 'react';
+import { firebaseApp } from 'firebase/init';
+
 import Icon from 'components/misc/IonIcon';
 import './Sidenav.scss';
 
 const SideNav = () => {
+
+  async function handleLogout() {
+    await firebaseApp.auth().signOut();
+  }
+
   return (
     <div className="sidenav">
       <ul className="sidenav-nav">
@@ -34,7 +41,7 @@ const SideNav = () => {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link">
+          <a className="nav-link" onClick={handleLogout}>
             <Icon name="power" />
           </a>
         </li>

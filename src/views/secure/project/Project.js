@@ -7,7 +7,7 @@ import { getBoards } from 'utils/data';
 
 import { LineLoader } from 'common/loader/LineLoader';
 import SideNav from 'components/sidenav/Sidenav';
-import RightPanel from 'components/right-panel/RightPanel';
+import ProjectPanel from 'components/right-panel/ProjectPanel';
 
 import { Team } from 'components/misc/Team';
 import Icon from 'components/misc/IonIcon';
@@ -44,9 +44,7 @@ export const ProjectDashboard = (update) => {
           <div className="all-boards">
             <>
               {boards.length === 0 ?
-                <div className="no-boards">
-                  You haven't created any boards. To get started kindly click on the 'Create New Board'.
-        </div>
+                <div className="no-boards">You haven't created any boards. To get started kindly click on the 'Create New Board'.</div>
                 : <>
                   <div className="board-header">
                     <div className="menubar">
@@ -103,7 +101,7 @@ export const ProjectDashboard = (update) => {
               }
             </>
           </div>
-          <div><RightPanel update={update} /></div>
+          <div><ProjectPanel project={currentProject} update={update} /></div>
         </div>
       </main>
     </>

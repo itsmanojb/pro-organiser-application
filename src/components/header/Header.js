@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter, useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AuthContext } from 'context/Auth';
@@ -23,7 +23,6 @@ const Navbar = (props) => {
   );
 }
 
-
 const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
   const [open, setOpen] = useContext(DropdownContext);
 
@@ -43,8 +42,9 @@ const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
     );
 }
 
-
 const DropdownMenu = ({ items, current, setProject }) => {
+
+  const history = useHistory();
 
   const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = useContext(DropdownContext);
@@ -74,14 +74,21 @@ const DropdownMenu = ({ items, current, setProject }) => {
   }
 
   function setCurrentProject(project) {
+    setOpen(false);
     setProject(project);
     localStorage.setItem('currentProject', JSON.stringify(project));
-    setOpen(false);
+    history.push(`/s/project/${project.id}`);
   }
 
   function resetProject() {
-    localStorage.removeItem('currentProject')
+    localStorage.removeItem('currentProject');
+    history.push(`/s/dashboard`);
     setProject(null);
+    setOpen(false);
+  }
+
+  function setBoard(board) {
+    history.push(`/s/board/${board.id}`);
     setOpen(false);
   }
 
@@ -96,8 +103,11 @@ const DropdownMenu = ({ items, current, setProject }) => {
       } else if (role === 'RESET_PROJECT') {
         resetProject();
       } else if (role === 'CREATE_BOARD') {
-        setOpen(false);
         setModalPage('addboard');
+        setOpen(false);
+      } else if (role === 'SET_BOARD') {
+        setBoard(item);
+        setOpen(false);
       }
     }
 
@@ -153,7 +163,7 @@ const DropdownMenu = ({ items, current, setProject }) => {
             Back to {current.name}
           </DropdownItem>
           <span className="divider"></span>
-          {boards.map((board, i) => <DropdownItem key={i} leftIcon={<Icon name="clipboard-outline" />} link={`/s/board/${board.id}`}>{board.name}</DropdownItem>)}
+          {boards.map((board, i) => <DropdownItem key={i} leftIcon={<Icon name="clipboard-outline" />} role={'SET_BOARD'} item={board}>{board.name}</DropdownItem>)}
           <DropdownItem leftIcon={<Icon name="add" />} role={'CREATE_BOARD'}>Create new board</DropdownItem>
         </div>
       </CSSTransition>}

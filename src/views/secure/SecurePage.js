@@ -5,6 +5,7 @@ import { ProjectContextProvider } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { DropdownContextProvider } from 'context/Dropdown';
 import { Dashboard } from 'views/secure/dashboard/Dashboard';
+import { ProjectDashboard } from 'views/secure/project/Project';
 import { Board } from 'views/secure/board/Board';
 
 import { AddBoard } from 'components/create-new/AddBoard';
@@ -40,6 +41,7 @@ const SecurePage = () => {
             render={(props) => (
               <Dashboard {...props} update={updateTime} />
             )} />
+          <Route path={`${path}/project/:id`} component={ProjectDashboard} />
           <Route path={`${path}/board/:id`} component={Board} />
         </Switch>
         {modalPage === 'addboard' && <AddBoard added={(e) => updatePage(e)} closed={() => setModalPage('')} />}

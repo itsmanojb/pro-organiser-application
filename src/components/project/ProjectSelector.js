@@ -43,14 +43,14 @@ const ProjectSelector = ({ update }) => {
           </div>
           <div className="info">Or, <span>create new project</span></div>
           <div className="project-list">
-            <div className="project new" onClick={(e) => setModalPage('addproject')}>
+            <div className="project new" onClick={(e) => setModalPage({ name: 'addproject' })}>
               <Icon name="add" />
             </div>
           </div>
         </div>
       ) : (
           <div className="create-new">
-            You have no projects created. To get started <span className="clickable" onClick={(e) => setModalPage('addproject')}>create new project</span>.
+            You have no projects created. To get started <span className="clickable" onClick={(e) => setModalPage({ name: 'addproject' })}>create new project</span>.
           </div>
         )}
     </div>

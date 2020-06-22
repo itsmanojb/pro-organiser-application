@@ -1,7 +1,7 @@
 .app-header {
   --bg: #fff;
   --bg-accent: #fbfbfb;
-  --bg-light: #f8f8f8;
+  --bg-light: #f6f7f8;
   --text-color: #73849a;
   --border: 1px solid #fafafa;
   --border-radius: 10px;
@@ -62,7 +62,7 @@
     font-size: 15px;
     font-weight: 500;
     transition: .3s ease all;
-    border: navajowhite;
+    border: none;
     font-family: inherit;
 
     &:hover {
@@ -137,7 +137,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: .8;
+  // opacity: .8;
   transition: background 300ms;
 
   &:hover {
@@ -197,7 +197,7 @@
       }
 
       &:hover {
-        background-color: var(--bg-accent);
+        background-color: var(--bg-light);
       }
 
     }

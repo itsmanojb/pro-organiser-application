@@ -117,15 +117,13 @@ main.content {
 }
 
 .boards-listing {
-  padding: 0 25px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  padding: 10px 25px;
 
-  &:not(grid) {
+  &:not(.grid) {
     .boards {
       .board {
         display: grid;
-        grid-template-columns: 150px 120px auto 150px 100px;
+        grid-template-columns: 250px 120px auto 250px;
         align-items: center;
         text-decoration: none;
         padding: 20px;
@@ -206,6 +204,12 @@ main.content {
           }
         }
 
+        &-footer {
+          display: grid;
+          grid-template-columns: 150px 100px;
+          align-items: center;
+        }
+
         .meta {
           display: block;
           font-size: 13px;
@@ -266,6 +270,7 @@ main.content {
         text-transform: capitalize;
         height: 100%;
         transition: all .3s ease;
+        justify-content: space-between;
 
         &-name {
           font-size: 20px;
@@ -306,6 +311,12 @@ main.content {
               }
             }
           }
+        }
+
+        &-footer {
+          display: grid;
+          grid-auto-columns: 1fr;
+          width: 100%;
         }
 
         &-members {
@@ -356,6 +367,10 @@ main.content {
           box-shadow: 0 0px 20px rgba(60, 151, 247, 0.15);
           border-color: #fff;
           transform: translateY(-2px)
+        }
+
+        &:focus {
+          outline: none;
         }
 
         &+.board {

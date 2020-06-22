@@ -63,6 +63,21 @@ export const addBoard = async (board) => {
 };
 
 /**
+ * Method which updates a board
+ * @param {string} id for the doc
+ * @param {object} board the board which has to be edited
+ */
+export const editBoard = async (id, board) => {
+  try {
+    await db.collection('boards').doc(id).update(board);
+    return true;
+  } catch (error) {
+    // console.log(error);
+    return error;
+  }
+};
+
+/**
  * Gets a single board with a given ID
  * @param {string} id single board ID
  */

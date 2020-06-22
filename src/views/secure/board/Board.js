@@ -4,12 +4,16 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import * as shortid from 'shortid';
 
+import { firebaseApp } from 'firebase/init';
 import { ToastsContext } from 'context/Toasts';
+import { ModalPageContext } from 'context/ModalPage';
+
 import { LineLoader } from 'common/loader/LineLoader';
 import { Card } from 'components/cards/Card';
 import { AddCard } from 'components/cards/AddCard';
 import { AddColumn } from 'components/cards/AddColumn';
 import ColumnHead from 'components/cards/ColumnHead';
+import confirmService from 'components/confirm/ConfirmService';
 import Icon from 'components/misc/IonIcon';
 
 import { createDeepCopy } from 'utils/utility';
@@ -46,6 +50,7 @@ export const Board = ({ history }) => {
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
 
+  const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [toasts, setToasts] = useContext(ToastsContext);
 
   // Required for Board name quick edit
@@ -84,18 +89,33 @@ export const Board = ({ history }) => {
       <div className="sidenav">
         <ul className="sidenav-nav">
           <li className="nav-item">
-            <a className="nav-link">
-              <Icon name="layers-outline" />
+            <a className="nav-link" title="Dashboard">
+              <Icon name="apps-outline" />
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link">
-              <Icon name="analytics-outline" />
+            <a className="nav-link" title="Projects">
+              <Icon name="folder-outline" />
             </a>
           </li>
-          <li className="nav-item" onClick={handleBoardDelete} >
+          <li className="nav-item" title="Members">
             <a className="nav-link">
-              <Icon name="trash" />
+              <Icon name="people-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Edit Board" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
+            <a className="nav-link">
+              <Icon name="create-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Delete Board" onClick={handleBoardDelete} >
+            <a className="nav-link">
+              <Icon name="trash-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Log Out" onClick={handleLogout} >
+            <a className="nav-link">
+              <Icon name="power" />
             </a>
           </li>
         </ul>
@@ -260,7 +280,8 @@ export const Board = ({ history }) => {
   }
 
   async function handleBoardDelete() {
-    if (window.confirm('Are you sure you want to delete the board?')) {
+    const result = await confirmService.show('Are you sure you want to delete the board?', 'Confirm!');
+    if (result) {
       setLoading(true);
       await Promise.all(
         columns.map(async (c) => {
@@ -271,6 +292,13 @@ export const Board = ({ history }) => {
       if (val) {
         history.push('/s/dashboard');
       }
+    }
+  }
+
+  async function handleLogout() {
+    const result = await confirmService.show('Are you sure you want to log out?', 'Confirm!');
+    if (result) {
+      await firebaseApp.auth().signOut();
     }
   }
 

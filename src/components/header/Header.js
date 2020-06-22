@@ -103,7 +103,7 @@ const DropdownMenu = ({ items, current, setProject }) => {
       } else if (role === 'RESET_PROJECT') {
         resetProject();
       } else if (role === 'CREATE_BOARD') {
-        setModalPage('addboard');
+        setModalPage({ name: 'addboard' });
         setOpen(false);
       } else if (role === 'SET_BOARD') {
         setBoard(item);
@@ -236,7 +236,7 @@ const Header = ({ update }) => {
         </Navbar>
       </div>
       <div className="cta">
-        <button disabled={!currentProject || modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
+        <button disabled={!currentProject || modalPage === 'addboard'} onClick={(e) => setModalPage({ name: 'addboard' })} className="cta-btn"> Create New Board </button>
       </div>
       <div className="search">
         <Navbar>

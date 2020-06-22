@@ -1,15 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { addBoard } from 'utils/data';
+import { editBoard } from 'utils/data';
 import { AuthContext } from 'context/Auth';
 import { ToastsContext } from 'context/Toasts';
 import Icon from 'components/misc/IonIcon';
 
-import './AddNew.scss';
+import '../create-new/AddNew.scss';
 
-export const AddBoard = ({ added, closed }) => {
+export const EditBoard = ({ board, edited, closed }) => {
 
   const { currentUser } = useContext(AuthContext);
-
   const [project, setProject] = useState(null);
   const [name, setName] = useState('');
   const [teamMember, setTeamMember] = useState([]);
@@ -23,31 +22,34 @@ export const AddBoard = ({ added, closed }) => {
     if (project) {
       setProject(project);
     }
-  }, []);
+    setName(board.name);
+    setTeamMember(board.teamMembers);
+    setType(board.type);
+  }, [board]);
 
   const saveBoard = () => {
     if (!name && teamMember.length === 0) {
-      showError('Please fill mandatory (*) fields');
+      showError('Mandatory (*) fields cannot be left blank');
       return;
     }
 
-    const newBoard = {
+    const editedBoard = {
       name,
       type,
+      projectId: project.id,
       user: currentUser.email,
       teamMembers: teamMember,
-      projectId: project.id,
-      createdOn: new Date().getTime()
+      modifiedOn: new Date().getTime()
     };
 
     setFormSubmitted(true);
-    addBoard(newBoard).then((created) => {
-      if (created) {
-        added(new Date().getTime());
+    editBoard(board.id, editedBoard).then((success) => {
+      if (success) {
+        edited(new Date().getTime());
         setToasts([
           ...toasts,
           {
-            message: 'Board has been created',
+            message: 'Board has been updated',
             id: toasts.length,
             title: 'Success',
             backgroundColor: '#d9534f',
@@ -55,12 +57,12 @@ export const AddBoard = ({ added, closed }) => {
           }
         ]);
       } else {
-        showError('Failed to add this board');
+        showError('Failed to update this board');
         return;
       }
     })
       .catch(() => {
-        showError('Could not add board. Some error occured.');
+        showError('Could not update board. Some error occured.');
         return;
       });
   };
@@ -95,7 +97,7 @@ export const AddBoard = ({ added, closed }) => {
           <Icon name="close" />
         </button>
         <div className="modal-page-content">
-          <h2>Create a board</h2>
+          <h2>Edit board</h2>
           <div className="floating">
             <input
               type="text"
@@ -143,8 +145,8 @@ export const AddBoard = ({ added, closed }) => {
             </label>
           </div>
           <div className="form-buttons">
-            <button type="submit" onClick={saveBoard} disabled={formSubmitted} id="CreateBoard" className="button">
-              {formSubmitted ? 'Creating...' : 'Create'}
+            <button type="submit" onClick={saveBoard} disabled={formSubmitted} id="EditBoard" className="button">
+              {formSubmitted ? 'Updating...' : 'Update'}
             </button>
           </div>
         </div>

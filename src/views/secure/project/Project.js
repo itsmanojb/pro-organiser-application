@@ -84,14 +84,16 @@ export const ProjectDashboard = (update) => {
                               <span>{board.type}</span>
                             </div>
                             <div className="board-desc">
-                              <p>6 cards</p>
+                              {/* <p>6 cards</p>
                               <p>16 tasks</p>
-                              <p>70% completion</p>
+                              <p>70% completion</p> */}
                             </div>
-                            <ul className="board-members">
-                              {board.teamMembers.map(name => <Team name={name} key={name} />)}
-                            </ul>
-                            <span className="meta">1 day ago</span>
+                            <div className="board-footer">
+                              <ul className="board-members">
+                                {board.teamMembers.map(name => <Team name={name} key={name} />)}
+                              </ul>
+                              <span className="meta">1 day ago</span>
+                            </div>
                           </Link>
                         );
                       })}

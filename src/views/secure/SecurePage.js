@@ -9,6 +9,7 @@ import { ProjectDashboard } from 'views/secure/project/Project';
 import { Board } from 'views/secure/board/Board';
 
 import { AddBoard } from 'components/create-new/AddBoard';
+import { EditBoard } from 'components/edit/EditBoard';
 import { AddProject } from 'components/create-new/AddProject';
 import Header from 'components/header/Header';
 
@@ -23,7 +24,7 @@ const SecurePage = () => {
   });
 
   const updatePage = (timestamp) => {
-    setModalPage('');
+    setModalPage(null);
     setUpdateTime(timestamp);
   }
 
@@ -44,8 +45,13 @@ const SecurePage = () => {
           <Route path={`${path}/project/:id`} component={ProjectDashboard} />
           <Route path={`${path}/board/:id`} component={Board} />
         </Switch>
-        {modalPage === 'addboard' && <AddBoard added={(e) => updatePage(e)} closed={() => setModalPage('')} />}
-        {modalPage === 'addproject' && <AddProject added={(e) => updatePage(e)} closed={() => setModalPage('')} />}
+        {modalPage &&
+          <>
+            {modalPage.name === 'addboard' && <AddBoard added={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
+            {modalPage.name === 'editboard' && <EditBoard board={modalPage.data} edited={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
+            {modalPage.name === 'addproject' && <AddProject added={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
+          </>
+        }
       </Router>
     </ProjectContextProvider>
   );

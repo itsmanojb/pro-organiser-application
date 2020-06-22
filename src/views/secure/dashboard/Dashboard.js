@@ -21,21 +21,25 @@ export const Dashboard = ({ update }) => {
   }, []);
 
   const { currentUser } = useContext(AuthContext);
+  const [currentProject] = useContext(ProjectContext);
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
-  const [currentProject] = useContext(ProjectContext);
   const [gridView, setGridView] = useState(true);
 
   useEffect(() => {
-    getBoards(currentUser.email)
-      .then((boards) => {
-        setBoards(boards);
-        setLoading(false);
-      })
-      .catch(() => {
-        setBoards([]);
-      });
-  }, [currentUser, update]);
+    if (currentProject) {
+      setLoading(true);
+      getBoards(currentUser.email, currentProject.id)
+        .then((boards) => {
+          setBoards(boards);
+          setLoading(false);
+        }).catch(() => {
+          setBoards([]);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [currentUser, currentProject, update]);
 
   return (
     <>
@@ -109,7 +113,7 @@ export const Dashboard = ({ update }) => {
               </>}
           </div>
           <div>
-            <RightPanel />
+            <RightPanel update={update} />
           </div>
         </div>
       </main>

@@ -9,7 +9,7 @@ import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { DropdownContext } from 'context/Dropdown';
 
-import { getProjects } from 'utils/data';
+import { getProjects, getBoards } from 'utils/data';
 
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import Icon from 'components/misc/IonIcon';
@@ -46,15 +46,27 @@ const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
 
 const DropdownMenu = ({ items, current, setProject }) => {
 
+  const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = useContext(DropdownContext);
-  // const { currentUser } = useContext(AuthContext);
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
+  const [boards, setBoards] = useState([]);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight + 32)
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (current) {
+      getBoards(currentUser.email, current.id)
+        .then((boards) => {
+          setBoards(boards);
+        }).catch(() => {
+          setBoards([]);
+        });
+    }
+  }, [currentUser, current]);
 
   function calcHeight(el) {
     const height = el.offsetHeight;
@@ -76,12 +88,16 @@ const DropdownMenu = ({ items, current, setProject }) => {
   const DropdownItem = (props) => {
 
     const { children, link, goToMenu, leftIcon, rightIcon, role, item } = props;
+    const [modalPage, setModalPage] = useContext(ModalPageContext);
 
     function handleClick(e) {
       if (role === 'SET_PROJECT') {
-        setCurrentProject(item)
+        setCurrentProject(item);
       } else if (role === 'RESET_PROJECT') {
         resetProject();
+      } else if (role === 'CREATE_BOARD') {
+        setOpen(false);
+        setModalPage('addboard');
       }
     }
 
@@ -108,6 +124,8 @@ const DropdownMenu = ({ items, current, setProject }) => {
           <div className="overscroll">
             {current ? <>
               <div className="overscroll">
+                <DropdownItem leftIcon={<Icon name="folder-outline" />} rightIcon={<Icon name="chevron-forward" />} goToMenu="boards">{current.name}</DropdownItem>
+                <span className="divider"></span>
                 {items.filter(item => current.name !== item.name).map((item, i) => (
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
@@ -119,19 +137,28 @@ const DropdownMenu = ({ items, current, setProject }) => {
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
               </>}
-            {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
-            <DropdownItem
-              leftIcon={<Icon name="settings-outline" />}
-              rightIcon={<Icon name="chevron-forward" />}
-              goToMenu="settings"
-            >
-              Settings
-          </DropdownItem> */}
+            {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem> */}
           </div>
         </div>
       </CSSTransition>
 
-      <CSSTransition
+      {current && <CSSTransition
+        in={activeMenu === 'boards'}
+        timeout={500}
+        classNames="menu-secondary"
+        unmountOnExit
+        onEnter={calcHeight}>
+        <div className="menu">
+          <DropdownItem goToMenu="main" leftIcon={<Icon name="chevron-back" />}>
+            Back to {current.name}
+          </DropdownItem>
+          <span className="divider"></span>
+          {boards.map((board, i) => <DropdownItem key={i} leftIcon={<Icon name="clipboard-outline" />} link={`/s/board/${board.id}`}>{board.name}</DropdownItem>)}
+          <DropdownItem leftIcon={<Icon name="add" />} role={'CREATE_BOARD'}>Create new board</DropdownItem>
+        </div>
+      </CSSTransition>}
+
+      {/* <CSSTransition
         in={activeMenu === 'settings'}
         timeout={500}
         classNames="menu-secondary"
@@ -143,7 +170,7 @@ const DropdownMenu = ({ items, current, setProject }) => {
           </DropdownItem>
           <DropdownItem leftIcon={<Icon name="shield-checkmark-outline" />} link='/'>Change Password</DropdownItem>
         </div>
-      </CSSTransition>
+      </CSSTransition> */}
 
     </div>
   );
@@ -152,19 +179,16 @@ const DropdownMenu = ({ items, current, setProject }) => {
 
 const Header = ({ update }) => {
 
-  const [currentPage, setCurrentPage] = useState('Select Project');
-  const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const { currentUser } = useContext(AuthContext);
+  const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
+  const [currentPage, setCurrentPage] = useState('Select Project');
   const [projects, setProjects] = useState([]);
-
-  // console.log(currentProject);
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
       setProjects(projects);
-      // console.log(projects);
       // await getAllColumns(data.id, setColumns);
     })();
   }, [currentUser, update]);
@@ -190,7 +214,7 @@ const Header = ({ update }) => {
 
   return (
     <header className="app-header">
-      <NavLink to="/" className="brand">
+      <NavLink to="/s" className="brand">
         <Logo />
       </NavLink>
       <div className="nav-actions">
@@ -202,7 +226,7 @@ const Header = ({ update }) => {
         </Navbar>
       </div>
       <div className="cta">
-        <button disabled={!currentProject} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
+        <button disabled={!currentProject || modalPage === 'addboard'} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
       </div>
       <div className="search">
         <Navbar>

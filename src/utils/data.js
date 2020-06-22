@@ -28,12 +28,13 @@ export const addProject = async (project) => {
   }
 };
 
-export const getBoards = async (email) => {
+export const getBoards = async (email, id) => {
   try {
     const snapshot = await db
       .collection('boards')
       .where('user', '==', email)
-      .orderBy('name')
+      .where('projectId', '==', id)
+      // .orderBy('name')
       .get();
     const boards = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
     return boards;

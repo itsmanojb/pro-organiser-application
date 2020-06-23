@@ -10,9 +10,9 @@ function initials(name) {
   return abbr;
 }
 
-const BoardMembers = ({ members }) => {
+const BoardMembers = ({ members, klass }) => {
   return (
-    <div className="members-panel">
+    <div className={"members-panel " + klass}>
       <div className="count">{members.length} Members</div>
       <div className="all-members">
         {members.length && members.map((member, i) =>

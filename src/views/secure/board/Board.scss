@@ -17,10 +17,6 @@
 
   &.extended {
     grid-template-columns: var(--sidenav-size) 150px 1fr;
-
-    .scroll {
-      // border: 1px solid #f1f1f1;
-    }
   }
 }
 

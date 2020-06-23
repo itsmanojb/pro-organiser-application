@@ -1,4 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid, no-lone-blocks */
+/* eslint-disable 
+jsx-a11y/anchor-is-valid, 
+no-lone-blocks,
+no-unused-vars 
+*/
 
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -13,6 +17,7 @@ import { Card } from 'components/cards/Card';
 import { AddCard } from 'components/cards/AddCard';
 import { AddColumn } from 'components/cards/AddColumn';
 import ColumnHead from 'components/cards/ColumnHead';
+import BoardMembers from 'components/members/BoardMembers';
 import confirmService from 'components/confirm/ConfirmService';
 import Icon from 'components/misc/IonIcon';
 
@@ -49,12 +54,12 @@ export const Board = ({ history }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
+  const [boardExtended, setBoardExtended] = useState(false);
 
   const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [toasts, setToasts] = useContext(ToastsContext);
 
   // Required for Board name quick edit
-
   // const [boardName, setBoardName] = useState({});
   // const [boardNamePlaceholder, setBoardNamePlaceholder] = useState('');
   // const [boardNameEdit, setBoardNameEdit] = useState(false);
@@ -81,48 +86,6 @@ export const Board = ({ history }) => {
         icon: 'warning'
       }
     ]);
-  }
-
-  // sidenav
-  const SideNav = () => {
-    return (
-      <div className="sidenav">
-        <ul className="sidenav-nav">
-          <li className="nav-item">
-            <a className="nav-link" title="Dashboard">
-              <Icon name="apps-outline" />
-            </a>
-          </li>
-          <li className="nav-item" title="Project Boards">
-            <Link className="nav-link" to={`/s/project/${board.projectId}`}>
-              {/* <a className="nav-link"> */}
-              <Icon name="copy-outline" />
-              {/* </a> */}
-            </Link>
-          </li>
-          <li className="nav-item" title="Members">
-            <a className="nav-link">
-              <Icon name="people-outline" />
-            </a>
-          </li>
-          <li className="nav-item" title="Edit Board" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
-            <a className="nav-link">
-              <Icon name="create-outline" />
-            </a>
-          </li>
-          <li className="nav-item" title="Delete Board" onClick={handleBoardDelete} >
-            <a className="nav-link">
-              <Icon name="trash-outline" />
-            </a>
-          </li>
-          <li className="nav-item" title="Log Out" onClick={handleLogout} >
-            <a className="nav-link">
-              <Icon name="power" />
-            </a>
-          </li>
-        </ul>
-      </div>
-    );
   }
 
   function handleAddCloumn(columnName) {
@@ -320,66 +283,111 @@ export const Board = ({ history }) => {
   //   }
   // }
 
+  // sidenav
+  const SideNav = () => {
+    return (
+      <div className="sidenav">
+        <ul className="sidenav-nav">
+          <li className="nav-item">
+            <a className="nav-link" title="Dashboard">
+              <Icon name="apps-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Project Boards">
+            <Link className="nav-link" to={`/s/project/${board.projectId}`}>
+              {/* <a className="nav-link"> */}
+              <Icon name="copy-outline" />
+              {/* </a> */}
+            </Link>
+          </li>
+          <li className="nav-item" title="Members" onClick={(e) => setBoardExtended(!boardExtended)}>
+            <a className={boardExtended ? "nav-link active" : "nav-link"}>
+              <Icon name="people-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Edit Board" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
+            <a className="nav-link">
+              <Icon name="create-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Delete Board" onClick={handleBoardDelete} >
+            <a className="nav-link">
+              <Icon name="trash-outline" />
+            </a>
+          </li>
+          <li className="nav-item" title="Log Out" onClick={handleLogout} >
+            <a className="nav-link">
+              <Icon name="power" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <>
       {loading && <LineLoader />}
-      <main className="board-content">
+      <main className={boardExtended ? "board-content extended" : "board-content"}>
         <div>
           <SideNav />
         </div>
+        {boardExtended && <BoardMembers members={board.teamMembers} />}
         <div className="scroll">
-          <div className="trello-board">
-            <ul className="column__list">
-              {columns.map((column) => {
-                return (
-                  <li
-                    className="column__item"
-                    key={column.id}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => {
-                      onDragDrop(e, column);
-                    }}
-                  >
-                    <div className="column__title--wrapper">
-                      <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
-                      <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
-                        <Icon name="trash-outline" />
-                      </span>
-                    </div>
-                    <ul className="card__list">
-                      {column.cards.map(
-                        (card) =>
-                          !card.isArchive && (
-                            <Card
-                              card={card}
-                              board={board}
-                              key={card.id}
-                              handleEdit={() => openCardEdit(card, column)}
-                              handleArchive={() => handleCardArchive(card, column)}
-                              handleCompletion={() => handleCardCompletion(card, column)}
-                              column={column}
-                            />
-                          )
-                      )}
-                    </ul>
-                    <div className="column__item--cta" onClick={() => openAddCard(column)}>
-                      <Icon name="add"></Icon>
-                      <span>Add a card</span>
-                    </div>
-                  </li>
-                );
-              })}
-              <li className="column__item trans">
-                {isColumnAdd ? (
-                  <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
-                ) : (
-                    <div className="column__item--new">
-                      <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
-                    </div>
-                  )}
-              </li>
-            </ul>
-          </div>
+          {loading ?
+            <div className="inner-loading-text">Loading columns ...</div>
+            : <div className="trello-board">
+              <ul className="column__list">
+                {columns.map((column) => {
+                  return (
+                    <li
+                      className="column__item"
+                      key={column.id}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        onDragDrop(e, column);
+                      }}
+                    >
+                      <div className="column__title--wrapper">
+                        <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
+                        <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
+                          <Icon name="trash-outline" />
+                        </span>
+                      </div>
+                      <ul className="card__list">
+                        {column.cards.map(
+                          (card) =>
+                            !card.isArchive && (
+                              <Card
+                                card={card}
+                                board={board}
+                                key={card.id}
+                                handleEdit={() => openCardEdit(card, column)}
+                                handleArchive={() => handleCardArchive(card, column)}
+                                handleCompletion={() => handleCardCompletion(card, column)}
+                                column={column}
+                              />
+                            )
+                        )}
+                      </ul>
+                      <div className="column__item--cta" onClick={() => openAddCard(column)}>
+                        <Icon name="add"></Icon>
+                        <span>Add a card</span>
+                      </div>
+                    </li>
+                  );
+                })}
+                <li className="column__item trans">
+                  {isColumnAdd ? (
+                    <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
+                  ) : (
+                      <div className="column__item--new">
+                        <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
+                      </div>
+                    )}
+                </li>
+              </ul>
+            </div>}
         </div>
       </main>
       {isCardAdd && (

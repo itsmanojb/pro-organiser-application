@@ -6,7 +6,7 @@ import confirmService from 'components/confirm/ConfirmService';
 import Icon from 'components/misc/IonIcon';
 import './Sidenav.scss';
 
-const SideNav = () => {
+const SideNav = ({ extended, setExtended }) => {
 
   async function handleLogout() {
     const result = await confirmService.show('Are you sure you want to log out?', 'Confirm!');
@@ -14,7 +14,6 @@ const SideNav = () => {
       await firebaseApp.auth().signOut();
     }
   }
-
 
   return (
     <div className="sidenav">
@@ -29,11 +28,16 @@ const SideNav = () => {
             <Icon name="folder-outline" />
           </a>
         </li>
-        <li className="nav-item">
+        <li className="nav-item" title="Members" onClick={(e) => setExtended(!extended)}>
+          <a className={extended ? "nav-link active" : "nav-link"}>
+            <Icon name="people-outline" />
+          </a>
+        </li>
+        {/* <li className="nav-item">
           <a className="nav-link">
             <Icon name="analytics-outline" />
           </a>
-        </li>
+        </li> */}
         <li className="nav-item">
           <a className="nav-link">
             <Icon name="calendar-outline" />

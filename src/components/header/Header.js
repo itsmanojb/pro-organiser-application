@@ -1,4 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable 
+jsx-a11y/anchor-is-valid,
+no-unused-vars 
+*/
 
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, withRouter, useHistory } from 'react-router-dom';

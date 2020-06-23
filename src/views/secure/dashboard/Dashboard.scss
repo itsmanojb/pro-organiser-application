@@ -9,7 +9,7 @@ main.content {
   grid-template-columns: var(--sidenav-size) 1fr 350px;
   padding: 12px 0 0;
 
-  >div {
+  >div:not(.members-panel) {
     overflow-y: auto;
   }
 
@@ -23,6 +23,10 @@ main.content {
       min-height: 100px;
     }
 
+  }
+
+  &.extended {
+    grid-template-columns: var(--sidenav-size) 150px 1fr 350px;
   }
 
   .sidebar {

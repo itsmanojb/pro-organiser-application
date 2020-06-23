@@ -8,6 +8,7 @@ import { getBoards } from 'utils/data';
 import { LineLoader } from 'common/loader/LineLoader';
 import SideNav from 'components/sidenav/Sidenav';
 import ProjectPanel from 'components/right-panel/ProjectPanel';
+import BoardMembers from 'components/members/BoardMembers';
 
 import { Team } from 'components/misc/Team';
 import Icon from 'components/misc/IonIcon';
@@ -19,6 +20,7 @@ export const ProjectDashboard = (update) => {
   const [gridView, setGridView] = useState(true);
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
+  const [projectExtended, setProjectExtended] = useState(false);
 
   useEffect(() => {
     if (currentProject) {
@@ -39,8 +41,9 @@ export const ProjectDashboard = (update) => {
     <>
       {loading && <LineLoader />}
       <main className="content">
-        <div className="dashboard">
-          <div><SideNav /></div>
+        <div className={projectExtended ? "dashboard extended" : "dashboard"}>
+          <div><SideNav extended={projectExtended} setExtended={setProjectExtended} /></div>
+          {projectExtended && <BoardMembers klass='project-members' members={currentProject.members} />}
           <div className="all-boards">
             {!loading ? <>
               {boards.length === 0 ?

@@ -53,8 +53,8 @@ export const AddCard = ({
   }
 
   function onAdd() {
-    if (!title || !description || !dueDate || team.length === 0) {
-      showError('All the fields are required');
+    if (!title || !dueDate || team.length === 0) {
+      showError('Fill up all the mandatory fields');
       return;
     }
 
@@ -118,7 +118,7 @@ export const AddCard = ({
           <textarea
             name="description"
             id="description"
-            placeholder="Description"
+            placeholder="Description (optional)"
             value={description}
             onChange={e => setDescription(e.target.value)}
             autoComplete="off"

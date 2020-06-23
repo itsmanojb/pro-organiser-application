@@ -2,7 +2,7 @@ import React from 'react';
 
 const Icon = (props) => {
   return (
-    <ion-icon name={props.name}></ion-icon>
+    <ion-icon style={props.styles} name={props.name}></ion-icon>
   );
 }
 

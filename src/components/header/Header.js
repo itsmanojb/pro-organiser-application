@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter, useHistory } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { AuthContext } from 'context/Auth';
@@ -9,7 +9,7 @@ import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { DropdownContext } from 'context/Dropdown';
 
-import { getProjects } from 'utils/data';
+import { getProjects, getBoards } from 'utils/data';
 
 import { ReactComponent as Logo } from 'assets/icons/logo.svg';
 import Icon from 'components/misc/IonIcon';
@@ -22,7 +22,6 @@ const Navbar = (props) => {
     </nav>
   );
 }
-
 
 const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
   const [open, setOpen] = useContext(DropdownContext);
@@ -43,18 +42,31 @@ const NavItem = ({ children, link, icon, label, klass = 'icon-button' }) => {
     );
 }
 
-
 const DropdownMenu = ({ items, current, setProject }) => {
 
+  const history = useHistory();
+
+  const { currentUser } = useContext(AuthContext);
   const [open, setOpen] = useContext(DropdownContext);
-  // const { currentUser } = useContext(AuthContext);
   const [activeMenu, setActiveMenu] = useState('main');
   const [menuHeight, setMenuHeight] = useState(null);
+  const [boards, setBoards] = useState([]);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     setMenuHeight(dropdownRef.current?.firstChild.offsetHeight + 32)
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (current) {
+      getBoards(currentUser.email, current.id)
+        .then((boards) => {
+          setBoards(boards);
+        }).catch(() => {
+          setBoards([]);
+        });
+    }
+  }, [currentUser, current]);
 
   function calcHeight(el) {
     const height = el.offsetHeight;
@@ -62,26 +74,40 @@ const DropdownMenu = ({ items, current, setProject }) => {
   }
 
   function setCurrentProject(project) {
+    setOpen(false);
     setProject(project);
     localStorage.setItem('currentProject', JSON.stringify(project));
-    setOpen(false);
+    history.push(`/s/project/${project.id}`);
   }
 
   function resetProject() {
-    localStorage.removeItem('currentProject')
+    localStorage.removeItem('currentProject');
+    history.push(`/s/dashboard`);
     setProject(null);
+    setOpen(false);
+  }
+
+  function setBoard(board) {
+    history.push(`/s/board/${board.id}`, { boardName: board.name })
     setOpen(false);
   }
 
   const DropdownItem = (props) => {
 
     const { children, link, goToMenu, leftIcon, rightIcon, role, item } = props;
+    const [modalPage, setModalPage] = useContext(ModalPageContext);
 
     function handleClick(e) {
       if (role === 'SET_PROJECT') {
-        setCurrentProject(item)
+        setCurrentProject(item);
       } else if (role === 'RESET_PROJECT') {
         resetProject();
+      } else if (role === 'CREATE_BOARD') {
+        setModalPage({ name: 'addboard' });
+        setOpen(false);
+      } else if (role === 'SET_BOARD') {
+        setBoard(item);
+        setOpen(false);
       }
     }
 
@@ -108,6 +134,8 @@ const DropdownMenu = ({ items, current, setProject }) => {
           <div className="overscroll">
             {current ? <>
               <div className="overscroll">
+                <DropdownItem leftIcon={<Icon name="folder-outline" />} rightIcon={<Icon name="chevron-forward" />} goToMenu="boards">{current.name}</DropdownItem>
+                <span className="divider"></span>
                 {items.filter(item => current.name !== item.name).map((item, i) => (
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
@@ -119,19 +147,28 @@ const DropdownMenu = ({ items, current, setProject }) => {
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
               </>}
-            {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem>
-            <DropdownItem
-              leftIcon={<Icon name="settings-outline" />}
-              rightIcon={<Icon name="chevron-forward" />}
-              goToMenu="settings"
-            >
-              Settings
-          </DropdownItem> */}
+            {/* <DropdownItem leftIcon={<Icon name="person-outline" />}>{currentUser.displayName}</DropdownItem> */}
           </div>
         </div>
       </CSSTransition>
 
-      <CSSTransition
+      {current && <CSSTransition
+        in={activeMenu === 'boards'}
+        timeout={500}
+        classNames="menu-secondary"
+        unmountOnExit
+        onEnter={calcHeight}>
+        <div className="menu">
+          <DropdownItem goToMenu="main" leftIcon={<Icon name="chevron-back" />}>
+            Back to {current.name}
+          </DropdownItem>
+          <span className="divider"></span>
+          {boards.map((board, i) => <DropdownItem key={i} leftIcon={<Icon name="clipboard-outline" />} role={'SET_BOARD'} item={board}>{board.name}</DropdownItem>)}
+          <DropdownItem leftIcon={<Icon name="add" />} role={'CREATE_BOARD'}>Create new board</DropdownItem>
+        </div>
+      </CSSTransition>}
+
+      {/* <CSSTransition
         in={activeMenu === 'settings'}
         timeout={500}
         classNames="menu-secondary"
@@ -143,28 +180,26 @@ const DropdownMenu = ({ items, current, setProject }) => {
           </DropdownItem>
           <DropdownItem leftIcon={<Icon name="shield-checkmark-outline" />} link='/'>Change Password</DropdownItem>
         </div>
-      </CSSTransition>
+      </CSSTransition> */}
 
     </div>
   );
 }
 
 
-const Header = ({ update }) => {
+const Header = ({ update, location }) => {
 
-  const [currentPage, setCurrentPage] = useState('Select Project');
-  const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const { currentUser } = useContext(AuthContext);
+  const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
+  const [currentPage, setCurrentPage] = useState('Select Project');
+  const [currentBoard, setCurrentBoard] = useState('');
   const [projects, setProjects] = useState([]);
-
-  // console.log(currentProject);
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
       setProjects(projects);
-      // console.log(projects);
       // await getAllColumns(data.id, setColumns);
     })();
   }, [currentUser, update]);
@@ -179,30 +214,30 @@ const Header = ({ update }) => {
   }, [currentProject]);
 
 
-  // useEffect(() => {
-  //   if (location.pathname.startsWith('/s/board/')) {
-  //     setCurrentPage(location.state.boardName)
-  //   } else {
-  //     setCurrentPage('')
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    if (location.pathname.startsWith('/s/board/')) {
+      setCurrentBoard(location.state.boardName)
+    } else {
+      setCurrentBoard('')
+    }
+  }, [location]);
 
 
   return (
     <header className="app-header">
-      <NavLink to="/" className="brand">
+      <NavLink to="/s" className="brand">
         <Logo />
       </NavLink>
       <div className="nav-actions">
         <Navbar>
-          {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
-          <NavItem label={currentPage} klass='text-button'>
+          <NavItem label={currentPage} icon={<Icon name="folder-open-outline" />} klass='text-button'>
             <DropdownMenu items={projects} current={currentProject} setProject={setCurrentProject} />
           </NavItem>
+          {currentBoard && <NavItem label={currentBoard} klass='text-button inactive' />}
         </Navbar>
       </div>
       <div className="cta">
-        <button disabled={!currentProject} onClick={(e) => setModalPage('addboard')} className="cta-btn"> Create New Board </button>
+        <button disabled={!currentProject || modalPage === 'addboard'} onClick={(e) => setModalPage({ name: 'addboard' })} className="cta-btn"> Create New Board </button>
       </div>
       <div className="search">
         <Navbar>

@@ -1,10 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from 'context/Auth';
+import { getProjects } from 'utils/data';
 import './Rightpanel.scss';
 
-const RightPanel = () => {
+const RightPanel = ({ update }) => {
 
   const { currentUser } = useContext(AuthContext);
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      const projects = await getProjects(currentUser.email);
+      setProjects(projects);
+      // await getAllColumns(data.id, setColumns);
+    })();
+  }, [currentUser, update]);
 
   return (
     <div className="sidebar right">
@@ -15,7 +25,7 @@ const RightPanel = () => {
         </div>
       </div>
       <div className="stats">
-        <div className="stat"><span className="label">Total projects</span><strong>189</strong></div>
+        <div className="stat"><span className="label">Total projects</span><strong>{projects.length}</strong></div>
         <div className="stat"><span className="label">Completed</span><strong>174</strong></div>
         <div className="stat"><span className="label">In Progress</span><strong>13</strong></div>
         <div className="stat"><span className="label">Out of Schedule</span><strong>2</strong></div>

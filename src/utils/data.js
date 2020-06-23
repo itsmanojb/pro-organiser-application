@@ -1,4 +1,5 @@
 import { db } from 'firebase/init';
+import { firestore } from 'firebase/app';
 
 export const getProjects = async (email) => {
   try {
@@ -27,12 +28,13 @@ export const addProject = async (project) => {
   }
 };
 
-export const getBoards = async (email) => {
+export const getBoards = async (email, id) => {
   try {
     const snapshot = await db
       .collection('boards')
       .where('user', '==', email)
-      .orderBy('name')
+      .where('projectId', '==', id)
+      // .orderBy('name')
       .get();
     const boards = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
     return boards;
@@ -48,9 +50,29 @@ export const getBoards = async (email) => {
  */
 export const addBoard = async (board) => {
   try {
-    await db.collection('boards').add(board);
+    const docId = (await db.collection('boards').add(board)).id;
+    const project = db.collection('projects').doc(board.projectId);
+    await project.update({
+      boards: firestore.FieldValue.arrayUnion(docId)
+    });
     return true;
   } catch (error) {
+    // console.log(error);
+    return error;
+  }
+};
+
+/**
+ * Method which updates a board
+ * @param {string} id for the doc
+ * @param {object} board the board which has to be edited
+ */
+export const editBoard = async (id, board) => {
+  try {
+    await db.collection('boards').doc(id).update(board);
+    return true;
+  } catch (error) {
+    // console.log(error);
     return error;
   }
 };

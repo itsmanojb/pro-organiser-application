@@ -135,4 +135,31 @@
     }
   }
 
+  &.project {
+    grid-template-rows: auto auto 1fr;
+
+    .user-info {
+      grid-template-columns: 1fr;
+      padding: 10px 0;
+
+      .greet {
+        display: flex;
+        flex-direction: column;
+        font-size: 22px;
+
+        strong {
+          color: var(--color-accent);
+          font-size: 25px;
+        }
+      }
+
+      .desc {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+    }
+  }
+
 }

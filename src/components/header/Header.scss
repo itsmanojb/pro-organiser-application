@@ -1,7 +1,7 @@
 .app-header {
   --bg: #fff;
   --bg-accent: #fbfbfb;
-  --bg-light: #f8f8f8;
+  --bg-light: #f6f7f8;
   --text-color: #73849a;
   --border: 1px solid #fafafa;
   --border-radius: 10px;
@@ -62,7 +62,7 @@
     font-size: 15px;
     font-weight: 500;
     transition: .3s ease all;
-    border: navajowhite;
+    border: none;
     font-family: inherit;
 
     &:hover {
@@ -98,7 +98,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    cursor: pointer;
+    font-size: 15px;
   }
 }
 
@@ -116,6 +116,7 @@
   justify-content: center;
   opacity: .8;
   transition: background 300ms;
+  cursor: pointer;
 
   &:hover {
     background-color: var(--bg-light);
@@ -137,11 +138,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: .8;
+  // opacity: .8;
   transition: background 300ms;
+  cursor: pointer;
+
+  ion-icon {
+    margin-right: 10px;
+  }
 
   &:hover {
     background-color: var(--bg-light);
+  }
+
+  &.inactive {
+    cursor: default;
+    background-color: transparent;
+    border: 1px solid var(--bg-light);
+    color: var(--text-color);
+    pointer-events: none;
   }
 
   &:focus {
@@ -197,7 +211,7 @@
       }
 
       &:hover {
-        background-color: var(--bg-accent);
+        background-color: var(--bg-light);
       }
 
     }

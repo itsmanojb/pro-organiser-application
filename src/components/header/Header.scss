@@ -98,7 +98,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    cursor: pointer;
+    font-size: 15px;
   }
 }
 
@@ -116,6 +116,7 @@
   justify-content: center;
   opacity: .8;
   transition: background 300ms;
+  cursor: pointer;
 
   &:hover {
     background-color: var(--bg-light);
@@ -139,9 +140,22 @@
   justify-content: center;
   // opacity: .8;
   transition: background 300ms;
+  cursor: pointer;
+
+  ion-icon {
+    margin-right: 10px;
+  }
 
   &:hover {
     background-color: var(--bg-light);
+  }
+
+  &.inactive {
+    cursor: default;
+    background-color: transparent;
+    border: 1px solid var(--bg-light);
+    color: var(--text-color);
+    pointer-events: none;
   }
 
   &:focus {

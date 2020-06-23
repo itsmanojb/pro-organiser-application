@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid, no-lone-blocks */
 
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import * as shortid from 'shortid';
 
 import { firebaseApp } from 'firebase/init';
@@ -39,7 +39,7 @@ async function getAllColumns(id, setColumns) {
 
 export const Board = ({ history }) => {
 
-  let { id } = useParams();
+  const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
@@ -93,10 +93,12 @@ export const Board = ({ history }) => {
               <Icon name="apps-outline" />
             </a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link" title="Projects">
-              <Icon name="folder-outline" />
-            </a>
+          <li className="nav-item" title="Project Boards">
+            <Link className="nav-link" to={`/s/project/${board.projectId}`}>
+              {/* <a className="nav-link"> */}
+              <Icon name="copy-outline" />
+              {/* </a> */}
+            </Link>
           </li>
           <li className="nav-item" title="Members">
             <a className="nav-link">
@@ -379,7 +381,6 @@ export const Board = ({ history }) => {
             </ul>
           </div>
         </div>
-        <div></div>
       </main>
       {isCardAdd && (
         <AddCard

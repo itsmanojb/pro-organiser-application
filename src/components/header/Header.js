@@ -88,7 +88,7 @@ const DropdownMenu = ({ items, current, setProject }) => {
   }
 
   function setBoard(board) {
-    history.push(`/s/board/${board.id}`);
+    history.push(`/s/board/${board.id}`, { boardName: board.name })
     setOpen(false);
   }
 
@@ -187,12 +187,13 @@ const DropdownMenu = ({ items, current, setProject }) => {
 }
 
 
-const Header = ({ update }) => {
+const Header = ({ update, location }) => {
 
   const { currentUser } = useContext(AuthContext);
   const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [currentPage, setCurrentPage] = useState('Select Project');
+  const [currentBoard, setCurrentBoard] = useState('');
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -213,13 +214,13 @@ const Header = ({ update }) => {
   }, [currentProject]);
 
 
-  // useEffect(() => {
-  //   if (location.pathname.startsWith('/s/board/')) {
-  //     setCurrentPage(location.state.boardName)
-  //   } else {
-  //     setCurrentPage('')
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    if (location.pathname.startsWith('/s/board/')) {
+      setCurrentBoard(location.state.boardName)
+    } else {
+      setCurrentBoard('')
+    }
+  }, [location]);
 
 
   return (
@@ -229,10 +230,10 @@ const Header = ({ update }) => {
       </NavLink>
       <div className="nav-actions">
         <Navbar>
-          {/* <NavItem link="/s/dashboard" icon={<Icon name="home" />} /> */}
-          <NavItem label={currentPage} klass='text-button'>
+          <NavItem label={currentPage} icon={<Icon name="folder-open-outline" />} klass='text-button'>
             <DropdownMenu items={projects} current={currentProject} setProject={setCurrentProject} />
           </NavItem>
+          {currentBoard && <NavItem label={currentBoard} klass='text-button inactive' />}
         </Navbar>
       </div>
       <div className="cta">

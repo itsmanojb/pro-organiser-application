@@ -50,8 +50,8 @@ export const AddBoard = ({ added, closed }) => {
             message: 'Board has been created',
             id: toasts.length,
             title: 'Success',
-            backgroundColor: '#d9534f',
-            icon: 'warning'
+            backgroundColor: '#47bf50',
+            icon: 'checkmark-circle'
           }
         ]);
       } else {

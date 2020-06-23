@@ -42,7 +42,7 @@ export const ProjectDashboard = (update) => {
         <div className="dashboard">
           <div><SideNav /></div>
           <div className="all-boards">
-            <>
+            {!loading ? <>
               {boards.length === 0 ?
                 <div className="no-boards">You haven't created any boards. To get started kindly click on the 'Create New Board'.</div>
                 : <>
@@ -101,7 +101,11 @@ export const ProjectDashboard = (update) => {
                   </div>
                 </>
               }
-            </>
+            </> :
+              <div className="inner-loading-text">
+                Loading boards ...
+              </div>
+            }
           </div>
           <div><ProjectPanel project={currentProject} update={update} /></div>
         </div>

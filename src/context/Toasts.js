@@ -4,7 +4,7 @@ export const ToastsContext = React.createContext();
 // const testList = [
 //   {
 //     title: 'Success',
-//     backgroundColor: '#5cb85c',
+//     backgroundColor: '#47bf50',
 //     icon: 'checkmark-circle'
 //   },
 //   {

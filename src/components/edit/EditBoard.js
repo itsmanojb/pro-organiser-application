@@ -52,8 +52,8 @@ export const EditBoard = ({ board, edited, closed }) => {
             message: 'Board has been updated',
             id: toasts.length,
             title: 'Success',
-            backgroundColor: '#d9534f',
-            icon: 'warning'
+            backgroundColor: '#47bf50',
+            icon: 'checkmark-circle'
           }
         ]);
       } else {

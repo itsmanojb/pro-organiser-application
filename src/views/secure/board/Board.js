@@ -1,4 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid, no-lone-blocks */
+/* eslint-disable 
+jsx-a11y/anchor-is-valid, 
+no-lone-blocks,
+no-unused-vars 
+*/
 
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -13,6 +17,7 @@ import { Card } from 'components/cards/Card';
 import { AddCard } from 'components/cards/AddCard';
 import { AddColumn } from 'components/cards/AddColumn';
 import ColumnHead from 'components/cards/ColumnHead';
+import BoardMembers from 'components/members/BoardMembers';
 import confirmService from 'components/confirm/ConfirmService';
 import Icon from 'components/misc/IonIcon';
 
@@ -49,12 +54,12 @@ export const Board = ({ history }) => {
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [isAdd, setIsAdd] = useState(true);
   const [inEditCard, setInEditCard] = useState(null);
+  const [boardExtended, setBoardExtended] = useState(false);
 
   const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [toasts, setToasts] = useContext(ToastsContext);
 
   // Required for Board name quick edit
-
   // const [boardName, setBoardName] = useState({});
   // const [boardNamePlaceholder, setBoardNamePlaceholder] = useState('');
   // const [boardNameEdit, setBoardNameEdit] = useState(false);
@@ -295,8 +300,8 @@ export const Board = ({ history }) => {
               {/* </a> */}
             </Link>
           </li>
-          <li className="nav-item" title="Members">
-            <a className="nav-link">
+          <li className="nav-item" title="Members" onClick={(e) => setBoardExtended(!boardExtended)}>
+            <a className={boardExtended ? "nav-link active" : "nav-link"}>
               <Icon name="people-outline" />
             </a>
           </li>
@@ -323,10 +328,11 @@ export const Board = ({ history }) => {
   return (
     <>
       {loading && <LineLoader />}
-      <main className="board-content">
+      <main className={boardExtended ? "board-content extended" : "board-content"}>
         <div>
           <SideNav />
         </div>
+        {boardExtended && <BoardMembers members={board.teamMembers} />}
         <div className="scroll">
           {loading ?
             <div className="inner-loading-text">Loading columns ...</div>

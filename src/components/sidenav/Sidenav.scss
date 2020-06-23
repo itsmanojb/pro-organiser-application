@@ -54,7 +54,8 @@
     border-radius: 50%;
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &.active {
       // filter: grayscale(0%) opacity(1);
       background: var(--bg-secondary);
       color: var(--color-accent);

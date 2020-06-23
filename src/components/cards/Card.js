@@ -93,7 +93,7 @@ export const Card = ({ card, board, column, handleEdit, handleArchive, handleCom
             </div>
           </dd>
           <dt>Description</dt>
-          <dd><p>{card.description}</p> </dd>
+          <dd><p>{card.description || '-'}</p> </dd>
         </dl>
       </div>
     </Modal>

@@ -42,7 +42,10 @@ const SecurePage = () => {
             render={(props) => (
               <Dashboard {...props} update={updateTime} />
             )} />
-          <Route path={`${path}/project/:id`} component={ProjectDashboard} />
+          <Route path={`${path}/project/:id`}
+            render={(props) => (
+              <ProjectDashboard {...props} update={updateTime} />
+            )} />
           <Route path={`${path}/board/:id`} component={Board} />
         </Switch>
         {modalPage &&

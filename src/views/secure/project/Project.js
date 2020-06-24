@@ -31,8 +31,7 @@ export const ProjectDashboard = ({ update, history }) => {
           setBoards(boards);
           setLoading(false);
         }).catch((error) => {
-          console.log(error);
-
+          // console.log(error);
           setBoards([]);
         });
     } else {

@@ -19,14 +19,10 @@ const ProjectSelector = ({ update, selected }) => {
 
   useEffect(() => {
     (async function () {
-      try {
-        const projects = await getProjects(currentUser.email);
-        if (isMountedRef.current) {
-          setProjects(projects);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
+      const projects = await getProjects(currentUser.email);
+      if (isMountedRef.current) {
+        setProjects(projects);
+        setLoading(false);
       }
       // await getAllColumns(data.id, setColumns);
       // console.log(projects);

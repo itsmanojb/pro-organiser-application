@@ -2,7 +2,7 @@
 /* Large screens */
 :root {
   font-size: 16px;
-  --text-primary: #aaa;
+  --text-primary: #888;
   --text-secondary: #ececec;
   --bg-primary: #fff;
   --bg-secondary: #f6f7f8;
@@ -42,7 +42,7 @@
 
     &.disabled {
       pointer-events: none;
-      opacity: 0.45;
+      opacity: 0.35;
     }
   }
 

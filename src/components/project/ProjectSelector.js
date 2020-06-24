@@ -14,6 +14,7 @@ const ProjectSelector = ({ update, selected }) => {
   const { currentUser } = useContext(AuthContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [projects, setProjects] = useState([]);
+  const [showArchived, setShowArchived] = useState(localStorage.getItem('showArchive'));
 
   useEffect(() => {
     (async function () {
@@ -25,22 +26,44 @@ const ProjectSelector = ({ update, selected }) => {
       // console.log(projects);
     })();
     return () => isMountedRef.current = false;
-  }, [currentUser, update, isMountedRef]);
+  }, [currentUser, update, isMountedRef, showArchived]);
+
+  const toggleArchive = () => {
+    setShowArchived(!showArchived);
+    localStorage.setItem('showArchive', !showArchived);
+  };
+
+  function addProjectClass(project) {
+    let klass = 'project';
+    if (project.archived) {
+      klass += ' archived';
+    } if (project.pinned) {
+      klass += ' pinned';
+    }
+    return klass;
+  }
 
   return (
     <div className="project-wrapper">
       {projects.length ? (
-        <div className="recent-projects">
-          <div className="info">Recents projects</div>
+        <div className={showArchived ? "recent-projects archived" : "recent-projects"}>
+          <div className="info">
+            <span className="label">
+              All projects
+            </span>
+            <div className="project-toggle">
+              <input type="checkbox" id="archiveToggle" checked={showArchived} onChange={toggleArchive} /> <span>Show archived</span>
+            </div>
+          </div>
           <div className="project-list">
             {projects.map((project, i) => (
-              <div className="project" key={i} onClick={(e) => selected(project)}>
+              <div className={addProjectClass(project)} key={i} onClick={(e) => selected(project)}>
                 <h4>{project.name}</h4>
                 <p className="boards">{project.boards.length} Boards</p>
               </div>
             ))}
           </div>
-          <div className="info">Or, <span>create new project</span></div>
+          <div className="info"><span className="label">Or, create new project</span></div>
           <div className="project-list">
             <div className="project new" onClick={(e) => setModalPage({ name: 'addproject' })}>
               <Icon name="add" />

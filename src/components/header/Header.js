@@ -139,14 +139,14 @@ const DropdownMenu = ({ items, current, setProject }) => {
               <div className="overscroll">
                 <DropdownItem leftIcon={<Icon name="folder-outline" />} rightIcon={<Icon name="chevron-forward" />} goToMenu="boards">{current.name}</DropdownItem>
                 <span className="divider"></span>
-                {items.filter(item => current.name !== item.name).map((item, i) => (
+                {items.filter(item => current.name !== item.name && !item.archived).map((item, i) => (
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
               </div>
               <span className="divider"></span>
               <DropdownItem leftIcon={<Icon name="chevron-back" />} role={'RESET_PROJECT'}>Projects Home</DropdownItem>
             </> : <>
-                {items.map((item, i) => (
+                {items.filter(item => !item.archived).map((item, i) => (
                   <DropdownItem key={i} leftIcon={<Icon name="folder-outline" />} role={'SET_PROJECT'} item={item}>{item.name}</DropdownItem>
                 ))}
               </>}
@@ -240,7 +240,7 @@ const Header = ({ update, location }) => {
         </Navbar>
       </div>
       <div className="cta">
-        <button disabled={!currentProject || modalPage === 'addboard'} onClick={(e) => setModalPage({ name: 'addboard' })} className="cta-btn"> Create New Board </button>
+        <button disabled={!currentProject || currentProject.archived || modalPage === 'addboard'} onClick={(e) => setModalPage({ name: 'addboard' })} className="cta-btn"> Create New Board </button>
       </div>
       <div className="search">
         <Navbar>

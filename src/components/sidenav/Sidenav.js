@@ -26,7 +26,7 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
 
   async function doArchive() {
 
-    const result = await confirmService.show('Are you sure you archive this project?', 'Confirm!');
+    const result = await confirmService.show('If you archive this project, you\'ll not be able to create or modify any boards or tasks for this project. Are you sure?', 'Please Note!');
     if (result) {
       const archived = await archiveProject(currentProject.id);
       setToasts([
@@ -80,17 +80,17 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
               <Icon name="people-outline" />
             </a>
           </li>
-          <li className="nav-item">
+          <li className={currentProject.archived ? "nav-item disabled" : "nav-item"}>
             <a className="nav-link" title="Mask as Favorite" onClick={markAsFavorite}>
               <Icon name={currentProject.pinned ? "star" : "star-outline"} />
             </a>
           </li>
-          <li className="nav-item">
+          <li className={currentProject.archived ? "nav-item disabled" : "nav-item"}>
             <a className="nav-link" title="Edit Project">
               <Icon name="create-outline" />
             </a>
           </li>
-          <li className="nav-item">
+          <li className={currentProject.archived ? "nav-item disabled" : "nav-item"}>
             <a className="nav-link" title="Archive Project" onClick={doArchive}>
               <Icon name="archive-outline" />
             </a>

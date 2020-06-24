@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { AuthContext } from 'context/Auth';
 import { ProjectContext } from 'context/Project';
 import { getBoards } from 'utils/data';
+import { timeAgo } from 'utils/utility';
 
 import { LineLoader } from 'common/loader/LineLoader';
 import SideNav from 'components/sidenav/Sidenav';
@@ -16,10 +17,11 @@ export const ProjectDashboard = ({ update, history }) => {
 
   const { currentUser } = useContext(AuthContext);
   const [currentProject, setCurrentProject] = useContext(ProjectContext);
-  const [gridView, setGridView] = useState(true);
+  const [gridView, setGridView] = useState(!localStorage.getItem('listView'));
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
   const [projectExtended, setProjectExtended] = useState(false);
+  const [sortOrder, setSortOrder] = useState('auto');
 
   useEffect(() => {
     if (currentProject) {
@@ -28,7 +30,8 @@ export const ProjectDashboard = ({ update, history }) => {
         .then((boards) => {
           setBoards(boards);
           setLoading(false);
-        }).catch(() => {
+        }).catch((error) => {
+          // console.log(error);
           setBoards([]);
         });
     } else {
@@ -42,6 +45,48 @@ export const ProjectDashboard = ({ update, history }) => {
       localStorage.removeItem('currentProject');
       history.push(`/s/dashboard`);
     }
+  };
+
+  function onSortOrderChange(e) {
+    const value = e.target.value;
+    setSortOrder(value);
+    const tempBoards = [...boards];
+
+    if (value !== 'auto') {
+      if (value.substr(1) === 'name') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.name > b.name ? -1 : (a.name < b.name ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
+        }
+      }
+      if (value.substr(1) === 'created') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.createdOn < b.createdOn ? -1 : (a.createdOn > b.createdOn ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.createdOn > b.createdOn ? -1 : (a.createdOn < b.createdOn ? 1 : 0));
+        }
+      }
+      if (value.substr(1) === 'members') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.teamMembers.length < b.teamMembers.length ? -1 : (a.teamMembers.length > b.teamMembers.length ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.teamMembers.length > b.teamMembers.length ? -1 : (a.teamMembers.length < b.teamMembers.length ? 1 : 0));
+        }
+      }
+    } else {
+      setBoards(boards);
+    }
+    setBoards(tempBoards);
+  }
+
+  const setView = (view) => {
+    if (view === 'list') {
+      setGridView(false)
+    } else {
+      setGridView(true)
+    }
+    localStorage.setItem('listView', view === 'list' ? true : false);
   };
 
   if (!currentProject) {
@@ -64,23 +109,31 @@ export const ProjectDashboard = ({ update, history }) => {
                     }
                   </div>
                   : <>
+                    {currentProject.archived &&
+                      <div className="archive-alert">
+                        Project has been archived. You can only view this project.
+                    </div>}
                     <div className="board-header">
                       <div className="menubar">
                         <div className="view-buttons">
-                          <button onClick={(e) => setGridView(true)} className={gridView ? 'active' : ''}>
+                          <button onClick={(e) => setView('grid')} className={gridView ? 'active' : ''}>
                             <Icon name="grid-outline" />
                           </button>
-                          <button onClick={(e) => setGridView(false)} className={gridView ? '' : 'active'}>
+                          <button onClick={(e) => setView('list')} className={gridView ? '' : 'active'}>
                             <Icon name="list-outline" />
                           </button>
                         </div>
                         <div className="control-buttons">
                           <div className="control">
-                            <label htmlFor="">Sort By</label>
-                            <select name="" id="">
-                              <option value="">Completion</option>
-                              <option value="">Progress</option>
-                              <option value="">Activity</option>
+                            <label htmlFor="sortMenu">Arrange Boards as</label>
+                            <select id="sortMenu" value={sortOrder} onChange={onSortOrderChange}>
+                              <option value="auto">Automatic</option>
+                              <option value="+created">Latest first</option>
+                              <option value="-created">Oldest first</option>
+                              <option value="+name">Name (a-z)</option>
+                              <option value="-name">Name (z-a)</option>
+                              <option value="+members">Team size (large)</option>
+                              <option value="-members">Team size (small)</option>
                             </select>
                           </div>
                         </div>
@@ -108,9 +161,9 @@ export const ProjectDashboard = ({ update, history }) => {
                               </div>
                               <div className="board-footer">
                                 <ul className="board-members">
-                                  {board.teamMembers.map(name => <Team name={name} key={name} />)}
+                                  {board.teamMembers.map((name, i) => <Team count={i} total={board.teamMembers.length} name={name} key={name} />)}
                                 </ul>
-                                <span className="meta">1 day ago</span>
+                                <span className="meta">{timeAgo(board.createdOn)}</span>
                               </div>
                             </Link>
                           );

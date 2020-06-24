@@ -113,13 +113,17 @@
       margin-left: 1.5rem;
     }
 
-    &:last-of-type {
+    &.column__item--new {
       padding-right: 1.5rem;
     }
 
     &.trans {
       background-color: transparent;
       height: var(--column-min-height);
+    }
+
+    &.empty {
+      min-height: 0;
     }
 
     &--input {
@@ -169,7 +173,7 @@
       }
     }
 
-    &+.column__item:not(:last-of-type) {
+    &+.column__item:not(.trans) {
       margin-left: .75rem;
     }
   }
@@ -245,8 +249,8 @@
     }
   }
 
-  .card__list {
-    margin: 0;
+  .card__list:not(:empty) {
+    margin: 0 0 10px;
     overflow-y: auto;
     max-height: calc(100vh - 266px);
     border-radius: var(--border-radius);
@@ -369,4 +373,10 @@
     height: 100%;
     object-fit: cover;
   }
+}
+
+.archive-alert {
+  padding: 30px;
+  font-size: 18px;
+  color: #888;
 }

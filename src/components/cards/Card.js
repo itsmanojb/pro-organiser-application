@@ -5,7 +5,7 @@ import Priority from 'components/misc/Priority';
 import { Modal } from 'common/modal/Modal';
 import { convertDateToNice } from 'utils/utility';
 
-export const Card = ({ card, board, column, handleEdit, handleArchive, handleCompletion }) => {
+export const Card = ({ card, board, column, archived, handleEdit, handleArchive, handleCompletion }) => {
   const [isDetails, setIsDetails] = useState(false);
   const members = card.teamMembers.map(name => <Team name={name} key={name} />);
   const allMembers = card.teamMembers;
@@ -41,24 +41,28 @@ export const Card = ({ card, board, column, handleEdit, handleArchive, handleCom
     <Modal>
       <div className="modal-header">
         <div className="modal-title">
-          {card.isCompleted ?
-            (<button disabled>
-              <Icon name="checkmark-done-outline" /><span> Completed </span>
-            </button>) : (
-              <button onClick={markComplete}>
-                <Icon name="checkmark-outline" /><span> Mark Complete </span>
-              </button>
-            )}
+          {!archived && <>
+            {card.isCompleted ?
+              (<button disabled>
+                <Icon name="checkmark-done-outline" /><span> Completed </span>
+              </button>) : (
+                <button onClick={markComplete}>
+                  <Icon name="checkmark-outline" /><span> Mark Complete </span>
+                </button>
+              )}
+          </>}
         </div>
         <div className="modal-actions no-text">
-          <button onClick={doEdit} disabled={card.isCompleted}>
-            <Icon name="options-outline" />
-            <span>Edit</span>
-          </button>
-          <button onClick={doArchive}>
-            <Icon name="archive-outline" />
-            <span>Delete</span>
-          </button>
+          {!archived && <>
+            <button onClick={doEdit} disabled={card.isCompleted}>
+              <Icon name="options-outline" />
+              <span>Edit</span>
+            </button>
+            <button onClick={doArchive}>
+              <Icon name="archive-outline" />
+              <span>Delete</span>
+            </button>
+          </>}
         </div>
         <div className="close" onClick={() => setIsDetails(false)}>
           <Icon name="close" />

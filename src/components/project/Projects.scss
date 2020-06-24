@@ -73,7 +73,6 @@
         }
       }
 
-
       &.new {
         min-height: 150px;
         background-color: rgba(255, 255, 255, 0.4);
@@ -93,6 +92,26 @@
     &:not(.archived) {
       .project.archived {
         display: none;
+      }
+    }
+
+    &.archived {
+      .project {
+
+        // &:not(.archived):not(.new) {
+        //   border-bottom: 4px solid var(--color-accent);
+        // }
+
+        &.archived {
+          opacity: 0.5;
+          // background-color: #eee;
+          // border-color: #eee;
+          border: 1px dashed #bbb;
+
+          &:hover {
+            opacity: .8;
+          }
+        }
       }
     }
   }

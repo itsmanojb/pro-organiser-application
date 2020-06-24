@@ -91,6 +91,11 @@ export const Board = ({ history }) => {
   }
 
   function handleAddCloumn(columnName) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
+
     const newColumn = {
       boardId: board.id,
       name: columnName,
@@ -112,6 +117,10 @@ export const Board = ({ history }) => {
   }
 
   async function addCard(card) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     try {
       card['id'] = shortid();
       const cards = [...selectedColumn.cards, card];
@@ -128,6 +137,10 @@ export const Board = ({ history }) => {
   }
 
   async function handleCardEdit(upCard) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     try {
       const card = { id: inEditCard.id, ...upCard };
       const uColumn = createDeepCopy(selectedColumn);
@@ -148,6 +161,10 @@ export const Board = ({ history }) => {
   }
 
   async function handleCardArchive(card, column) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     try {
       card.isArchive = true;
       const newCards = column.cards.filter((c) => c.id !== card.id);
@@ -163,6 +180,10 @@ export const Board = ({ history }) => {
   }
 
   async function handleCardCompletion(card, column) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     try {
       card.isCompleted = true;
       const newCards = column.cards.filter((c) => c.id !== card.id);
@@ -178,6 +199,10 @@ export const Board = ({ history }) => {
   }
 
   async function onDragDrop(ev, newColumn) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     try {
       const card = JSON.parse(ev.dataTransfer.getData('card'));
       const oldColumn = JSON.parse(ev.dataTransfer.getData('columnFrom'));
@@ -230,6 +255,11 @@ export const Board = ({ history }) => {
   }
 
   function handleDeleteColumn(column) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
+
     const newCols = columns
       .filter((c) => c.id !== column.id)
       .sort((a, b) => a.created - b.created);
@@ -243,10 +273,26 @@ export const Board = ({ history }) => {
   }
 
   function handleRenameColumn(column, newName) {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     renameColumn(column.id, newName);
   }
 
+  function handleBoardEdit() {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
+    setModalPage({ name: 'editboard', data: board });
+  }
+
   async function handleBoardDelete() {
+    if (project.archived) {
+      showError('Modification on archived project is not allowed');
+      return;
+    }
     const result = await confirmService.show('Are you sure you want to delete the board?', 'Confirm!');
     if (result) {
       setLoading(true);
@@ -296,33 +342,33 @@ export const Board = ({ history }) => {
     return (
       <div className="sidenav">
         <ul className="sidenav-nav">
-          <li className="nav-item" title="Dashboard">
-            <a className="nav-link" onClick={(e) => goToDashboard()}>
+          <li className="nav-item">
+            <a className="nav-link" title="Dashboard" onClick={(e) => goToDashboard()}>
               <Icon name="layers-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Project Boards">
-            <Link className="nav-link" to={`/s/project/${board.projectId}`}>
+          <li className="nav-item">
+            <Link className="nav-link" title="Project Boards" to={`/s/project/${board.projectId}`}>
               <Icon name="folder-outline" />
             </Link>
           </li>
-          <li className="nav-item" title="Members">
-            <a className={boardExtended ? "nav-link active" : "nav-link"} onClick={(e) => setBoardExtended(!boardExtended)}>
+          <li className="nav-item">
+            <a title="Members" className={boardExtended ? "nav-link active" : "nav-link"} onClick={(e) => setBoardExtended(!boardExtended)}>
               <Icon name="people-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Edit Board">
-            <a className="nav-link" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
+          <li className={project.archived ? "nav-item disabled" : "nav-item"}>
+            <a className="nav-link" title="Edit Board" onClick={handleBoardEdit}>
               <Icon name="create-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Delete Board">
-            <a className="nav-link" onClick={handleBoardDelete} >
+          <li className={project.archived ? "nav-item disabled" : "nav-item"}>
+            <a className="nav-link" title="Delete Board" onClick={handleBoardDelete} >
               <Icon name="trash-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Log Out" >
-            <a className="nav-link" onClick={handleLogout}>
+          <li className="nav-item">
+            <a className="nav-link" title="Log Out" onClick={handleLogout}>
               <Icon name="power" />
             </a>
           </li>
@@ -342,12 +388,15 @@ export const Board = ({ history }) => {
         <div className="scroll">
           {loading ?
             <div className="inner-loading-text">Loading columns ...</div>
-            : <div className="trello-board">
+            : <div className="trello-board" style={{ paddingTop: project.archived ? '0' : '40px' }}>
+              {project.archived && <div className="archive-alert">
+                Project has been archived. You can only view this project.
+              </div>}
               <ul className="column__list">
                 {columns.map((column) => {
                   return (
                     <li
-                      className="column__item"
+                      className={project.archived && column.cards.length === 0 ? "column__item empty" : "column__item"}
                       key={column.id}
                       onDragOver={(e) => e.preventDefault()}
                       onDrop={(e) => {
@@ -356,9 +405,9 @@ export const Board = ({ history }) => {
                     >
                       <div className="column__title--wrapper">
                         <ColumnHead name={column.name} renameColumn={(newName) => handleRenameColumn(column, newName)} />
-                        <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
+                        {!project.archived && <span className="btn" onClick={(e) => handleDeleteColumn(column)}>
                           <Icon name="trash-outline" />
-                        </span>
+                        </span>}
                       </div>
                       <ul className="card__list">
                         {column.cards.map(
@@ -372,18 +421,19 @@ export const Board = ({ history }) => {
                                 handleArchive={() => handleCardArchive(card, column)}
                                 handleCompletion={() => handleCardCompletion(card, column)}
                                 column={column}
+                                archived={project.archived}
                               />
                             )
                         )}
                       </ul>
-                      <div className="column__item--cta" onClick={() => openAddCard(column)}>
+                      {!project.archived && <div className="column__item--cta" onClick={() => openAddCard(column)}>
                         <Icon name="add"></Icon>
                         <span>Add a card</span>
-                      </div>
+                      </div>}
                     </li>
                   );
                 })}
-                <li className="column__item trans">
+                {!project.archived && <li className="column__item trans">
                   {isColumnAdd ? (
                     <AddColumn handleClose={cancelNewColumn} handleAdd={handleAddCloumn} />
                   ) : (
@@ -391,7 +441,7 @@ export const Board = ({ history }) => {
                         <button onClick={() => setIsColumnAdd(true)}>Add Column</button>
                       </div>
                     )}
-                </li>
+                </li>}
               </ul>
             </div>}
         </div>

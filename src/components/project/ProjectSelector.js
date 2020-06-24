@@ -13,6 +13,7 @@ const ProjectSelector = ({ update, selected }) => {
   const isMountedRef = useIsMountedRef();
   const { currentUser } = useContext(AuthContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
+  const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [showArchived, setShowArchived] = useState(localStorage.getItem('showArchive'));
 
@@ -21,6 +22,7 @@ const ProjectSelector = ({ update, selected }) => {
       const projects = await getProjects(currentUser.email);
       if (isMountedRef.current) {
         setProjects(projects);
+        setLoading(false);
       }
       // await getAllColumns(data.id, setColumns);
       // console.log(projects);
@@ -44,38 +46,41 @@ const ProjectSelector = ({ update, selected }) => {
   }
 
   return (
-    <div className="project-wrapper">
-      {projects.length ? (
-        <div className={showArchived ? "recent-projects archived" : "recent-projects"}>
-          <div className="info">
-            <span className="label">
-              All projects
+    <>
+      {loading && <div className="inner-loading-text">Fetching projects...</div>}
+      <div className="project-wrapper">
+        {projects.length ? (
+          <div className={showArchived ? "recent-projects archived" : "recent-projects"}>
+            <div className="info">
+              <span className="label">
+                All projects
             </span>
-            <div className="project-toggle">
-              <input type="checkbox" id="archiveToggle" checked={showArchived} onChange={toggleArchive} /> <span>Show archived</span>
-            </div>
-          </div>
-          <div className="project-list">
-            {projects.map((project, i) => (
-              <div className={addProjectClass(project)} key={i} onClick={(e) => selected(project)}>
-                <h4>{project.name}</h4>
-                <p className="boards">{project.boards.length} Boards</p>
+              <div className="project-toggle">
+                <input type="checkbox" id="archiveToggle" checked={!!showArchived} onChange={toggleArchive} /> <span>Show archived</span>
               </div>
-            ))}
-          </div>
-          <div className="info"><span className="label">Or, create new project</span></div>
-          <div className="project-list">
-            <div className="project new" onClick={(e) => setModalPage({ name: 'addproject' })}>
-              <Icon name="add" />
+            </div>
+            <div className="project-list">
+              {projects.map((project, i) => (
+                <div className={addProjectClass(project)} key={i} onClick={(e) => selected(project)}>
+                  <h4>{project.name}</h4>
+                  <p className="boards">{project.boards.length} Boards</p>
+                </div>
+              ))}
+            </div>
+            <div className="info"><span className="label">Or, create new project</span></div>
+            <div className="project-list">
+              <div className="project new" onClick={(e) => setModalPage({ name: 'addproject' })}>
+                <Icon name="add" />
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-          <div className="create-new">
-            You have no projects created. To get started <span className="clickable" onClick={(e) => setModalPage({ name: 'addproject' })}>create new project</span>.
-          </div>
-        )}
-    </div>
+        ) : (
+            <div className="create-new">
+              You have no projects created. To get started <span className="clickable" onClick={(e) => setModalPage({ name: 'addproject' })}>create new project</span>.
+            </div>
+          )}
+      </div>
+    </>
   );
 }
 

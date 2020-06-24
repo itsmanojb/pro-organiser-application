@@ -9,12 +9,22 @@ const RightPanel = ({ update }) => {
   const isMountedRef = useIsMountedRef();
   const { currentUser } = useContext(AuthContext);
   const [projects, setProjects] = useState([]);
+  const [activeProjects, setActiveProjects] = useState(0);
+  const [totalBoards, setTotalBoards] = useState(0);
+  const [totalMembers, setTotalMembers] = useState(0);
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
       if (isMountedRef.current) {
         setProjects(projects);
+        setActiveProjects(projects.filter(project => !project.archived).length);
+        setTotalBoards(projects.map((project) => project.boards.length).reduce((a, b) => a + b, 0));
+        const members = projects.map((project) => project.members).reduce((acc, val) => acc.concat(val), []);
+        const uniqMembers = members.filter((item, i) => members.indexOf(item) === i && item !== 'me');
+        // const uniqMembers = [...new Set(members)];
+        setTotalMembers(uniqMembers.length);
+
       }
       // await getAllColumns(data.id, setColumns);
     })();
@@ -31,9 +41,9 @@ const RightPanel = ({ update }) => {
       </div>
       <div className="stats">
         <div className="stat"><span className="label">Total projects</span><strong>{projects.length}</strong></div>
-        <div className="stat"><span className="label">Completed</span><strong>174</strong></div>
-        <div className="stat"><span className="label">In Progress</span><strong>13</strong></div>
-        <div className="stat"><span className="label">Out of Schedule</span><strong>2</strong></div>
+        <div className="stat"><span className="label">Active Projects</span><strong>{activeProjects}</strong></div>
+        <div className="stat"><span className="label">Total Boards</span><strong>{totalBoards}</strong></div>
+        <div className="stat"><span className="label">Total Members</span><strong>{totalMembers}</strong></div>
       </div>
       <div className="activity-feed">
         <div className="header">

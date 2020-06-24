@@ -52,7 +52,7 @@ const ProjectSelector = ({ update, selected }) => {
               All projects
             </span>
             <div className="project-toggle">
-              <input type="checkbox" id="archiveToggle" checked={showArchived} onChange={toggleArchive} /> <span>Show archived</span>
+              <input type="checkbox" id="archiveToggle" checked={!!showArchived} onChange={toggleArchive} /> <span>Show archived</span>
             </div>
           </div>
           <div className="project-list">

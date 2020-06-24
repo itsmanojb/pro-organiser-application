@@ -6,5 +6,5 @@ export const Team = ({ name }) => {
   arr.forEach(element => {
     abbr += element.charAt(0);
   });
-  return <li className="card__avatars--item">{abbr}</li>
+  return <li title={name} className="card__avatars--item">{abbr}</li>
 };

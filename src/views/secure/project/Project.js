@@ -64,6 +64,10 @@ export const ProjectDashboard = ({ update, history }) => {
                     }
                   </div>
                   : <>
+                    {currentProject.archived &&
+                      <div className="archive-alert">
+                        Project has been archived. You can only view this project.
+                    </div>}
                     <div className="board-header">
                       <div className="menubar">
                         <div className="view-buttons">
@@ -76,11 +80,12 @@ export const ProjectDashboard = ({ update, history }) => {
                         </div>
                         <div className="control-buttons">
                           <div className="control">
-                            <label htmlFor="">Sort By</label>
-                            <select name="" id="">
-                              <option value="">Completion</option>
-                              <option value="">Progress</option>
-                              <option value="">Activity</option>
+                            {/* <label htmlFor="sortMenu"><Icon name="filter-outline" /></label> */}
+                            <select name="" id="sortMenu">
+                              <option value="">Sort By</option>
+                              <option value="team">Team Size</option>
+                              <option value="created">Creation Date</option>
+                              <option value="name">Name(a-z)</option>
                             </select>
                           </div>
                         </div>

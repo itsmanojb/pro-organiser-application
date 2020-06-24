@@ -23,6 +23,18 @@ main.content {
       min-height: 100px;
     }
 
+    .archive-alert {
+      padding: 30px;
+      font-size: 18px;
+      color: #888;
+      background: #f5f7fa;
+      // padding: 20px 30px;
+      // color: #4b4e52;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
   }
 
   &.extended {
@@ -85,14 +97,14 @@ main.content {
 
       .control {
         display: flex;
-        flex-direction: column;
-        width: 150px;
+        // flex-direction: row;
+        // width: 180px;
 
-        label {
-          color: #888;
-          font-size: 12px;
-          padding: 0 10px;
-        }
+        // label {
+        //   color: #888;
+        //   font-size: 16px;
+        //   padding: 0 10px;
+        // }
 
         select {
           width: 100%;
@@ -101,7 +113,7 @@ main.content {
           border-radius: 0;
           padding: 5px;
           font-family: inherit;
-          color: #444;
+          color: #888;
           font-size: 16px;
           cursor: pointer;
           font-weight: 500;
@@ -272,6 +284,7 @@ main.content {
         color: #333;
         border-radius: 10px;
         text-transform: capitalize;
+        min-height: 220px;
         height: 100%;
         transition: all .3s ease;
         justify-content: space-between;
@@ -289,7 +302,7 @@ main.content {
             font-weight: 500;
             margin: 2px 0;
             color: var(--color-accent);
-            font-size: 13px;
+            font-size: 15px;
             display: inline-block;
             padding: 4px 0;
             border-radius: 4px;
@@ -328,12 +341,12 @@ main.content {
           margin: 10px 0 15px -2px;
 
           li {
-            font-size: 11px;
-            height: 30px;
+            font-size: 12px;
+            height: 36px;
             color: #555;
-            width: 30px;
+            width: 36px;
             line-height: 1;
-            padding: 8px 0;
+            padding: 10px 0;
             border-radius: 50%;
             text-align: center;
             background: #eee;
@@ -386,7 +399,7 @@ main.content {
 }
 
 .no-boards {
-  padding: 50px 30px;
+  padding: 30px;
   font-size: 18px;
   color: #888;
 

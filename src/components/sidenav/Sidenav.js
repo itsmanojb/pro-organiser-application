@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
+/* eslint-disable jsx-a11y/anchor-is-valid,
+no-unused-vars */
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { firebaseApp } from 'firebase/init';
 import { getProject, updateProject, archiveProject } from 'utils/data';
 import confirmService from 'components/confirm/ConfirmService';
 import { ProjectContext } from 'context/Project';
+import { ModalPageContext } from 'context/ModalPage';
 import { ToastsContext } from 'context/Toasts';
 import Icon from 'components/misc/IonIcon';
 import './Sidenav.scss';
@@ -15,6 +16,7 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
 
   const history = useHistory();
   const [currentProject, setCurrentProject] = useContext(ProjectContext);
+  const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [toasts, setToasts] = useContext(ToastsContext);
 
   async function handleLogout() {
@@ -25,7 +27,6 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
   }
 
   async function doArchive() {
-
     const result = await confirmService.show('If you archive this project, you\'ll not be able to create or modify any boards or tasks for this project. Are you sure?', 'Please Note!');
     if (result) {
       const archived = await archiveProject(currentProject.id);
@@ -53,6 +54,24 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
       setCurrentProject(updatedDoc);
     }
   }
+
+  function doEdit() {
+    if (currentProject.archived) {
+      setToasts([
+        ...toasts,
+        {
+          message: 'Modification on archived project is not allowed',
+          id: toasts.length,
+          title: 'Error',
+          backgroundColor: '#d9534f',
+          icon: 'warning'
+        }
+      ]);
+      return;
+    }
+    setModalPage({ name: 'editproject', data: currentProject });
+  }
+
 
   return (
     <div className="sidenav">
@@ -86,7 +105,7 @@ const SideNav = ({ target, extended, setExtended, navigate }) => {
             </a>
           </li>
           <li className={currentProject.archived ? "nav-item disabled" : "nav-item"}>
-            <a className="nav-link" title="Edit Project">
+            <a className="nav-link" title="Edit Project" onClick={doEdit}>
               <Icon name="create-outline" />
             </a>
           </li>

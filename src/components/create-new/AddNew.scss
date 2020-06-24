@@ -32,13 +32,40 @@
 
   .modal-page-content {
     width: 100%;
-    max-width: 600px;
+    max-width: 480px;
     min-width: 420px;
 
     h2 {
       margin: 0 0 20px;
       font-size: 30px;
       font-weight: 500;
+    }
+  }
+}
+
+.member-list {
+  >span {
+    color: var(--label-color);
+    font-size: 12px;
+    display: block;
+    margin: 15px 0 5px;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -4px;
+
+    span {
+      color: #666;
+      background-color: #f6f7f8;
+      border: 1px solid #f2f2f2;
+      font-size: 12px;
+      padding: 8px 14px;
+      margin: 2px;
+      border-radius: 20px;
+      line-height: 1;
+      cursor: default;
     }
   }
 }

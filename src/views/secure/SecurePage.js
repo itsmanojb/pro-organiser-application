@@ -10,6 +10,7 @@ import { Board } from 'views/secure/board/Board';
 
 import { AddBoard } from 'components/create-new/AddBoard';
 import { EditBoard } from 'components/edit/EditBoard';
+import { EditProject } from 'components/edit/EditProject';
 import { AddProject } from 'components/create-new/AddProject';
 import Header from 'components/header/Header';
 
@@ -53,6 +54,7 @@ const SecurePage = () => {
             {modalPage.name === 'addboard' && <AddBoard added={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
             {modalPage.name === 'editboard' && <EditBoard board={modalPage.data} edited={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
             {modalPage.name === 'addproject' && <AddProject added={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
+            {modalPage.name === 'editproject' && <EditProject project={modalPage.data} added={(e) => updatePage(e)} closed={() => setModalPage(null)} />}
           </>
         }
       </Router>

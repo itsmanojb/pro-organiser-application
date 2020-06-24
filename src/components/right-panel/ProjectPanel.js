@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getFullDateTime } from 'utils/utility';
 // import { AuthContext } from 'context/Auth';
 import './Rightpanel.scss';
 
 const ProjectPanel = ({ project }) => {
+
+  const [projectCreationDate, setProjectCreationDate] = useState('');
+
+  useEffect(() => {
+    const fullDate = getFullDateTime(project.created);
+    setProjectCreationDate(fullDate);
+  }, [project]);
+
 
   return (
     <div className="sidebar project right">
@@ -10,7 +19,10 @@ const ProjectPanel = ({ project }) => {
         <div className="greet">
           <strong>{project.name}</strong>
         </div>
-        <div className="desc">{project.description}</div>
+        <div className="desc">
+          {project.description}
+          <small>Created {projectCreationDate}</small>
+        </div>
       </div>
       <div className="stats">
         <div className="stat"><span className="label">Members</span><strong>{project.members.length}</strong></div>

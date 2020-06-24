@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { AuthContext } from 'context/Auth';
 import { ProjectContext } from 'context/Project';
 import { getBoards } from 'utils/data';
+import { timeAgo } from 'utils/utility';
 
 import { LineLoader } from 'common/loader/LineLoader';
 import SideNav from 'components/sidenav/Sidenav';
@@ -80,12 +81,13 @@ export const ProjectDashboard = ({ update, history }) => {
                         </div>
                         <div className="control-buttons">
                           <div className="control">
-                            {/* <label htmlFor="sortMenu"><Icon name="filter-outline" /></label> */}
+                            <label htmlFor="sortMenu">Arrange Boards as</label>
                             <select name="" id="sortMenu">
-                              <option value="">Sort By</option>
-                              <option value="team">Team Size</option>
-                              <option value="created">Creation Date</option>
-                              <option value="name">Name(a-z)</option>
+                              <option value="auto" selected>Automatic</option>
+                              <option value="created+">Latest first</option>
+                              <option value="created-">Oldest first</option>
+                              <option value="name+">Name (a-z)</option>
+                              <option value="name-">Name (z-a)</option>
                             </select>
                           </div>
                         </div>
@@ -115,7 +117,7 @@ export const ProjectDashboard = ({ update, history }) => {
                                 <ul className="board-members">
                                   {board.teamMembers.map(name => <Team name={name} key={name} />)}
                                 </ul>
-                                <span className="meta">1 day ago</span>
+                                <span className="meta">{timeAgo(board.createdOn)}</span>
                               </div>
                             </Link>
                           );

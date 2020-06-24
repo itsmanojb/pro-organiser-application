@@ -97,14 +97,14 @@ main.content {
 
       .control {
         display: flex;
-        // flex-direction: row;
-        // width: 180px;
+        flex-direction: column;
+        width: auto;
 
-        // label {
-        //   color: #888;
-        //   font-size: 16px;
-        //   padding: 0 10px;
-        // }
+        label {
+          color: #bbb;
+          font-size: 13px;
+          padding: 0 10px;
+        }
 
         select {
           width: 100%;

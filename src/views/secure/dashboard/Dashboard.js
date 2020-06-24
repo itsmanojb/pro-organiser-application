@@ -10,21 +10,30 @@ import './Dashboard.scss';
 
 export const Dashboard = ({ update }) => {
 
-  useEffect(() => {
-    document.title = 'Dashboard - TaskForce'
-  }, []);
+  const [currentProject, setCurrentproject] = useContext(ProjectContext);
 
-  const [currentProject] = useContext(ProjectContext);
+  useEffect(() => {
+    if (currentProject) {
+      document.title = `Project - ${currentProject.name} - TaskForce`
+    } else {
+      document.title = 'Dashboard - TaskForce'
+    }
+  }, [currentProject]);
+
+  const setProject = project => {
+    localStorage.setItem('currentProject', JSON.stringify(project));
+    setCurrentproject(project);
+  }
 
   return (
     <>
       <main className="content">
         <div className="dashboard">
-          <div><SideNav /></div>
+          <div><SideNav target="main" /></div>
           <div className="all-boards">
             {
               !currentProject
-                ? <ProjectSelector update={update} />
+                ? <ProjectSelector update={update} selected={(e) => setProject(e)} />
                 : <Redirect to={`/s/project/${currentProject.id}`} />
             }
           </div>

@@ -1,20 +1,25 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useIsMountedRef } from 'App';
 import { AuthContext } from 'context/Auth';
 import { getProjects } from 'utils/data';
 import './Rightpanel.scss';
 
 const RightPanel = ({ update }) => {
 
+  const isMountedRef = useIsMountedRef();
   const { currentUser } = useContext(AuthContext);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
-      setProjects(projects);
+      if (isMountedRef.current) {
+        setProjects(projects);
+      }
       // await getAllColumns(data.id, setColumns);
     })();
-  }, [currentUser, update]);
+    return () => isMountedRef.current = false;
+  }, [currentUser, update, isMountedRef]);
 
   return (
     <div className="sidebar right">

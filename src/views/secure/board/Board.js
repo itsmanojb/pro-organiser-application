@@ -29,6 +29,7 @@ import {
   // renameBoard, 
 } from 'utils/data';
 import './Board.scss';
+import { ProjectContext } from 'context/Project';
 
 function afterUpdateColumn(columns, selectedColumn, upColumn, setColumns) {
   const filColumns = columns.filter((cl) => cl.id !== selectedColumn.id);
@@ -56,6 +57,7 @@ export const Board = ({ history }) => {
   const [inEditCard, setInEditCard] = useState(null);
   const [boardExtended, setBoardExtended] = useState(false);
 
+  const [project, setProject] = useContext(ProjectContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
   const [toasts, setToasts] = useContext(ToastsContext);
 
@@ -267,6 +269,12 @@ export const Board = ({ history }) => {
     }
   }
 
+  function goToDashboard() {
+    localStorage.removeItem('currentProject');
+    history.push(`/s/dashboard`);
+    setProject(null);
+  }
+
   // board name edit
   // function doBoardRename() {
   //   if (!boardName) {
@@ -288,35 +296,33 @@ export const Board = ({ history }) => {
     return (
       <div className="sidenav">
         <ul className="sidenav-nav">
-          <li className="nav-item">
-            <a className="nav-link" title="Dashboard">
-              <Icon name="apps-outline" />
+          <li className="nav-item" title="Dashboard">
+            <a className="nav-link" onClick={(e) => goToDashboard()}>
+              <Icon name="layers-outline" />
             </a>
           </li>
           <li className="nav-item" title="Project Boards">
             <Link className="nav-link" to={`/s/project/${board.projectId}`}>
-              {/* <a className="nav-link"> */}
-              <Icon name="copy-outline" />
-              {/* </a> */}
+              <Icon name="folder-outline" />
             </Link>
           </li>
-          <li className="nav-item" title="Members" onClick={(e) => setBoardExtended(!boardExtended)}>
-            <a className={boardExtended ? "nav-link active" : "nav-link"}>
+          <li className="nav-item" title="Members">
+            <a className={boardExtended ? "nav-link active" : "nav-link"} onClick={(e) => setBoardExtended(!boardExtended)}>
               <Icon name="people-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Edit Board" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
-            <a className="nav-link">
+          <li className="nav-item" title="Edit Board">
+            <a className="nav-link" onClick={(e) => setModalPage({ name: 'editboard', data: board })}>
               <Icon name="create-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Delete Board" onClick={handleBoardDelete} >
-            <a className="nav-link">
+          <li className="nav-item" title="Delete Board">
+            <a className="nav-link" onClick={handleBoardDelete} >
               <Icon name="trash-outline" />
             </a>
           </li>
-          <li className="nav-item" title="Log Out" onClick={handleLogout} >
-            <a className="nav-link">
+          <li className="nav-item" title="Log Out" >
+            <a className="nav-link" onClick={handleLogout}>
               <Icon name="power" />
             </a>
           </li>

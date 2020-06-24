@@ -1,48 +1,69 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useContext, useState } from 'react';
+import { useIsMountedRef } from 'App';
 
 import { AuthContext } from 'context/Auth';
-import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { getProjects } from 'utils/data';
 import Icon from 'components/misc/IonIcon';
 import './Projects.scss';
 
-const ProjectSelector = ({ update }) => {
+const ProjectSelector = ({ update, selected }) => {
 
+  const isMountedRef = useIsMountedRef();
   const { currentUser } = useContext(AuthContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
-  const [currentproject, setCurrentproject] = useContext(ProjectContext);
   const [projects, setProjects] = useState([]);
+  const [showArchived, setShowArchived] = useState(localStorage.getItem('showArchive'));
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
-      setProjects(projects);
+      if (isMountedRef.current) {
+        setProjects(projects);
+      }
       // await getAllColumns(data.id, setColumns);
       // console.log(projects);
     })();
-  }, [currentUser, update]);
+    return () => isMountedRef.current = false;
+  }, [currentUser, update, isMountedRef, showArchived]);
 
-  const setProject = project => {
-    localStorage.setItem('currentProject', JSON.stringify(project));
-    setCurrentproject(project);
+  const toggleArchive = () => {
+    setShowArchived(!showArchived);
+    localStorage.setItem('showArchive', !showArchived);
+  };
+
+  function addProjectClass(project) {
+    let klass = 'project';
+    if (project.archived) {
+      klass += ' archived';
+    } if (project.pinned) {
+      klass += ' pinned';
+    }
+    return klass;
   }
 
   return (
     <div className="project-wrapper">
       {projects.length ? (
-        <div className="recent-projects">
-          <div className="info">Recents projects</div>
+        <div className={showArchived ? "recent-projects archived" : "recent-projects"}>
+          <div className="info">
+            <span className="label">
+              All projects
+            </span>
+            <div className="project-toggle">
+              <input type="checkbox" id="archiveToggle" checked={showArchived} onChange={toggleArchive} /> <span>Show archived</span>
+            </div>
+          </div>
           <div className="project-list">
             {projects.map((project, i) => (
-              <div className="project" key={i} onClick={(e) => setProject(project)}>
+              <div className={addProjectClass(project)} key={i} onClick={(e) => selected(project)}>
                 <h4>{project.name}</h4>
                 <p className="boards">{project.boards.length} Boards</p>
               </div>
             ))}
           </div>
-          <div className="info">Or, <span>create new project</span></div>
+          <div className="info"><span className="label">Or, create new project</span></div>
           <div className="project-list">
             <div className="project new" onClick={(e) => setModalPage({ name: 'addproject' })}>
               <Icon name="add" />

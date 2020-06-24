@@ -20,7 +20,7 @@ export const Dashboard = ({ update }) => {
     <>
       <main className="content">
         <div className="dashboard">
-          <div><SideNav /></div>
+          <div><SideNav target="main" /></div>
           <div className="all-boards">
             {
               !currentProject

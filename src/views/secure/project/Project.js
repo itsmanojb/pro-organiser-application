@@ -13,10 +13,10 @@ import BoardMembers from 'components/members/BoardMembers';
 import { Team } from 'components/misc/Team';
 import Icon from 'components/misc/IonIcon';
 
-export const ProjectDashboard = (update) => {
+export const ProjectDashboard = ({ update, history }) => {
 
   const { currentUser } = useContext(AuthContext);
-  const [currentProject] = useContext(ProjectContext);
+  const [currentProject, setCurrentProject] = useContext(ProjectContext);
   const [gridView, setGridView] = useState(true);
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
@@ -37,12 +37,20 @@ export const ProjectDashboard = (update) => {
     }
   }, [currentUser, currentProject, update]);
 
+  const navigateTo = (e) => {
+    if (e === 'dash') {
+      setCurrentProject(null);
+      localStorage.removeItem('currentProject');
+      history.push(`/s/dashboard`);
+    }
+  };
+
   return (
     <>
       {loading && <LineLoader />}
       <main className="content">
         <div className={projectExtended ? "dashboard extended" : "dashboard"}>
-          <div><SideNav extended={projectExtended} setExtended={setProjectExtended} /></div>
+          <div><SideNav extended={projectExtended} target='project' setExtended={setProjectExtended} navigate={(e) => navigateTo(e)} /></div>
           {projectExtended && <BoardMembers klass='project-members' members={currentProject.members} />}
           <div className="all-boards">
             {!loading ? <>

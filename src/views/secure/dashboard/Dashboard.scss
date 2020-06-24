@@ -242,6 +242,7 @@ main.content {
 
         @media screen and (max-width:1200px) {
           grid-template-columns: 180px 150px auto 100px;
+          overflow: hidden;
 
           .board-desc {
             display: none;

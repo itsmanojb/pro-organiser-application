@@ -17,10 +17,11 @@ export const ProjectDashboard = ({ update, history }) => {
 
   const { currentUser } = useContext(AuthContext);
   const [currentProject, setCurrentProject] = useContext(ProjectContext);
-  const [gridView, setGridView] = useState(true);
+  const [gridView, setGridView] = useState(!localStorage.getItem('listView'));
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState([]);
   const [projectExtended, setProjectExtended] = useState(false);
+  const [sortOrder, setSortOrder] = useState('auto');
 
   useEffect(() => {
     if (currentProject) {
@@ -43,6 +44,48 @@ export const ProjectDashboard = ({ update, history }) => {
       localStorage.removeItem('currentProject');
       history.push(`/s/dashboard`);
     }
+  };
+
+  function onSortOrderChange(e) {
+    const value = e.target.value;
+    setSortOrder(value);
+    const tempBoards = [...boards];
+
+    if (value !== 'auto') {
+      if (value.substr(1) === 'name') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.name > b.name ? -1 : (a.name < b.name ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
+        }
+      }
+      if (value.substr(1) === 'created') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.createdOn < b.createdOn ? -1 : (a.createdOn > b.createdOn ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.createdOn > b.createdOn ? -1 : (a.createdOn < b.createdOn ? 1 : 0));
+        }
+      }
+      if (value.substr(1) === 'members') {
+        if (value.charAt(0) === '-') {
+          tempBoards.sort((a, b) => a.teamMembers.length < b.teamMembers.length ? -1 : (a.teamMembers.length > b.teamMembers.length ? 1 : 0));
+        } else {
+          tempBoards.sort((a, b) => a.teamMembers.length > b.teamMembers.length ? -1 : (a.teamMembers.length < b.teamMembers.length ? 1 : 0));
+        }
+      }
+    } else {
+      setBoards(boards);
+    }
+    setBoards(tempBoards);
+  }
+
+  const setView = (view) => {
+    if (view === 'list') {
+      setGridView(false)
+    } else {
+      setGridView(true)
+    }
+    localStorage.setItem('listView', view === 'list' ? true : false);
   };
 
   if (!currentProject) {
@@ -72,22 +115,24 @@ export const ProjectDashboard = ({ update, history }) => {
                     <div className="board-header">
                       <div className="menubar">
                         <div className="view-buttons">
-                          <button onClick={(e) => setGridView(true)} className={gridView ? 'active' : ''}>
+                          <button onClick={(e) => setView('grid')} className={gridView ? 'active' : ''}>
                             <Icon name="grid-outline" />
                           </button>
-                          <button onClick={(e) => setGridView(false)} className={gridView ? '' : 'active'}>
+                          <button onClick={(e) => setView('list')} className={gridView ? '' : 'active'}>
                             <Icon name="list-outline" />
                           </button>
                         </div>
                         <div className="control-buttons">
                           <div className="control">
                             <label htmlFor="sortMenu">Arrange Boards as</label>
-                            <select name="" id="sortMenu">
-                              <option value="auto" selected>Automatic</option>
-                              <option value="created+">Latest first</option>
-                              <option value="created-">Oldest first</option>
-                              <option value="name+">Name (a-z)</option>
-                              <option value="name-">Name (z-a)</option>
+                            <select id="sortMenu" value={sortOrder} onChange={onSortOrderChange}>
+                              <option value="auto">Automatic</option>
+                              <option value="+created">Latest first</option>
+                              <option value="-created">Oldest first</option>
+                              <option value="+name">Name (a-z)</option>
+                              <option value="-name">Name (z-a)</option>
+                              <option value="+members">Team size (large)</option>
+                              <option value="-members">Team size (small)</option>
                             </select>
                           </div>
                         </div>

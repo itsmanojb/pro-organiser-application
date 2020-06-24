@@ -30,7 +30,9 @@ export const ProjectDashboard = ({ update, history }) => {
         .then((boards) => {
           setBoards(boards);
           setLoading(false);
-        }).catch(() => {
+        }).catch((error) => {
+          console.log(error);
+
           setBoards([]);
         });
     } else {
@@ -160,7 +162,7 @@ export const ProjectDashboard = ({ update, history }) => {
                               </div>
                               <div className="board-footer">
                                 <ul className="board-members">
-                                  {board.teamMembers.map(name => <Team name={name} key={name} />)}
+                                  {board.teamMembers.map((name, i) => <Team count={i} total={board.teamMembers.length} name={name} key={name} />)}
                                 </ul>
                                 <span className="meta">{timeAgo(board.createdOn)}</span>
                               </div>

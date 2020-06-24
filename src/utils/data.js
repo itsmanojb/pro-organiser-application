@@ -28,6 +28,47 @@ export const addProject = async (project) => {
   }
 };
 
+/**
+ * Method which retriwves a project
+ * @param {string} id id of the project
+ */
+export const getProject = async (id) => {
+  try {
+    return (await db.collection('projects').doc(id).get()).data() || null;
+  } catch (error) {
+    return error;
+  }
+};
+
+/**
+ * Method which updates a project (star, unstar or archive)
+ * @param {string} id id of the project which has to be edited
+ * @param {object} project the updated data
+ */
+export const updateProject = async (id, project) => {
+  try {
+    await db.collection('projects').doc(id).update(project);
+    return true;
+  } catch (error) {
+    return error;
+  }
+};
+
+/**
+ * Method which updates a project (star, unstar or archive)
+ * @param {string} id id of the project which has to be edited
+ * @param {object} project the updated data
+ */
+export const archiveProject = async (id) => {
+  try {
+    await db.collection('projects').doc(id).update({ archived: true });
+    return true;
+  } catch (error) {
+    return error;
+  }
+};
+
+
 export const getBoards = async (email, id) => {
   try {
     const snapshot = await db

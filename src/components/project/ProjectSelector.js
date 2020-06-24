@@ -1,33 +1,31 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useContext, useState } from 'react';
+import { useIsMountedRef } from 'App';
 
 import { AuthContext } from 'context/Auth';
-import { ProjectContext } from 'context/Project';
 import { ModalPageContext } from 'context/ModalPage';
 import { getProjects } from 'utils/data';
 import Icon from 'components/misc/IonIcon';
 import './Projects.scss';
 
-const ProjectSelector = ({ update }) => {
+const ProjectSelector = ({ update, selected }) => {
 
+  const isMountedRef = useIsMountedRef();
   const { currentUser } = useContext(AuthContext);
   const [modalPage, setModalPage] = useContext(ModalPageContext);
-  const [currentproject, setCurrentproject] = useContext(ProjectContext);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     (async function () {
       const projects = await getProjects(currentUser.email);
-      setProjects(projects);
+      if (isMountedRef.current) {
+        setProjects(projects);
+      }
       // await getAllColumns(data.id, setColumns);
       // console.log(projects);
     })();
-  }, [currentUser, update]);
-
-  const setProject = project => {
-    localStorage.setItem('currentProject', JSON.stringify(project));
-    setCurrentproject(project);
-  }
+    return () => isMountedRef.current = false;
+  }, [currentUser, update, isMountedRef]);
 
   return (
     <div className="project-wrapper">
@@ -36,7 +34,7 @@ const ProjectSelector = ({ update }) => {
           <div className="info">Recents projects</div>
           <div className="project-list">
             {projects.map((project, i) => (
-              <div className="project" key={i} onClick={(e) => setProject(project)}>
+              <div className="project" key={i} onClick={(e) => selected(project)}>
                 <h4>{project.name}</h4>
                 <p className="boards">{project.boards.length} Boards</p>
               </div>

@@ -49,7 +49,7 @@ const SignUp = ({ history }) => {
         const doc = (await db.doc(`users/${user.uid}`).get());
         if (!doc.exists) {
           try {
-            const photoURL = `https://api.adorable.io/avatars/120/${user.email}`;
+            const photoURL = `https://i.pravatar.cc/150?u=${user.email}`;
             const data = { uid: user.uid, email: user.email, displayName: name, photoURL };
             await docRef.set(data);
             await user.updateProfile({ displayName: name, photoURL });
@@ -153,6 +153,7 @@ const SignUp = ({ history }) => {
 
             <div className="form-buttons">
               <button type="submit" className="button" disabled={formSubmitted} onClick={(e) => handleSignUp(e)}> {formSubmitted ? 'Signing Up...' : 'Sign Up'}</button>
+              <Link to="/" role="button" className="button aux">Cancel</Link>
             </div>
             <div className="help-block">
               Already have an account? <Link to="/login">Sign in</Link>

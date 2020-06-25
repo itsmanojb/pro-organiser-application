@@ -9,11 +9,11 @@
   --speed: 500ms;
 
   display: grid;
-  grid-template-columns: 60px auto 200px 80px;
+  grid-template-columns: 60px auto 200px;
   height: var(--nav-size);
   background-color: var(--bg);
   // box-shadow: var(--box-shadow);
-  padding: 0 .5rem;
+  padding: 0 1rem 0 .5rem;
   position: sticky;
   top: 0;
   z-index: 9;

@@ -114,6 +114,7 @@ const Login = ({ history }) => {
             </div>
             <div className="form-buttons">
               <button type="submit" className="button" disabled={formSubmitted} onClick={(e) => handleLogin(e)}> {formSubmitted ? 'Logging In...' : 'Login'}</button>
+              <Link to="/" role="button" className="button aux">Cancel</Link>
             </div>
             <div className="help-block">
               Don't have an account? <Link to="/signup">Sign up</Link>

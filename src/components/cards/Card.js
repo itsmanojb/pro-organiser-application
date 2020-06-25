@@ -118,7 +118,8 @@ export const Card = ({ card, board, column, archived, handleEdit, handleArchive,
         <h6 className="card__title">{card.title}</h6>
         <ol className="card__actions">
           <li className="card__actions--wrapper">
-            <i className="far fa-check-square"></i><span className="card__actions--text">1/4</span></li>
+            {/* <i className="far fa-check-square"></i><span className="card__actions--text">1/4</span> */}
+          </li>
           <ol className="card__avatars">
             {members}
           </ol>

@@ -3,14 +3,14 @@ import { getFullDateTime } from 'utils/utility';
 // import { AuthContext } from 'context/Auth';
 import './Rightpanel.scss';
 
-const ProjectPanel = ({ project }) => {
+const ProjectPanel = ({ project, boards, update }) => {
 
   const [projectCreationDate, setProjectCreationDate] = useState('');
 
   useEffect(() => {
     const fullDate = getFullDateTime(project.created);
     setProjectCreationDate(fullDate);
-  }, [project]);
+  }, [project, update]);
 
 
   return (
@@ -26,7 +26,7 @@ const ProjectPanel = ({ project }) => {
       </div>
       <div className="stats">
         <div className="stat"><span className="label">Members</span><strong>{project.members.length}</strong></div>
-        <div className="stat"><span className="label">Boards</span><strong>{project.boards.length}</strong></div>
+        <div className="stat"><span className="label">Boards</span><strong>{boards}</strong></div>
       </div>
       <div className="activity-feed">
         <div className="header">

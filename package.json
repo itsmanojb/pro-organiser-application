@@ -1,11 +1,12 @@
 {
   "name": "task-force",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "Manoj Barman",
     "url": "https://manojbarman.in"
   },
+  "homepage": "https://taskforce.netlify.app/",
   "repository": {
     "type": "git",
     "url": "https://github.com/itsmanojb/task-force.git"

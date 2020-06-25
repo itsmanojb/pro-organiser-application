@@ -16,12 +16,12 @@ export const AddProject = ({ added, closed }) => {
   const [toasts, setToasts] = useContext(ToastsContext);
 
   const saveProject = () => {
-    if (!name && !teamMembers) {
-      showError('Please fill all mandatory (*) fields');
+    if (!name) {
+      showError('Project name is required');
       return;
     }
 
-    const members = teamMembers.split(',').map((el) => el.trim());
+    const members = teamMembers.trim().split(',').map((el) => el.trim()).filter(i => i !== '');
     const newProject = {
       manager: currentUser.email,
       name,
@@ -114,7 +114,7 @@ export const AddProject = ({ added, closed }) => {
               className="floating__input"
               autoComplete="off"
             />
-            <label htmlFor="members" className="floating__label" data-content="Add members *">
+            <label htmlFor="members" className="floating__label" data-content="Add members">
               <span className="hidden--visually">Add members</span>
             </label>
           </div>

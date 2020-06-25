@@ -107,6 +107,7 @@ const ResetPassword = ({ history }) => {
 
             <div className="form-buttons">
               <button type="submit" className="button" onClick={(e) => handleSubmit(e)}>Submit</button>
+              <Link to="/" role="button" className="button aux">Cancel</Link>
             </div>
             <div className="help-block">
               Don't have an account? <Link to="/signup">Sign up</Link>

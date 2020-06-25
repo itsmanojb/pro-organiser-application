@@ -178,7 +178,7 @@ export const ProjectDashboard = ({ update, history }) => {
               </div>
               }
             </div>
-            <div>{currentProject && <ProjectPanel project={currentProject} update={update} />}</div>
+            <div>{currentProject && <ProjectPanel project={currentProject} boards={boards.length} update={update} />}</div>
           </div>
         </main>
       </>

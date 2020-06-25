@@ -242,11 +242,11 @@ const Header = ({ update, location }) => {
       <div className="cta">
         <button disabled={!currentProject || currentProject.archived || modalPage === 'addboard'} onClick={(e) => setModalPage({ name: 'addboard' })} className="cta-btn"> Create New Board </button>
       </div>
-      <div className="search">
+      {/* <div className="search">
         <Navbar>
           <NavItem link="/s/dashboard" icon={<Icon name="search" />} />
         </Navbar>
-      </div>
+      </div> */}
     </header>
   );
 };
